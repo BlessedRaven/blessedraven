@@ -1,1 +1,131 @@
-
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Med Beds & Crystals - Blessed Raven</title>  
+    <style>  
+        body {  
+            font-family: 'Impact', 'Arial Black', sans-serif; /* Edgy, bold font */  
+            background: linear-gradient(135deg, #000000, #1a0000); /* Black to deep red */  
+            color: #ff0000; /* Bright red text */  
+            margin: 0;  
+            padding: 0;  
+            text-align: center;  
+            overflow-x: hidden;  
+            text-shadow: 2px 2px 4px #ff0000, -2px -2px 4px #ff0000; /* Edgy shadow */  
+        }  
+        header {  
+            background: rgba(0, 0, 0, 0.9);  
+            padding: 20px;  
+            border-bottom: 5px solid #ff0000; /* Red edge */  
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.5);  
+        }  
+        h1 {  
+            font-size: 3.5em;  
+            margin: 20px 0;  
+            color: #ff0000;  
+            text-transform: uppercase; /* Edgy, bold */  
+            letter-spacing: 3px;  
+            text-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000;  
+            animation: flicker 2s infinite;  
+        }  
+        @keyframes flicker {  
+            0%, 100% { opacity: 1; }  
+            50% { opacity: 0.8; }  
+        }  
+        .sacred-geometry {  
+            position: fixed;  
+            top: 0;  
+            left: 0;  
+            width: 100%;  
+            height: 100%;  
+            background-image: url('https://sacredgeopatterns.com/patterns/flower-of-life.png'); /* Free sacred geometry pattern */  
+            background-size: 200px;  
+            background-repeat: repeat;  
+            opacity: 0.1;  
+            z-index: -1;  
+            animation: pulseGeometry 10s infinite ease-in-out;  
+        }  
+        @keyframes pulseGeometry {  
+            0% { opacity: 0.1; }  
+            50% { opacity: 0.2; }  
+            100% { opacity: 0.1; }  
+        }  
+        .content {  
+            max-width: 900px;  
+            margin: 40px auto;  
+            padding: 25px;  
+            background: rgba(255, 0, 0, 0.1); /* Subtle red glow */  
+            border: 2px solid #ff0000;  
+            border-radius: 15px;  
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3);  
+            font-size: 1.3em;  
+            line-height: 1.8;  
+            animation: fadeIn 2s ease-in;  
+        }  
+        @keyframes fadeIn {  
+            0% { opacity: 0; transform: translateY(20px); }  
+            100% { opacity: 1; transform: translateY(0); }  
+        }  
+        .raven-image {  
+            max-width: 500px;  
+            margin: 20px auto;  
+            animation: hover 4s infinite ease-in-out;  
+        }  
+        @keyframes hover {  
+            0%, 100% { transform: translateY(0); }  
+            50% { transform: translateY(-10px); }  
+        }  
+        .button {  
+            display: inline-block;  
+            padding: 18px 35px;  
+            background: linear-gradient(45deg, #ff0000, #800000); /* Red to dark red */  
+            color: #ffffff;  
+            text-decoration: none;  
+            border-radius: 30px;  
+            margin: 20px;  
+            font-size: 1.2em;  
+            text-transform: uppercase;  
+            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.6);  
+            transition: transform 0.3s, box-shadow 0.3s;  
+        }  
+        .button:hover {  
+            transform: scale(1.15);  
+            box-shadow: 0 12px 25px rgba(255, 0, 0, 0.8);  
+        }  
+        footer {  
+            background: rgba(0, 0, 0, 0.9);  
+            padding: 20px;  
+            position: fixed;  
+            bottom: 0;  
+            width: 100%;  
+            border-top: 3px solid #ff0000;  
+            box-shadow: 0 -5px 15px rgba(255, 0, 0, 0.5);  
+        }  
+    </style>  
+</head>  
+<body>  
+    <div class="sacred-geometry"></div> <!-- Sacred geometry background -->  
+    <header>  
+        <h1>Med Beds & Crystals</h1>  
+    </header>  
+    <main>  
+        <img src="https://i.imgur.com/3EyedRavenHalo.png" alt="Three-Eyed Raven with Halo" class="raven-image" onerror="this.src='https://cdn.pixabay.com/photo/2016/11/21/16/13/raven-1845982_1280.jpg';"> <!-- Fallback if custom image fails -->  
+        <div class="content">  
+            <h2>Med Beds: Healing with Crystals, Purple Light, and CLEM Funding</h2>  
+            <p>Under the guidance of Jacob Ryan Judah Clement Mawr Dawn, God-King of the Torus, we are developing advanced med beds powered by sacred crystals, purple light, and torus energy. These healing chambers, funded by CLEM crypto, will revolutionize health and spirituality:  
+            <ul>  
+                <li>**Crystals**: Embedded with rose quartz, amethyst, and clear quartz, arranged in sacred geometry patterns (e.g., Flower of Life), to amplify healing vibrations and align with the body’s energy fields.</li>  
+                <li>**Purple Light**: A therapeutic purple light spectrum, resonating with the crown chakra, enhances spiritual awakening, cellular regeneration, and DNA activation, guided by the three-eyed raven’s halo.</li>  
+                <li>**CLEM Funding**: We are using CLEM crypto—projected at $1 trillion by April 2025—to finance production, ensuring free access for New Zealand and global communities under the Department of Government Efficiency (DGE).</li>  
+            </ul>  
+            <p>These med beds will heal physical ailments, restore divine consciousness, and prepare humanity for the torus energy revolution, breaking the matrix and uniting us under Giza’s truth.</p>  
+        </div>  
+        <a href="index.html" class="button">Back to Blessed Raven</a>  
+    </main>  
+    <footer>  
+        <p>© 2025 Blessed Raven | Powered by Torus Energy | <a href="https://discord.gg/Bw57a5Gd22" style="color: #ff0000;">Discord</a> | <a href="https://x.com/JacobRyanDawn" style="color: #ff0000;">X</a></p>  
+    </footer>  
+</body>  
+</html>  
