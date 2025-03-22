@@ -1,21 +1,117 @@
 <!DOCTYPE html>  
-<html>  
+<html lang="en">  
 <head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
     <title>Blessed Raven - Torus Empire</title>  
+    <style>  
+        body {  
+            font-family: 'Arial', sans-serif;  
+            background: linear-gradient(135deg, #1a1a1a, #0d0d0d);  
+            color: #ffffff;  
+            margin: 0;  
+            padding: 0;  
+            text-align: center;  
+            overflow-x: hidden;  
+        }  
+        header {  
+            background: rgba(0, 0, 0, 0.8);  
+            padding: 20px;  
+            border-bottom: 5px solid #ff4500; /* Torus orange glow */  
+            box-shadow: 0 5px 15px rgba(255, 69, 0, 0.5);  
+        }  
+        h1 {  
+            font-size: 3em;  
+            margin: 20px 0;  
+            color: #ff4500;  
+            text-shadow: 0 0 10px #ff4500, 0 0 20px #ff4500, 0 0 30px #ff6347;  
+            animation: pulse 3s infinite;  
+        }  
+        @keyframes pulse {  
+            0% { transform: scale(1); }  
+            50% { transform: scale(1.1); }  
+            100% { transform: scale(1); }  
+        }  
+        .lore {  
+            max-width: 800px;  
+            margin: 40px auto;  
+            padding: 20px;  
+            background: rgba(255, 69, 0, 0.1);  
+            border-radius: 10px;  
+            box-shadow: 0 0 20px rgba(255, 69, 0, 0.3);  
+            font-size: 1.2em;  
+            line-height: 1.6;  
+            animation: fadeIn 2s ease-in;  
+        }  
+        @keyframes fadeIn {  
+            0% { opacity: 0; transform: translateY(20px); }  
+            100% { opacity: 1; transform: translateY(0); }  
+        }  
+        .mission {  
+            margin: 40px auto;  
+            padding: 20px;  
+            max-width: 600px;  
+            background: rgba(0, 0, 0, 0.7);  
+            border: 2px solid #ff4500;  
+            border-radius: 15px;  
+            font-size: 1.1em;  
+        }  
+        .button {  
+            display: inline-block;  
+            padding: 15px 30px;  
+            background: linear-gradient(45deg, #ff4500, #ff6347);  
+            color: #ffffff;  
+            text-decoration: none;  
+            border-radius: 25px;  
+            margin: 15px;  
+            font-size: 1.1em;  
+            box-shadow: 0 5px 15px rgba(255, 69, 0, 0.5);  
+            transition: transform 0.3s, box-shadow 0.3s;  
+        }  
+        .button:hover {  
+            transform: scale(1.1);  
+            box-shadow: 0 8px 20px rgba(255, 69, 0, 0.7);  
+        }  
+        .torus-image {  
+            max-width: 400px;  
+            margin: 20px auto;  
+            animation: rotate 8s infinite linear;  
+        }  
+        @keyframes rotate {  
+            0% { transform: rotate(0deg); }  
+            100% { transform: rotate(360deg); }  
+        }  
+        footer {  
+            background: rgba(0, 0, 0, 0.8);  
+            padding: 15px;  
+            position: fixed;  
+            bottom: 0;  
+            width: 100%;  
+            border-top: 3px solid #ff4500;  
+            box-shadow: 0 -5px 15px rgba(255, 69, 0, 0.5);  
+        }  
+    </style>  
 </head>  
 <body>  
-    <h1>Welcome to Blessed Raven</h1>  
-    <p>Jacob Ryan Judah Clement Mawr Dawn, God-King of the Torus—DNA eternal, CLEM crypto, DGE for NZ, Roman Empire reborn. Join discord.gg/Bw57a5Gd22!</p>  
-</body>  
-</html>  
-<!DOCTYPE html>  
-<html>  
-<head>  
-    <title>Blessed Raven - Torus Empire</title>  
-</head>  
-<body>  
-    <h1>Welcome to Blessed Raven</h1>  
-    <p>Jacob Ryan Judah Clement Mawr Dawn, God-King of the Torus—DNA eternal, CLEM crypto on hold, DGE for NZ, Roman Empire reborn. Join discord.gg/Bw57a5Gd22!</p>  
-    <p>Follow on X: @JacobRyanDawn | Check torus energy: blessedraven.com</p>  
+    <header>  
+        <h1>Blessed Raven</h1>  
+    </header>  
+    <main>  
+        <img src="https://cdn.pixabay.com/photo/2023/03/15/12/34/torus-7853868_1280.png" alt="Torus Energy" class="torus-image">  
+        <div class="lore">  
+            <h2>The Lore of Jacob Ryan Judah Clement Mawr Dawn</h2>  
+            <p>I am Jacob Ryan Judah Clement Mawr Dawn, God-King of the Torus, born of infinite light to heal the matrix. My DNA is eternal, encoded with the power to resurrect the Roman Empire, unite New Zealand under the Department of Government Efficiency (DGE), and unleash CLEM crypto—$1 trillion by April 2025. The torus energy flows through me, crushing corruption, restoring divinity, and guiding humanity to Giza’s truth.</p>  
+        </div>  
+        <div class="mission">  
+            <h2>My Divine Mission</h2>  
+            <p>Reclaim NZ, forge a new Roman Empire, launch CLEM crypto (on hold until funds), and activate torus energy worldwide. Join me to rise from the ashes, break the matrix, and heal with blessedraven.com—your salvation begins now!</p>  
+        </div>  
+        <a href="https://discord.gg/Bw57a5Gd22" class="button">Join the Torus Empire</a>  
+        <a href="https://x.com/JacobRyanDawn" class="button">Follow on X</a>  
+        <a href="https://discord.gg/Bw57a5Gd22" class="button">Support DGE for NZ</a>  
+    </main>  
+    <footer>  
+        <p>© 2025 Blessed Raven | Powered by Torus Energy | <a href="https://discord.gg/Bw57a5Gd22" style="color: #ff4500;">Discord</a> | <a href="https://x.com/JacobRyanDawn" style="color: #ff4500;">X</a></p>  
+    </footer>  
 </body>  
 </html>  
