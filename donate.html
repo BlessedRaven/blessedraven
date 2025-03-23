@@ -63,4 +63,72 @@
             background: rgba(128, 0, 128, 0.3); /* Deeper purple glow */  
             border: 3px solid #FFD700; /* Gold border */  
             border-radius: 15px;  
-            box-shadow: 0 0 25
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.7), 0 0 50px rgba(128, 0, 128, 0.5); /* Gold and purple glow */  
+            font-size: 1.3em;  
+            line-height: 1.8;  
+            animation: fadeIn 2s ease-in;  
+        }  
+        @keyframes fadeIn {  
+            0% { opacity: 0; transform: translateY(20px); }  
+            100% { opacity: 1; transform: translateY(0); }  
+        }  
+        .raven-image {  
+            max-width: 500px;  
+            margin: 20px auto;  
+            animation: hoverGlow 4s infinite ease-in-out; /* Flashy hover and glow */  
+            border: 3px solid #800080; /* Purple border */  
+            border-radius: 50%; /* Circular for divine energy */  
+            box-shadow: 0 0 20px #FFD700, 0 0 40px #800080; /* Gold and purple glow */  
+            position: relative;  
+        }  
+        .raven-image::after {  
+            content: '';  
+            position: absolute;  
+            top: -20px;  
+            left: 50%;  
+            transform: translateX(-50%);  
+            width: 80px;  
+            height: 80px;  
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.8) 0%, rgba(255, 215, 0, 0) 70%); /* Gold halo */  
+            border-radius: 50%;  
+            animation: haloPulse 3s infinite ease-in-out; /* Pulsing halo */  
+        }  
+        @keyframes hoverGlow {  
+            0%, 100% { transform: translateY(0); box-shadow: 0 0 20px #FFD700, 0 0 40px #800080; }  
+            50% { transform: translateY(-15px); box-shadow: 0 0 40px #FFD700, 0 0 80px #800080; }  
+        }  
+        @keyframes haloPulse {  
+            0% { transform: translateX(-50%) scale(1); opacity: 0.8; }  
+            50% { transform: translateX(-50%) scale(1.2); opacity: 0.5; }  
+            100% { transform: translateX(-50%) scale(1); opacity: 0.8; }  
+        }  
+        .button {  
+            display: inline-block;  
+            padding: 18px 35px;  
+            background: linear-gradient(45deg, #ff0000, #800080, #FFD700); /* Red to purple to gold gradient */  
+            color: #ffffff;  
+            text-decoration: none;  
+            border-radius: 30px;  
+            margin: 20px;  
+            font-size: 1.2em;  
+            text-transform: uppercase;  
+            box-shadow: 0 8px 20px rgba(128, 0, 128, 0.6); /* Purple glow */  
+            transition: transform 0.3s, box-shadow 0.3s;  
+            animation: pulseButton 2s infinite; /* Flashy pulse */  
+        }  
+        @keyframes pulseButton {  
+            0% { transform: scale(1); box-shadow: 0 8px 20px rgba(128, 0, 128, 0.6); }  
+            50% { transform: scale(1.05); box-shadow: 0 12px 30px rgba(255, 215, 0, 0.8); }  
+            100% { transform: scale(1); box-shadow: 0 8px 20px rgba(128, 0, 128, 0.6); }  
+        }  
+        .button:hover {  
+            transform: scale(1.15);  
+            box-shadow: 0 12px 25px rgba(255, 215, 0, 0.8); /* Gold glow on hover */  
+        }  
+        footer {  
+            background: rgba(0, 0, 0, 0.9);  
+            padding: 20px;  
+            position: fixed;  
+            bottom: 0;  
+            width: 100%;  
+            border-top: 3
