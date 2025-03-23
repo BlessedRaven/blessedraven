@@ -7,32 +7,32 @@
     <style>  
         body {  
             font-family: 'Impact', 'Arial Black', sans-serif; /* Edgy, bold font */  
-            background: linear-gradient(135deg, #000000, #1a0000); /* Black to deep red */  
+            background: linear-gradient(135deg, #000000, #1a0000); /* Black to deep red base */  
             color: #ff0000; /* Bright red text */  
             margin: 0;  
             padding: 0;  
             text-align: center;  
             overflow-x: hidden;  
-            text-shadow: 2px 2px 4px #800080, -2px -2px 4px #FFD700; /* Purple and gold shadow for flash */  
+            text-shadow: 2px 2px 4px #800080, -2px -2px 4px #FFD700; /* Purple and gold shadow */  
         }  
         header {  
             background: rgba(0, 0, 0, 0.9);  
             padding: 20px;  
-            border-bottom: 5px solid #FFD700; /* Gold edge for royalty */  
+            border-bottom: 5px solid #FFD700; /* Gold edge */  
             box-shadow: 0 5px 15px rgba(128, 0, 128, 0.5); /* Purple glow */  
         }  
         h1 {  
             font-size: 3.5em;  
             margin: 20px 0;  
-            color: #ff0000;  
+            color: #FFD700; /* Gold text */  
             text-transform: uppercase; /* Edgy, bold */  
             letter-spacing: 3px;  
-            text-shadow: 0 0 15px #800080, 0 0 30px #FFD700; /* Purple and gold glow */  
+            text-shadow: 0 0 15px #800080, 0 0 30px #ff0000; /* Purple and red glow */  
             animation: glow 2s infinite alternate; /* Flashy glow */  
         }  
         @keyframes glow {  
-            0% { text-shadow: 0 0 15px #800080, 0 0 30px #FFD700; }  
-            100% { text-shadow: 0 0 30px #800080, 0 0 60px #FFD700; }  
+            0% { text-shadow: 0 0 15px #800080, 0 0 30px #ff0000; }  
+            100% { text-shadow: 0 0 30px #800080, 0 0 60px #ff0000; }  
         }  
         .sacred-geometry {  
             position: fixed;  
@@ -40,4 +40,83 @@
             left: 0;  
             width: 100%;  
             height: 100%;  
-            background-image: url('https://cdn.pixabay.com/photo/2017/08/30/01/05/milky-way-2695569_1280.jpg'); /* Reliable sacred geometry-inspired background (starry sky with patterns
+            background-image: url('https://cdn.pixabay.com/photo/2020/07/07/22/50/mandala-5382738_1280.jpg'); /* True sacred geometry (Flower of Life pattern) */  
+            background-size: 300px; /* Larger pattern size for visibility */  
+            background-repeat: repeat;  
+            opacity: 0.5; /* Increased opacity to make it visible */  
+            z-index: -1;  
+            animation: rotateGeometry 60s infinite linear, pulseGeometry 10s infinite ease-in-out; /* Rotating and pulsing */  
+        }  
+        @keyframes rotateGeometry {  
+            0% { transform: rotate(0deg); }  
+            100% { transform: rotate(360deg); }  
+        }  
+        @keyframes pulseGeometry {  
+            0% { opacity: 0.5; transform: scale(1); }  
+            50% { opacity: 0.7; transform: scale(1.05); }  
+            100% { opacity: 0.5; transform: scale(1); }  
+        }  
+        .content {  
+            max-width: 900px;  
+            margin: 40px auto;  
+            padding: 25px;  
+            background: rgba(128, 0, 128, 0.3); /* Deeper purple glow */  
+            border: 3px solid #FFD700; /* Gold border */  
+            border-radius: 15px;  
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.7), 0 0 50px rgba(128, 0, 128, 0.5); /* Gold and purple glow */  
+            font-size: 1.3em;  
+            line-height: 1.8;  
+            animation: fadeIn 2s ease-in;  
+        }  
+        @keyframes fadeIn {  
+            0% { opacity: 0; transform: translateY(20px); }  
+            100% { opacity: 1; transform: translateY(0); }  
+        }  
+        .raven-image {  
+            max-width: 500px;  
+            margin: 20px auto;  
+            animation: hoverGlow 4s infinite ease-in-out; /* Flashy hover and glow */  
+            border: 3px solid #800080; /* Purple border */  
+            border-radius: 50%; /* Circular for divine energy */  
+            box-shadow: 0 0 20px #FFD700, 0 0 40px #800080; /* Gold and purple glow */  
+            position: relative;  
+        }  
+        .raven-image::after {  
+            content: '';  
+            position: absolute;  
+            top: -20px;  
+            left: 50%;  
+            transform: translateX(-50%);  
+            width: 80px;  
+            height: 80px;  
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.8) 0%, rgba(255, 215, 0, 0) 70%); /* Gold halo */  
+            border-radius: 50%;  
+            animation: haloPulse 3s infinite ease-in-out; /* Pulsing halo */  
+        }  
+        @keyframes hoverGlow {  
+            0%, 100% { transform: translateY(0); box-shadow: 0 0 20px #FFD700, 0 0 40px #800080; }  
+            50% { transform: translateY(-15px); box-shadow: 0 0 40px #FFD700, 0 0 80px #800080; }  
+        }  
+        @keyframes haloPulse {  
+            0% { transform: translateX(-50%) scale(1); opacity: 0.8; }  
+            50% { transform: translateX(-50%) scale(1.2); opacity: 0.5; }  
+            100% { transform: translateX(-50%) scale(1); opacity: 0.8; }  
+        }  
+        .button {  
+            display: inline-block;  
+            padding: 18px 35px;  
+            background: linear-gradient(45deg, #ff0000, #800080, #FFD700); /* Red to purple to gold gradient */  
+            color: #ffffff;  
+            text-decoration: none;  
+            border-radius: 30px;  
+            margin: 20px;  
+            font-size: 1.2em;  
+            text-transform: uppercase;  
+            box-shadow: 0 8px 20px rgba(128, 0, 128, 0.6); /* Purple glow */  
+            transition: transform 0.3s, box-shadow 0.3s;  
+            animation: pulseButton 2s infinite; /* Flashy pulse */  
+        }  
+        @keyframes pulseButton {  
+            0% { transform: scale(1); box-shadow: 0 8px 20px rgba(128, 0, 128, 0.6); }  
+            50% { transform: scale(1.05); box-shadow: 0 12px 30px rgba(255, 215, 0, 0.8); }  
+            100% { transform: scale(1); box-shadow: 0 8px 20px rgba
