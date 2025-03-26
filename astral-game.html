@@ -1,139 +1,222 @@
-<!DOCTYPE html>  
-<html lang="en">  
-<head>  
-    <meta charset="UTF-8">  
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>Astral: The Game - Blessed Raven</title>  
-    <style>  
-        body {  
-            font-family: 'Impact', 'Arial Black', sans-serif; /* Edgy, bold font */  
-            background: linear-gradient(135deg, #000000, #1a0000); /* Black to deep red */  
-            color: #ff0000; /* Bright red text */  
-            margin: 0;  
-            padding: 0;  
-            text-align: center;  
-            overflow-x: hidden;  
-            text-shadow: 2px 2px 4px #ff0000, -2px -2px 4px #ff0000; /* Edgy shadow */  
-        }  
-        header {  
-            background: rgba(0, 0, 0, 0.9);  
-            padding: 20px;  
-            border-bottom: 5px solid #ff0000; /* Red edge */  
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.5);  
-        }  
-        h1 {  
-            font-size: 3.5em;  
-            margin: 20px 0;  
-            color: #ff0000;  
-            text-transform: uppercase; /* Edgy, bold */  
-            letter-spacing: 3px;  
-            text-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000;  
-            animation: flicker 2s infinite;  
-        }  
-        @keyframes flicker {  
-            0%, 100% { opacity: 1; }  
-            50% { opacity: 0.8; }  
-        }  
-        .sacred-geometry {  
-            position: fixed;  
-            top: 0;  
-            left: 0;  
-            width: 100%;  
-            height: 100%;  
-            background-image: url('https://sacredgeopatterns.com/patterns/flower-of-life.png'); /* Free sacred geometry pattern */  
-            background-size: 200px;  
-            background-repeat: repeat;  
-            opacity: 0.1;  
-            z-index: -1;  
-            animation: pulseGeometry 10s infinite ease-in-out;  
-        }  
-        @keyframes pulseGeometry {  
-            0% { opacity: 0.1; }  
-            50% { opacity: 0.2; }  
-            100% { opacity: 0.1; }  
-        }  
-        .content {  
-            max-width: 900px;  
-            margin: 40px auto;  
-            padding: 25px;  
-            background: rgba(255, 0, 0, 0.1); /* Subtle red glow */  
-            border: 2px solid #ff0000;  
-            border-radius: 15px;  
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3);  
-            font-size: 1.3em;  
-            line-height: 1.8;  
-            animation: fadeIn 2s ease-in;  
-        }  
-        @keyframes fadeIn {  
-            0% { opacity: 0; transform: translateY(20px); }  
-            100% { opacity: 1; transform: translateY(0); }  
-        }  
-        .raven-image {  
-            max-width: 500px;  
-            margin: 20px auto;  
-            animation: hover 4s infinite ease-in-out;  
-        }  
-        @keyframes hover {  
-            0%, 100% { transform: translateY(0); }  
-            50% { transform: translateY(-10px); }  
-        }  
-        .button {  
-            display: inline-block;  
-            padding: 18px 35px;  
-            background: linear-gradient(45deg, #ff0000, #800000); /* Red to dark red */  
-            color: #ffffff;  
-            text-decoration: none;  
-            border-radius: 30px;  
-            margin: 20px;  
-            font-size: 1.2em;  
-            text-transform: uppercase;  
-            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.6);  
-            transition: transform 0.3s, box-shadow 0.3s;  
-        }  
-        .button:hover {  
-            transform: scale(1.15);  
-            box-shadow: 0 12px 25px rgba(255, 0, 0, 0.8);  
-        }  
-        footer {  
-            background: rgba(0, 0, 0, 0.9);  
-            padding: 20px;  
-            position: fixed;  
-            bottom: 0;  
-            width: 100%;  
-            border-top: 3px solid #ff0000;  
-            box-shadow: 0 -5px 15px rgba(255, 0, 0, 0.5);  
-        }  
-    </style>  
-</head>  
-<body>  
-    <div class="sacred-geometry"></div> <!-- Sacred geometry background -->  
-    <header>  
-        <h1>Astral: The Game</h1>  
-    </header>  
-    <main>  
-        <img src="https://i.imgur.com/3EyedRavenHalo.png" alt="Three-Eyed Raven with Halo" class="raven-image" onerror="this.src='https://cdn.pixabay.com/photo/2016/11/21/16/13/raven-1845982_1280.jpg';"> <!-- Fallback if custom image fails -->  
-        <div class="content">  
-            <h2>Astral: The Game</h2>  
-            <p>Astral is an immersive, multi-player online game created by Jacob Ryan Judah Clement Mawr Dawn, God-King of the Torus, to awaken humanity’s spiritual potential through torus energy and sacred geometry. Players explore a virtual universe where they harness torus fields, battle matrix corruption, and unite under the three-eyed raven’s guidance. Key features include:  
-            <ul>  
-                <li>Real-time torus energy simulations for strategic gameplay.</li>  
-                <li>Sacred geometry puzzles unlocking divine knowledge from Giza and New Zealand’s DGE.</li>  
-                <li>Multiplayer alliances to rebuild the Roman Empire and crush corruption.</li>  
-            </ul>  
-            <h2>BCI/Float Tank Purple Light Crystal Combination with Heart Focus</h2>  
-            <p>Complementing Astral, we’re developing a Brain-Computer Interface (BCI) integrated with flotation tanks, purple light, and crystals to enhance spiritual and physical healing, guided by the three-eyed raven’s halo:  
-            <ul>  
-                <li>**BCI**: A neuralink-inspired interface connects players’ minds to Astral, amplifying torus energy and heart-centered consciousness.</li>  
-                <li>**Float Tank**: Sensory deprivation tanks, infused with purple light (crown chakra resonance), facilitate astral projection and out-of-body experiences, per web:4 (Vice on Flotation Tanks).</li>  
-                <li>**Crystals**: Amethyst and quartz, arranged in sacred geometry, emit healing vibrations, aligning with the heart’s electromagnetic field for love and divinity.</li>  
-                <li>**Heart Focus**: The system synchronizes with the heart’s rhythm, using torus energy to heal trauma, restore DNA, and connect players to Giza’s truth.</li>  
-            </ul>  
-            <p>This combination, funded by CLEM crypto, will launch humanity into a new era of spiritual awakening, breaking the matrix under your divine leadership.</p>  
-        </div>  
-        <a href="index.html" class="button">Back to Blessed Raven</a>  
-    </main>  
-    <footer>  
-        <p>© 2025 Blessed Raven | Powered by Torus Energy | <a href="https://discord.gg/Bw57a5Gd22" style="color: #ff0000;">Discord</a> | <a href="https://x.com/JacobRyanDawn" style="color: #ff0000;">X</a></p>  
-    </footer>  
-</body>  
-</html>  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astral: The Game - Blessed Raven</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Cinzel+Decorative:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #0a0015, #1a0000, #2b0010);
+            color: #ff3333;
+            text-align: center;
+            overflow-x: hidden;
+            cursor: none;
+            min-height: 100vh;
+            position: relative;
+        }
+        .cursor {
+            position: fixed;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, rgba(255, 51, 51, 0.8), transparent);
+            border: 2px solid #ff6666;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 20px 0;
+            z-index: 1000;
+            border-bottom: 4px solid #ff3333;
+            box-shadow: 0 5px 25px rgba(255, 51, 51, 0.7);
+            transition: background 0.3s ease;
+        }
+        nav.scrolled {
+            background: rgba(0, 0, 0, 0.98);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+        }
+        nav ul li a {
+            color: #ff3333;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: color 0.3s, transform 0.3s;
+        }
+        nav ul li a:hover {
+            color: #ffd700;
+            transform: scale(1.1);
+            text-shadow: 0 0 20px #ff3333;
+        }
+        header {
+            padding: 150px 20px 80px;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(10, 0, 21, 0.9));
+            border-bottom: 6px solid #ff3333;
+            box-shadow: 0 15px 40px rgba(255, 51, 51, 0.7);
+            position: relative;
+            z-index: 500;
+        }
+        h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 6em;
+            color: #ff3333;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            text-shadow: 0 0 25px #ff3333, 0 0 50px #ff3333, 0 0 75px #ff3333;
+            animation: neonFlicker 1.5s infinite alternate;
+        }
+        @keyframes neonFlicker {
+            0%, 100% { opacity: 1; text-shadow: 0 0 25px #ff3333, 0 0 50px #ff3333; }
+            50% { opacity: 0.9; text-shadow: 0 0 15px #ff3333; }
+        }
+        .sacred-geometry {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://sacredgeopatterns.com/patterns/flower-of-life.png');
+            background-size: 400px;
+            opacity: 0.1;
+            z-index: -1;
+            animation: rotateGeometry 30s infinite linear;
+        }
+        @keyframes rotateGeometry {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -2;
+        }
+        .content-section {
+            max-width: 1100px;
+            margin: 80px auto;
+            padding: 50px;
+            background: rgba(255, 51, 51, 0.1);
+            border: 4px solid #ff3333;
+            border-radius: 25px;
+            box-shadow: 0 0 50px rgba(255, 51, 51, 0.5);
+            position: relative;
+            z-index: 400;
+            transition: transform 0.5s ease;
+        }
+        .content-section:hover {
+            transform: translateY(-10px);
+        }
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3em;
+            margin-bottom: 25px;
+            color: #ffd700;
+            text-shadow: 0 0 20px #ff3333;
+        }
+        p {
+            font-size: 1.5em;
+            line-height: 2;
+            color: #ff9999;
+        }
+        footer {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 25px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            border-top: 4px solid #ff3333;
+            box-shadow: 0 -15px 40px rgba(255, 51, 51, 0.7);
+            color: #ff9999;
+            font-size: 1.2em;
+            z-index: 500;
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="sacred-geometry"></div>
+    <div class="cursor"></div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#lore">Lore</a></li>
+            <li><a href="index.html#mission">Mission</a></li>
+            <li><a href="index.html#explore">Explore</a></li>
+            <li><a href="family-tree.html">Family Tree</a></li>
+            <li><a href="donate.html">Donate</a></li>
+        </ul>
+    </nav>
+    <header>
+        <h1>Astral: The Game</h1>
+    </header>
+    <main>
+        <div class="content-section">
+            <h2>Explore the Astral Plane</h2>
+            <p>Astral is a virtual reality (VR) game set in the near future, where players immerse themselves in the astral plane—a metaphysical realm with seven levels, inspired by esoteric traditions like neo-Platonism, Hinduism, and Kabbalah. Using a sensory deprivation tank (e.g., "Neurotank"), a brain-computer interface (BCI) called the Silver Cord/Sutratma (a waterproof EEG cap with dry foam sensors), and heart magnetic resonance monitoring (via magnetocardiography), players control their astral body (avatar) with brainwaves and heart signals.</p>
+            <p>Starting at the 4th plane, players ascend or descend through the levels based on choices, using psychic powers like telekinesis, element manipulation, and psionics. The solo campaign involves completing quests to reach the highest (7th) or lowest (1st) plane, with scenarios like learning astral projection from spiritual beings, connecting via the Neurotank, or navigating the afterlife after a fatal accident. Multiplayer mode offers an open-world experience where players interact with spirits, other-dimensional beings, and deceased loved ones, co-creating the environment with collective brainwaves and emotional states.</p>
+            <p>The game integrates with the Med Bed Sensory Deprivation Tank, enhancing immersion and providing potential DNA repair through violet light (400–450 nm). Brainwave control (e.g., beta for focus, alpha for relaxation) enables actions like moving or manipulating elements, while heart signals (via HRV) adjust the environment (e.g., calm states spawn peaceful entities). Astral explores themes of spiritual growth, unity, and the afterlife, offering a limitless potential for creativity and connection.</p>
+        </div>
+    </main>
+    <footer>
+        <p>© 2025 Blessed Raven. All rights reserved.</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#ff3333" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.6, "random": true },
+                "size": { "value": 4, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#ff3333", "opacity": 0.4, "width": 1 },
+                "move": { "enable": true, "speed": 3, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "repulse": { "distance": 120, "duration": 0.4 }, "push": { "particles_nb": 5 } }
+            },
+            "retina_detect": true
+        });
+
+        const cursor = document.querySelector('.cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        document.addEventListener('mousedown', () => cursor.style.transform = 'scale(1.5)');
+        document.addEventListener('mouseup', () => cursor.style.transform = 'scale(1)');
+
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
