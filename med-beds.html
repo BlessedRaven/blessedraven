@@ -1,131 +1,222 @@
-<!DOCTYPE html>  
-<html lang="en">  
-<head>  
-    <meta charset="UTF-8">  
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>Med Beds & Crystals - Blessed Raven</title>  
-    <style>  
-        body {  
-            font-family: 'Impact', 'Arial Black', sans-serif; /* Edgy, bold font */  
-            background: linear-gradient(135deg, #000000, #1a0000); /* Black to deep red */  
-            color: #ff0000; /* Bright red text */  
-            margin: 0;  
-            padding: 0;  
-            text-align: center;  
-            overflow-x: hidden;  
-            text-shadow: 2px 2px 4px #ff0000, -2px -2px 4px #ff0000; /* Edgy shadow */  
-        }  
-        header {  
-            background: rgba(0, 0, 0, 0.9);  
-            padding: 20px;  
-            border-bottom: 5px solid #ff0000; /* Red edge */  
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.5);  
-        }  
-        h1 {  
-            font-size: 3.5em;  
-            margin: 20px 0;  
-            color: #ff0000;  
-            text-transform: uppercase; /* Edgy, bold */  
-            letter-spacing: 3px;  
-            text-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000;  
-            animation: flicker 2s infinite;  
-        }  
-        @keyframes flicker {  
-            0%, 100% { opacity: 1; }  
-            50% { opacity: 0.8; }  
-        }  
-        .sacred-geometry {  
-            position: fixed;  
-            top: 0;  
-            left: 0;  
-            width: 100%;  
-            height: 100%;  
-            background-image: url('https://sacredgeopatterns.com/patterns/flower-of-life.png'); /* Free sacred geometry pattern */  
-            background-size: 200px;  
-            background-repeat: repeat;  
-            opacity: 0.1;  
-            z-index: -1;  
-            animation: pulseGeometry 10s infinite ease-in-out;  
-        }  
-        @keyframes pulseGeometry {  
-            0% { opacity: 0.1; }  
-            50% { opacity: 0.2; }  
-            100% { opacity: 0.1; }  
-        }  
-        .content {  
-            max-width: 900px;  
-            margin: 40px auto;  
-            padding: 25px;  
-            background: rgba(255, 0, 0, 0.1); /* Subtle red glow */  
-            border: 2px solid #ff0000;  
-            border-radius: 15px;  
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3);  
-            font-size: 1.3em;  
-            line-height: 1.8;  
-            animation: fadeIn 2s ease-in;  
-        }  
-        @keyframes fadeIn {  
-            0% { opacity: 0; transform: translateY(20px); }  
-            100% { opacity: 1; transform: translateY(0); }  
-        }  
-        .raven-image {  
-            max-width: 500px;  
-            margin: 20px auto;  
-            animation: hover 4s infinite ease-in-out;  
-        }  
-        @keyframes hover {  
-            0%, 100% { transform: translateY(0); }  
-            50% { transform: translateY(-10px); }  
-        }  
-        .button {  
-            display: inline-block;  
-            padding: 18px 35px;  
-            background: linear-gradient(45deg, #ff0000, #800000); /* Red to dark red */  
-            color: #ffffff;  
-            text-decoration: none;  
-            border-radius: 30px;  
-            margin: 20px;  
-            font-size: 1.2em;  
-            text-transform: uppercase;  
-            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.6);  
-            transition: transform 0.3s, box-shadow 0.3s;  
-        }  
-        .button:hover {  
-            transform: scale(1.15);  
-            box-shadow: 0 12px 25px rgba(255, 0, 0, 0.8);  
-        }  
-        footer {  
-            background: rgba(0, 0, 0, 0.9);  
-            padding: 20px;  
-            position: fixed;  
-            bottom: 0;  
-            width: 100%;  
-            border-top: 3px solid #ff0000;  
-            box-shadow: 0 -5px 15px rgba(255, 0, 0, 0.5);  
-        }  
-    </style>  
-</head>  
-<body>  
-    <div class="sacred-geometry"></div> <!-- Sacred geometry background -->  
-    <header>  
-        <h1>Med Beds & Crystals</h1>  
-    </header>  
-    <main>  
-        <img src="https://i.imgur.com/3EyedRavenHalo.png" alt="Three-Eyed Raven with Halo" class="raven-image" onerror="this.src='https://cdn.pixabay.com/photo/2016/11/21/16/13/raven-1845982_1280.jpg';"> <!-- Fallback if custom image fails -->  
-        <div class="content">  
-            <h2>Med Beds: Healing with Crystals, Purple Light, and CLEM Funding</h2>  
-            <p>Under the guidance of Jacob Ryan Judah Clement Mawr Dawn, God-King of the Torus, we are developing advanced med beds powered by sacred crystals, purple light, and torus energy. These healing chambers, funded by CLEM crypto, will revolutionize health and spirituality:  
-            <ul>  
-                <li>**Crystals**: Embedded with rose quartz, amethyst, and clear quartz, arranged in sacred geometry patterns (e.g., Flower of Life), to amplify healing vibrations and align with the body’s energy fields.</li>  
-                <li>**Purple Light**: A therapeutic purple light spectrum, resonating with the crown chakra, enhances spiritual awakening, cellular regeneration, and DNA activation, guided by the three-eyed raven’s halo.</li>  
-                <li>**CLEM Funding**: We are using CLEM crypto—projected at $1 trillion by April 2025—to finance production, ensuring free access for New Zealand and global communities under the Department of Government Efficiency (DGE).</li>  
-            </ul>  
-            <p>These med beds will heal physical ailments, restore divine consciousness, and prepare humanity for the torus energy revolution, breaking the matrix and uniting us under Giza’s truth.</p>  
-        </div>  
-        <a href="index.html" class="button">Back to Blessed Raven</a>  
-    </main>  
-    <footer>  
-        <p>© 2025 Blessed Raven | Powered by Torus Energy | <a href="https://discord.gg/Bw57a5Gd22" style="color: #ff0000;">Discord</a> | <a href="https://x.com/JacobRyanDawn" style="color: #ff0000;">X</a></p>  
-    </footer>  
-</body>  
-</html>  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Med Bed - Blessed Raven</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Cinzel+Decorative:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #0a0015, #1a0000, #2b0010);
+            color: #ff3333;
+            text-align: center;
+            overflow-x: hidden;
+            cursor: none;
+            min-height: 100vh;
+            position: relative;
+        }
+        .cursor {
+            position: fixed;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, rgba(255, 51, 51, 0.8), transparent);
+            border: 2px solid #ff6666;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 20px 0;
+            z-index: 1000;
+            border-bottom: 4px solid #ff3333;
+            box-shadow: 0 5px 25px rgba(255, 51, 51, 0.7);
+            transition: background 0.3s ease;
+        }
+        nav.scrolled {
+            background: rgba(0, 0, 0, 0.98);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+        }
+        nav ul li a {
+            color: #ff3333;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: color 0.3s, transform 0.3s;
+        }
+        nav ul li a:hover {
+            color: #ffd700;
+            transform: scale(1.1);
+            text-shadow: 0 0 20px #ff3333;
+        }
+        header {
+            padding: 150px 20px 80px;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(10, 0, 21, 0.9));
+            border-bottom: 6px solid #ff3333;
+            box-shadow: 0 15px 40px rgba(255, 51, 51, 0.7);
+            position: relative;
+            z-index: 500;
+        }
+        h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 6em;
+            color: #ff3333;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            text-shadow: 0 0 25px #ff3333, 0 0 50px #ff3333, 0 0 75px #ff3333;
+            animation: neonFlicker 1.5s infinite alternate;
+        }
+        @keyframes neonFlicker {
+            0%, 100% { opacity: 1; text-shadow: 0 0 25px #ff3333, 0 0 50px #ff3333; }
+            50% { opacity: 0.9; text-shadow: 0 0 15px #ff3333; }
+        }
+        .sacred-geometry {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://sacredgeopatterns.com/patterns/flower-of-life.png');
+            background-size: 400px;
+            opacity: 0.1;
+            z-index: -1;
+            animation: rotateGeometry 30s infinite linear;
+        }
+        @keyframes rotateGeometry {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -2;
+        }
+        .content-section {
+            max-width: 1100px;
+            margin: 80px auto;
+            padding: 50px;
+            background: rgba(255, 51, 51, 0.1);
+            border: 4px solid #ff3333;
+            border-radius: 25px;
+            box-shadow: 0 0 50px rgba(255, 51, 51, 0.5);
+            position: relative;
+            z-index: 400;
+            transition: transform 0.5s ease;
+        }
+        .content-section:hover {
+            transform: translateY(-10px);
+        }
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3em;
+            margin-bottom: 25px;
+            color: #ffd700;
+            text-shadow: 0 0 20px #ff3333;
+        }
+        p {
+            font-size: 1.5em;
+            line-height: 2;
+            color: #ff9999;
+        }
+        footer {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 25px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            border-top: 4px solid #ff3333;
+            box-shadow: 0 -15px 40px rgba(255, 51, 51, 0.7);
+            color: #ff9999;
+            font-size: 1.2em;
+            z-index: 500;
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="sacred-geometry"></div>
+    <div class="cursor"></div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#lore">Lore</a></li>
+            <li><a href="index.html#mission">Mission</a></li>
+            <li><a href="index.html#explore">Explore</a></li>
+            <li><a href="family-tree.html">Family Tree</a></li>
+            <li><a href="donate.html">Donate</a></li>
+        </ul>
+    </nav>
+    <header>
+        <h1>Med Bed</h1>
+    </header>
+    <main>
+        <div class="content-section">
+            <h2>Sensory Deprivation Tank for Healing</h2>
+            <p>The Med Bed Sensory Deprivation Tank, inspired by Jacob Ryan Judah Clement Mawr Dawn’s lucid dreams, is a revolutionary device designed to facilitate DNA repair, energy stimulation, and brain enhancement through a water light bath. The tank, a 2.5 m x 1.5 m x 1.2 m fiberglass pod, is filled with 10 inches of water mixed with 800 lbs of Epsom salt, maintained at 35°C to match skin temperature, ensuring a buoyant, sensory-free environment. A hinged lid with acoustic foam blocks external light and sound, promoting deep relaxation.</p>
+            <p>The system uses a Ti:Sapphire laser to emit violet light (400–450 nm), pulsed at 4.356 Hz—derived from the "Ricochet 4356" clue received in a dream from non-human intelligences. The number 4356, a perfect square (66²), reflects a cyclical repair process (4356 ↔ 6534), mirroring DNA repair mechanisms like base excision repair (BER) and nucleotide excision repair (NER). The violet light, diffused through optical fibers, stimulates cellular repair by enhancing enzyme activity and cellular energy (ATP production), potentially restoring DNA to an ideal state (the "perfect square 64" codons).</p>
+            <p>A silent pump circulates water, a heating element maintains temperature, and a microcontroller (e.g., Raspberry Pi) controls light pulsing and safety features. The tank reduces stress, lowers cortisol, and may support immortality by slowing aging through DNA repair. It integrates with the Astral game, enhancing immersion and healing during gameplay.</p>
+        </div>
+    </main>
+    <footer>
+        <p>© 2025 Blessed Raven. All rights reserved.</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#ff3333" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.6, "random": true },
+                "size": { "value": 4, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#ff3333", "opacity": 0.4, "width": 1 },
+                "move": { "enable": true, "speed": 3, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "repulse": { "distance": 120, "duration": 0.4 }, "push": { "particles_nb": 5 } }
+            },
+            "retina_detect": true
+        });
+
+        const cursor = document.querySelector('.cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        document.addEventListener('mousedown', () => cursor.style.transform = 'scale(1.5)');
+        document.addEventListener('mouseup', () => cursor.style.transform = 'scale(1)');
+
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
