@@ -17,11 +17,10 @@
             color: #ff0000;
             text-align: center;
             overflow-x: hidden;
-            cursor: none; /* Custom cursor */
+            cursor: none;
             min-height: 100vh;
             position: relative;
         }
-        /* Custom glowing cursor */
         .cursor {
             position: fixed;
             width: 20px;
@@ -32,7 +31,6 @@
             z-index: 9999;
             transition: transform 0.1s ease;
         }
-        /* Navigation Bar */
         nav {
             position: fixed;
             top: 0;
@@ -81,7 +79,6 @@
             0%, 100% { opacity: 1; text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000; }
             50% { opacity: 0.85; text-shadow: 0 0 10px #ff0000; }
         }
-        /* Sacred Geometry Background */
         .sacred-geometry {
             position: fixed;
             top: 0;
@@ -98,7 +95,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        /* Particle Background */
         #particles-js {
             position: fixed;
             width: 100%;
@@ -188,7 +184,6 @@
             color: #ffcccc;
             font-size: 1.1em;
         }
-        /* Scroll Animation */
         .fade-in {
             opacity: 0;
             transform: translateY(50px);
@@ -201,18 +196,15 @@
     </style>
 </head>
 <body>
-    <!-- Particle Background -->
     <div id="particles-js"></div>
-    <!-- Sacred Geometry -->
     <div class="sacred-geometry"></div>
-    <!-- Custom Cursor -->
     <div class="cursor"></div>
-    <!-- Navigation -->
     <nav>
         <ul>
             <li><a href="#lore">Lore</a></li>
             <li><a href="#mission">Mission</a></li>
             <li><a href="#links">Explore</a></li>
+            <li><a href="family-tree.html">Family Tree</a></li> <!-- Added Family Tree link -->
             <li><a href="donate.html">Donate</a></li>
         </ul>
     </nav>
@@ -234,18 +226,17 @@
             <a href="torus-energy.html" class="link-button">Torus Free Energy Blueprint</a>
             <a href="med-beds.html" class="link-button">Med Beds & Crystals</a>
             <a href="pyramids.html" class="link-button">Pyramids & Magnetic Fields</a>
+            <a href="family-tree.html" class="link-button">Sacred Family Tree</a> <!-- Added Family Tree link -->
             <a href="donate.html" class="link-button">Donate to the Cause</a>
             <a href="astral-game.html" class="link-button">Astral: The Game</a>
         </div>
     </main>
     <footer>
-        <p>&copy; 2025 Blessed Raven - Torus Empire | All Rights Reserved</p>
+        <p>© 2025 Blessed Raven - Torus Empire | All Rights Reserved</p>
     </footer>
 
-    <!-- External Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script>
-        // Particle.js Configuration
         particlesJS("particles-js", {
             "particles": {
                 "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
@@ -264,14 +255,12 @@
             "retina_detect": true
         });
 
-        // Custom Cursor
         const cursor = document.querySelector('.cursor');
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.pageX + 'px';
             cursor.style.top = e.pageY + 'px';
         });
 
-        // Scroll Animation
         const fadeIns = document.querySelectorAll('.fade-in');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -282,7 +271,6 @@
         }, { threshold: 0.3 });
         fadeIns.forEach(fade => observer.observe(fade));
 
-        // Button Click Sound
         const buttons = document.querySelectorAll('.button, .link-button');
         buttons.forEach(button => {
             button.addEventListener('click', () => {
