@@ -211,6 +211,7 @@
             <li><a href="#mission">Mission</a></li>
             <li><a href="#explore">Explore</a></li>
             <li><a href="family-tree.html">Family Tree</a></li>
+            <li><a href="immortality.html">Immortality</a></li>
             <li><a href="donate.html">Donate</a></li>
         </ul>
     </nav>
@@ -221,4 +222,59 @@
         <img src="https://i.imgur.com/3EyedRavenHalo.png" alt="Three-Eyed Raven with Halo" class="raven-image" onerror="this.src='https://cdn.pixabay.com/photo/2016/11/21/16/13/raven-1845982_1280.jpg';">
         <div class="content-section" id="lore">
             <h2>The Eternal Lore of Jacob Ryan Judah Clement Mawr Dawn</h2>
-            <p>I am Jacob Ryan Judah Clement Mawr Dawn, God-King of the Torus, a vessel of infinite light born to heal the fractured matrix of existence. My bloodline is a sacred tapestry woven through the ages, stretching back to the primordial origins of creation itself—to Gaia, the Earth Mother, whose essence birthed the cosmos, and to Noah, the steward of life who preserved humanity through the Great Flood. From Noah’s lineage, I descend through King David, the anointed shepherd-king of Israel; Juddah, the lion of the royal line; Anna, the holy grandmother of Jesus, keeper of the Grail’s wisdom; Jesus Christ, the divine savior whose light pierces the veil; King Arthur, the once and future king of Camelot; Bran the Blessed, the raven-hearted guardian of Britain’s soul; Beli Mawr, the ancient Welsh king of the gods; and Rhodri Mawr, the unifier of Wales. This eternal lineage, encoded with the torus energy of the universe, flows through me, a conduit of divine purpose. I am destined to resurrect the Roman Empire, unite New Zealand under the Department of Government Efficiency (DGE), and launch CLEM crypto to a $1 trillion valuation by April 2025. Guided by the three-eyed raven, its halo a beacon of cosmic truth,
+            <p>I am Jacob Ryan Judah Clement Mawr Dawn, God-King of the Torus, a vessel of infinite light born to heal the fractured matrix of existence. My bloodline is a sacred tapestry woven through the ages, stretching back to the primordial origins of creation itself—to Gaia, the Earth Mother, whose essence birthed the cosmos, and to Noah, the steward of life who preserved humanity through the Great Flood. From Noah’s lineage, I descend through King David, the anointed shepherd-king of Israel; Juddah, the lion of the royal line; Anna, the holy grandmother of Jesus, keeper of the Grail’s wisdom; Jesus Christ, the divine savior whose light pierces the veil; King Arthur, the once and future king of Camelot; Bran the Blessed, the raven-hearted guardian of Britain’s soul; Beli Mawr, the ancient Welsh king of the gods; and Rhodri Mawr, the unifier of Wales. This eternal lineage, encoded with the torus energy of the universe, flows through me, a conduit of divine purpose. I am destined to resurrect the Roman Empire, unite New Zealand under the Department of Government Efficiency (DGE), and launch CLEM crypto to a $1 trillion valuation by April 2025. Guided by the three-eyed raven, its halo a beacon of cosmic truth, I stand as the Blessed Raven, here to lead humanity into a golden age of enlightenment.</p>
+        </div>
+        <div class="content-section" id="mission">
+            <h2>Our Cosmic Mission</h2>
+            <p>At Blessed Raven, our mission is to heal the matrix and restore the divine order of the universe. We are building the Torus Empire, a new paradigm of governance and prosperity, starting with the unification of New Zealand under the Department of Government Efficiency (DGE). By April 2025, we will launch CLEM crypto, a revolutionary currency that will reach a $1 trillion valuation, empowering humanity with financial sovereignty. Our journey will culminate at the Great Pyramid of Giza, where the secrets of the ancients will be unveiled, unlocking the path to immortality and eternal light. Join us as we rewrite the destiny of humanity, one torus at a time.</p>
+        </div>
+        <div class="content-section" id="explore">
+            <h2>Explore the Cosmic Vision</h2>
+            <p>Dive deeper into the mysteries of the Blessed Raven and uncover the sacred knowledge that will guide us to a new era.</p>
+            <a href="pyramids.html" class="link-button">Pyramids</a>
+            <a href="family-tree.html" class="link-button">Sacred Family Tree</a>
+            <a href="immortality.html" class="link-button">Path to Immortality</a>
+        </div>
+    </main>
+    <footer>
+        <p>© 2025 Blessed Raven. All rights reserved.</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#ff3333" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.6, "random": true },
+                "size": { "value": 4, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#ff3333", "opacity": 0.4, "width": 1 },
+                "move": { "enable": true, "speed": 3, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "repulse": { "distance": 120, "duration": 0.4 }, "push": { "particles_nb": 5 } }
+            },
+            "retina_detect": true
+        });
+
+        const cursor = document.querySelector('.cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        document.addEventListener('mousedown', () => cursor.style.transform = 'scale(1.5)');
+        document.addEventListener('mouseup', () => cursor.style.transform = 'scale(1)');
+
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
