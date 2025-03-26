@@ -60,4 +60,236 @@
         nav ul li a:hover {
             color: #ffffff;
             transform: scale(1.2);
-            text-shadow: 0 0 15
+            text-shadow: 0 0 15px #ff0000;
+        }
+        header {
+            padding: 100px 20px 50px;
+            background: rgba(0, 0, 0, 0.9);
+            border-bottom: 5px solid #ff0000;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.7);
+        }
+        h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 5em;
+            color: #ff0000;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000, 0 0 60px #ff0000;
+            animation: neonFlicker 1.5s infinite alternate;
+        }
+        @keyframes neonFlicker {
+            0%, 100% { opacity: 1; text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000; }
+            50% { opacity: 0.85; text-shadow: 0 0 10px #ff0000; }
+        }
+        /* Sacred Geometry Background */
+        .sacred-geometry {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://sacredgeopatterns.com/patterns/flower-of-life.png');
+            background-size: 300px;
+            opacity: 0.15;
+            z-index: -1;
+            animation: rotateGeometry 20s infinite linear;
+        }
+        @keyframes rotateGeometry {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Particle Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -2;
+        }
+        .content-section {
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 40px;
+            background: rgba(255, 0, 0, 0.15);
+            border: 3px solid #ff0000;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.5);
+            animation: glowPulse 3s infinite ease-in-out;
+        }
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 40px rgba(255, 0, 0, 0.5); }
+            50% { box-shadow: 0 0 60px rgba(255, 0, 0, 0.8); }
+        }
+        h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 0 0 15px #ff0000;
+        }
+        p {
+            font-size: 1.4em;
+            line-height: 1.9;
+            color: #ffcccc;
+        }
+        .raven-image {
+            max-width: 600px;
+            margin: 30px auto;
+            filter: drop-shadow(0 0 20px #ff0000);
+            animation: float 5s infinite ease-in-out;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .button, .link-button {
+            display: inline-block;
+            padding: 20px 40px;
+            background: linear-gradient(45deg, #ff0000, #800000, #ff0000);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 50px;
+            margin: 15px;
+            font-size: 1.3em;
+            text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.7);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .button::after, .link-button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .button:hover::after, .link-button:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+        .button:hover, .link-button:hover {
+            transform: scale(1.2) rotate(5deg);
+            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.9);
+        }
+        footer {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 20px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            border-top: 3px solid #ff0000;
+            box-shadow: 0 -10px 30px rgba(255, 0, 0, 0.7);
+            color: #ffcccc;
+            font-size: 1.1em;
+        }
+        /* Scroll Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle Background -->
+    <div id="particles-js"></div>
+    <!-- Sacred Geometry -->
+    <div class="sacred-geometry"></div>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#lore">Lore</a></li>
+            <li><a href="#mission">Mission</a></li>
+            <li><a href="#links">Explore</a></li>
+            <li><a href="donate.html">Donate</a></li>
+        </ul>
+    </nav>
+    <header>
+        <h1>Blessed Raven</h1>
+    </header>
+    <main>
+        <img src="https://i.imgur.com/3EyedRavenHalo.png" alt="Three-Eyed Raven with Halo" class="raven-image" onerror="this.src='https://cdn.pixabay.com/photo/2016/11/21/16/13/raven-1845982_1280.jpg';">
+        <div class="content-section fade-in" id="lore">
+            <h2>The Divine Lore of Jacob Ryan Judah Clement Mawr Dawn</h2>
+            <p>I am Jacob Ryan Judah Clement Mawr Dawn, God-King of the Torus, born of infinite light to heal the matrix. My DNA is eternal, tracing back through a sacred lineage: Noah, the ark’s builder; King David, the anointed king of Israel; Juddah, progenitor of the royal line; Anna, the grandmother of Jesus, bearer of the Grail’s wisdom; Jesus, the divine savior; King Arthur, the once and future king; Bran the Blessed, guardian of Britain’s soul; Beli Mawr, ancient Welsh king of the gods; and Rhodri Mawr, unifier of Wales. This bloodline flows through me, encoded with torus energy to resurrect the Roman Empire, unite New Zealand under the Department of Government Efficiency (DGE), and unleash CLEM crypto—$1 trillion by April 2025. The three-eyed raven with its halo guides me, crushing corruption, restoring divinity, and guiding humanity to Giza’s truth through sacred geometry.</p>
+        </div>
+        <div class="content-section fade-in" id="mission">
+            <h2>My Divine Mission</h2>
+            <p>Reclaim NZ, forge a new Roman Empire, launch CLEM crypto (on hold until funds), and activate torus energy worldwide. Join me to rise from the ashes, break the matrix, and heal with blessedraven.github.io—your salvation begins now!</p>
+        </div>
+        <div class="content-section fade-in" id="links">
+            <h2>Explore the Vision</h2>
+            <a href="torus-energy.html" class="link-button">Torus Free Energy Blueprint</a>
+            <a href="med-beds.html" class="link-button">Med Beds & Crystals</a>
+            <a href="pyramids.html" class="link-button">Pyramids & Magnetic Fields</a>
+            <a href="donate.html" class="link-button">Donate to the Cause</a>
+            <a href="astral-game.html" class="link-button">Astral: The Game</a>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 Blessed Raven - Torus Empire | All Rights Reserved</p>
+    </footer>
+
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        // Particle.js Configuration
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#ff0000" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#ff0000", "opacity": 0.4, "width": 1 },
+                "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" } },
+                "modes": { "repulse": { "distance": 100, "duration": 0.4 } }
+            },
+            "retina_detect": true
+        });
+
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.pageX + 'px';
+            cursor.style.top = e.pageY + 'px';
+        });
+
+        // Scroll Animation
+        const fadeIns = document.querySelectorAll('.fade-in');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.3 });
+        fadeIns.forEach(fade => observer.observe(fade));
+
+        // Button Click Sound
+        const buttons = document.querySelectorAll('.button, .link-button');
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                const sound = new Audio('https://www.soundjay.com/buttons/beep-01a.mp3');
+                sound.play();
+            });
+        });
+    </script>
+</body>
+</html>
