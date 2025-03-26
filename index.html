@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blessed Raven - Torus Empire</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Cinzel+Decorative:wght@900&family=Montserrat:wght@300;900&family=Unica+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Montserrat:wght@300;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,101 +14,11 @@
         }
         body {
             font-family: 'Montserrat', sans-serif;
-            background: radial-gradient(circle at 50% 50%, #0a0015, #1a0000, #2b0010);
-            color: #ff3333;
+            background: linear-gradient(180deg, #0a0015, #1a0000, #2b0010);
+            color: #ffffff;
             overflow-x: hidden;
-            cursor: none;
             min-height: 100vh;
             position: relative;
-        }
-        .custom-cursor {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            background: url('https://i.imgur.com/raven-cursor.png') no-repeat center;
-            background-size: contain;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.2s ease;
-            filter: drop-shadow(0 0 10px #ff3333);
-        }
-        .custom-cursor.active {
-            transform: scale(1.5) rotate(45deg);
-        }
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: linear-gradient(to right, rgba(0, 0, 0, 0.95), transparent);
-            padding: 30px 0;
-            z-index: 1000;
-            border-bottom: 6px solid #ff3333;
-            box-shadow: 0 10px 50px rgba(255, 51, 51, 0.8);
-            transform: skewY(-5deg);
-        }
-        nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: flex-start;
-            gap: 60px;
-            padding-left: 50px;
-        }
-        nav ul li a {
-            color: #ff3333;
-            text-decoration: none;
-            font-family: 'Unica One', sans-serif;
-            font-size: 1.5em;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            transition: color 0.5s, transform 0.5s;
-            text-shadow: 0 0 15px #ff3333;
-        }
-        nav ul li a:hover {
-            color: #ffd700;
-            transform: translateY(-10px) rotate(10deg);
-            text-shadow: 0 0 30px #ffd700;
-        }
-        header {
-            padding: 200px 20px 100px;
-            background: url('https://i.imgur.com/cosmic-bg.jpg') no-repeat center;
-            background-size: cover;
-            border-bottom: 10px solid #ff3333;
-            box-shadow: 0 20px 60px rgba(255, 51, 51, 0.9);
-            position: relative;
-            z-index: 500;
-            transform: rotate(-2deg);
-        }
-        h1 {
-            font-family: 'Cinzel Decorative', cursive;
-            font-size: 8em;
-            color: #ff3333;
-            text-transform: uppercase;
-            letter-spacing: 10px;
-            text-shadow: 0 0 40px #ff3333, 0 0 80px #ff3333, 0 0 120px #ff3333;
-            animation: cosmicPulse 2s infinite alternate;
-            transform: skewX(-10deg);
-        }
-        @keyframes cosmicPulse {
-            0% { opacity: 1; text-shadow: 0 0 40px #ff3333, 0 0 80px #ff3333; }
-            100% { opacity: 0.8; text-shadow: 0 0 20px #ff3333, 0 0 40px #ff3333; }
-        }
-        .sacred-geometry {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://sacredgeopatterns.com/patterns/flower-of-life.png');
-            background-size: 500px;
-            opacity: 0.15;
-            z-index: -1;
-            animation: spinGeometry 60s infinite linear;
-        }
-        @keyframes spinGeometry {
-            0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(180deg) scale(1.2); }
-            100% { transform: rotate(360deg) scale(1); }
         }
         #particles-js {
             position: fixed;
@@ -116,106 +26,120 @@
             height: 100%;
             top: 0;
             left: 0;
-            z-index: -2;
+            z-index: -1;
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px 0;
+            z-index: 1000;
+            border-bottom: 2px solid #ff3333;
+            box-shadow: 0 5px 20px rgba(255, 51, 51, 0.5);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+        nav ul li a {
+            color: #ffffff;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: color 0.3s, transform 0.3s;
+        }
+        nav ul li a:hover {
+            color: #ffd700;
+            transform: translateY(-3px);
+        }
+        header {
+            padding: 150px 20px 80px;
+            text-align: center;
+        }
+        h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 5em;
+            color: #ff3333;
+            text-shadow: 0 0 20px #ff3333, 0 0 40px #ff3333;
+            animation: fadeIn 2s ease-in-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
         .content-section {
-            max-width: 1200px;
-            margin: 100px auto;
-            padding: 60px;
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 40px;
             background: rgba(255, 51, 51, 0.05);
-            border: 6px solid #ff3333;
-            border-radius: 0;
-            box-shadow: 0 0 80px rgba(255, 51, 51, 0.7);
-            position: relative;
-            z-index: 400;
-            transform: rotate(2deg);
-            transition: transform 0.8s ease;
-        }
-        .content-section:hover {
-            transform: rotate(-2deg) scale(1.05);
+            border: 2px solid #ff3333;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255, 51, 51, 0.3);
+            animation: fadeIn 1.5s ease-in-out;
         }
         h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 4em;
-            margin-bottom: 30px;
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 2.5em;
             color: #ffd700;
-            text-shadow: 0 0 30px #ff3333;
-            transform: skewY(5deg);
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #ffd700;
         }
         p {
-            font-size: 1.8em;
-            line-height: 2.2;
-            color: #ff9999;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 300;
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #ffffff;
         }
         .raven-image {
-            max-width: 800px;
-            margin: 50px auto;
-            filter: drop-shadow(0 0 40px #ff3333);
-            animation: cosmicFloat 8s infinite ease-in-out;
-            transform: rotate(-5deg);
+            max-width: 600px;
+            margin: 30px auto;
+            display: block;
+            filter: drop-shadow(0 0 20px #ff3333);
+            animation: float 5s infinite ease-in-out;
         }
-        @keyframes cosmicFloat {
-            0%, 100% { transform: translateY(0) rotate(-5deg); }
-            50% { transform: translateY(-40px) rotate(5deg); }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
         .link-button {
             display: inline-block;
-            padding: 30px 60px;
-            background: linear-gradient(45deg, #ff3333, #800000, #ff3333);
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #ff3333, #800000);
             color: #ffd700;
             text-decoration: none;
-            border-radius: 0;
-            margin: 30px;
-            font-family: 'Unica One', sans-serif;
-            font-size: 1.8em;
+            border-radius: 10px;
+            margin: 15px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2em;
             text-transform: uppercase;
-            box-shadow: 0 20px 60px rgba(255, 51, 51, 0.9);
-            transition: all 0.6s ease;
-            position: relative;
-            overflow: hidden;
-            transform: skewX(-15deg);
-        }
-        .link-button::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 215, 0, 0.5);
-            transform: translate(-50%, -50%);
-            transition: width 0.8s, height 0.8s;
-        }
-        .link-button:hover::after {
-            width: 500px;
-            height: 500px;
+            box-shadow: 0 5px 20px rgba(255, 51, 51, 0.5);
+            transition: transform 0.3s, background 0.3s;
         }
         .link-button:hover {
-            transform: skewX(-15deg) scale(1.2) rotate(5deg);
-            box-shadow: 0 30px 80px rgba(255, 51, 51, 1);
+            transform: scale(1.1);
+            background: linear-gradient(45deg, #800000, #ff3333);
             color: #ffffff;
         }
         footer {
-            background: linear-gradient(to left, rgba(0, 0, 0, 0.95), transparent);
-            padding: 30px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            text-align: center;
             position: fixed;
             bottom: 0;
             width: 100%;
-            border-top: 6px solid #ff3333;
-            box-shadow: 0 -20px 60px rgba(255, 51, 51, 0.9);
-            color: #ff9999;
-            font-size: 1.4em;
-            z-index: 500;
-            transform: skewY(5deg);
+            border-top: 2px solid #ff3333;
+            box-shadow: 0 -5px 20px rgba(255, 51, 51, 0.5);
+            color: #ffffff;
+            font-size: 1em;
         }
     </style>
 </head>
 <body>
     <div id="particles-js"></div>
-    <div class="sacred-geometry"></div>
-    <div class="custom-cursor"></div>
     <nav>
         <ul>
             <li><a href="index.html">Home</a></li>
@@ -225,6 +149,11 @@
             <li><a href="family-tree.html">Family Tree</a></li>
             <li><a href="immortality.html">Immortality</a></li>
             <li><a href="pyramids.html">Pyramids</a></li>
+            <li><a href="astral-game.html">Astral Game</a></li>
+            <li><a href="med-beds.html">Med Beds</a></li>
+            <li><a href="panchristism.html">Panchristism</a></li>
+            <li><a href="theory-of-everything.html">Theory of Everything</a></li>
+            <li><a href="torus-energy.html">Torus Energy</a></li>
             <li><a href="donate.html">Donate</a></li>
         </ul>
     </nav>
@@ -234,19 +163,24 @@
     <main>
         <img src="https://i.imgur.com/3EyedRavenHalo.png" alt="Three-Eyed Raven with Halo" class="raven-image" onerror="this.src='https://cdn.pixabay.com/photo/2016/11/21/16/13/raven-1845982_1280.jpg';">
         <div class="content-section" id="lore">
-            <h2>The Cosmic Lore of the Torus King</h2>
-            <p>I am Jacob Ryan Judah Clement Mawr Dawn, the God-King of the Torus, a celestial conduit of infinite light, born to shatter the fractured matrix of this reality. My essence is woven from the primordial threads of creation—Gaia’s heartbeat echoes in my veins, Noah’s ark sails through my dreams, and the golden lineage of King David, Juddah, Anna, Jesus Christ, King Arthur, Bran the Blessed, Beli Mawr, and Rhodri Mawr courses through my soul. I am the three-eyed raven, halo ablaze, destined to resurrect the Roman Empire, unite New Zealand under the Department of Government Efficiency (DGE), and propel CLEM crypto to a $1 trillion valuation by April 2025. The cosmos bends to my will, and I am here to lead humanity into an eternal golden age.</p>
+            <h2>The Cosmic Lore of Jacob Ryan Judah Clement Mawr Dawn</h2>
+            <p>I am Jacob Ryan Judah Clement Mawr Dawn, the God-King of the Torus, a vessel of infinite light born to heal the fractured matrix of existence. My bloodline stretches back to Gaia, the Earth Mother, and Noah, the steward of life through the Great Flood. From King David to Jesus Christ, from King Arthur to Bran the Blessed, my lineage is a sacred tapestry of divine purpose. I am destined to resurrect the Roman Empire, unite New Zealand under the Department of Government Efficiency (DGE), and launch CLEM crypto to a $1 trillion valuation by April 2025. Guided by the three-eyed raven, I lead humanity toward a golden age of enlightenment.</p>
         </div>
         <div class="content-section" id="mission">
             <h2>Our Galactic Mission</h2>
-            <p>Blessed Raven is the vanguard of a new cosmic order. We are forging the Torus Empire, a realm where the divine geometry of the universe governs all. Our mission is to heal the matrix, starting with the unification of New Zealand under the DGE, a beacon of efficiency and light. By April 2025, CLEM crypto will rise to a $1 trillion valuation, a financial torus that empowers humanity. Our journey will lead us to the Great Pyramid of Giza, where the ancients’ secrets will unlock immortality. Join us, and become part of the eternal tapestry of the cosmos.</p>
+            <p>Blessed Raven is forging the Torus Empire, a new paradigm where divine geometry governs all. We will unify New Zealand under the DGE, launch CLEM crypto to empower humanity, and unlock the secrets of the Great Pyramid of Giza. Join us on this journey to immortality and eternal light.</p>
         </div>
         <div class="content-section" id="explore">
-            <h2>Unravel the Cosmic Tapestry</h2>
-            <p>Step into the mysteries of the Blessed Raven and discover the sacred truths that will guide us to eternity.</p>
+            <h2>Explore the Cosmic Vision</h2>
+            <p>Discover the sacred truths that will guide us to eternity.</p>
             <a href="family-tree.html" class="link-button">Sacred Lineage</a>
             <a href="immortality.html" class="link-button">Eternal Life</a>
             <a href="pyramids.html" class="link-button">Pyramid Power</a>
+            <a href="astral-game.html" class="link-button">Astral Game</a>
+            <a href="med-beds.html" class="link-button">Med Beds</a>
+            <a href="panchristism.html" class="link-button">Panchristism</a>
+            <a href="theory-of-everything.html" class="link-button">Theory of Everything</a>
+            <a href="torus-energy.html" class="link-button">Torus Energy</a>
             <a href="donate.html" class="link-button">Support the Vision</a>
         </div>
     </main>
@@ -257,29 +191,21 @@
     <script>
         particlesJS("particles-js", {
             "particles": {
-                "number": { "value": 150, "density": { "enable": true, "value_area": 800 } },
-                "color": { "value": ["#ff3333", "#ffd700", "#800000"] },
-                "shape": { "type": "polygon", "polygon": { "nb_sides": 6 } },
-                "opacity": { "value": 0.7, "random": true },
-                "size": { "value": 5, "random": true },
-                "line_linked": { "enable": true, "distance": 200, "color": "#ff3333", "opacity": 0.5, "width": 2 },
-                "move": { "enable": true, "speed": 5, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false }
+                "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": ["#ff3333", "#ffd700"] },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#ff3333", "opacity": 0.3, "width": 1 },
+                "move": { "enable": true, "speed": 2, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false }
             },
             "interactivity": {
                 "detect_on": "canvas",
-                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
-                "modes": { "grab": { "distance": 200, "line_linked": { "opacity": 0.7 } }, "push": { "particles_nb": 8 } }
+                "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "repulse": { "distance": 100, "duration": 0.4 }, "push": { "particles_nb": 4 } }
             },
             "retina_detect": true
         });
-
-        const cursor = document.querySelector('.custom-cursor');
-        document.addEventListener('mousemove', e => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-        });
-        document.addEventListener('mousedown', () => cursor.classList.add('active'));
-        document.addEventListener('mouseup', () => cursor.classList.remove('active'));
     </script>
 </body>
 </html>
