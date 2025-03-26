@@ -65,6 +65,8 @@
             background: rgba(0, 0, 0, 0.9);
             border-bottom: 5px solid #ff0000;
             box-shadow: 0 10px 30px rgba(255, 0, 0, 0.7);
+            position: relative;
+            z-index: 500;
         }
         h1 {
             font-family: 'Cinzel Decorative', cursive;
@@ -79,7 +81,6 @@
             0%, 100% { opacity: 1; text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000; }
             50% { opacity: 0.85; text-shadow: 0 0 10px #ff0000; }
         }
-        /* Replace Celtic Tree with CSS Pattern */
         .celtic-pattern {
             position: fixed;
             top: 0;
@@ -136,11 +137,14 @@
             max-width: 1200px;
             margin: 60px auto;
             padding: 40px;
-            background: rgba(0, 0, 0, 0.85); /* Darker background for better contrast */
+            background: rgba(0, 0, 0, 0.85);
             border: 3px solid #ff0000;
             border-radius: 20px;
             box-shadow: 0 0 40px rgba(255, 0, 0, 0.5);
             animation: glowPulse 3s infinite ease-in-out;
+            position: relative;
+            z-index: 400; /* Ensure it’s above background layers */
+            min-height: 600px; /* Ensure enough space for content */
         }
         @keyframes glowPulse {
             0%, 100% { box-shadow: 0 0 40px rgba(255, 0, 0, 0.5); }
@@ -158,13 +162,14 @@
             gap: 20px;
             padding: 20px;
             text-align: left;
+            min-height: 400px; /* Ensure the list has space */
         }
         .tree-item {
-            background: rgba(255, 0, 0, 0.2); /* Slightly red-tinted background */
+            background: rgba(255, 0, 0, 0.2);
             padding: 15px;
             border: 1px solid #ff0000;
             border-radius: 10px;
-            color: #ffffff; /* White text for better readability */
+            color: #ffffff;
             font-size: 1.1em;
             transition: transform 0.3s, box-shadow 0.3s;
         }
@@ -181,6 +186,8 @@
             border-radius: 15px;
             color: #ffcccc;
             font-size: 1.2em;
+            position: relative;
+            z-index: 400;
         }
         footer {
             background: rgba(0, 0, 0, 0.95);
@@ -192,6 +199,7 @@
             box-shadow: 0 -10px 30px rgba(255, 0, 0, 0.7);
             color: #ffcccc;
             font-size: 1.1em;
+            z-index: 500;
         }
         .fade-in {
             opacity: 0;
@@ -207,7 +215,7 @@
 <body>
     <div id="particles-js"></div>
     <div class="sacred-geometry"></div>
-    <div class="celtic-pattern"></div> <!-- Updated to CSS pattern -->
+    <div class="celtic-pattern"></div>
     <div class="cursor"></div>
     <nav>
         <ul>
@@ -221,7 +229,7 @@
         <h1>Family Tree</h1>
     </header>
     <main>
-        <div class="family-tree fade-in" id="family-tree">
+        <div class="family-tree" id="family-tree">
             <h2>The Sacred Lineage of Jacob Ryan Judah Clement Mawr Dawn</h2>
             <div class="tree-list">
                 <div class="tree-item">Jacob (b. 1995): Self.</div>
@@ -351,8 +359,12 @@
                     entry.target.classList.add('visible');
                 }
             });
-        }, { threshold: 0.3 });
+        }, { threshold: 0.1 }); // Lowered threshold for better triggering
         fadeIns.forEach(fade => observer.observe(fade));
+
+        // Force visibility of family-tree for debugging
+        const familyTree = document.querySelector('.family-tree');
+        familyTree.classList.add('visible');
     </script>
 </body>
 </html>
