@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blessed Raven - Torus Empire</title>
+    <title>Blessed Raven - Home</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Montserrat:wght@300;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -60,6 +60,10 @@
         header {
             padding: 150px 20px 80px;
             text-align: center;
+            background: url('https://i.imgur.com/blessed-raven-logo.jpg') no-repeat center;
+            background-size: cover;
+            border-bottom: 2px solid #ff3333;
+            box-shadow: 0 5px 20px rgba(255, 51, 51, 0.5);
         }
         h1 {
             font-family: 'Cinzel Decorative', cursive;
@@ -89,40 +93,18 @@
             margin-bottom: 20px;
             text-shadow: 0 0 10px #ffd700;
         }
-        p {
+        p, ul {
             font-size: 1.2em;
             line-height: 1.8;
             color: #ffffff;
         }
-        .raven-image {
-            max-width: 600px;
-            margin: 30px auto;
-            display: block;
-            filter: drop-shadow(0 0 20px #ff3333);
-            animation: float 5s infinite ease-in-out;
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
         }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-        .link-button {
-            display: inline-block;
-            padding: 15px 30px;
-            background: linear-gradient(45deg, #ff3333, #800000);
-            color: #ffd700;
-            text-decoration: none;
-            border-radius: 10px;
-            margin: 15px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.2em;
-            text-transform: uppercase;
-            box-shadow: 0 5px 20px rgba(255, 51, 51, 0.5);
-            transition: transform 0.3s, background 0.3s;
-        }
-        .link-button:hover {
-            transform: scale(1.1);
-            background: linear-gradient(45deg, #800000, #ff3333);
-            color: #ffffff;
+        li {
+            margin: 10px 0;
         }
         footer {
             background: rgba(0, 0, 0, 0.9);
@@ -151,7 +133,6 @@
             <li><a href="pyramids.html">Pyramids</a></li>
             <li><a href="astral-game.html">Astral Game</a></li>
             <li><a href="med-beds.html">Med Beds</a></li>
-            <li><a href="panchristism.html">Panchristism</a></li>
             <li><a href="theory-of-everything.html">Theory of Everything</a></li>
             <li><a href="torus-energy.html">Torus Energy</a></li>
             <li><a href="donate.html">Donate</a></li>
@@ -161,27 +142,27 @@
         <h1>Blessed Raven</h1>
     </header>
     <main>
-        <img src="https://i.imgur.com/3EyedRavenHalo.png" alt="Three-Eyed Raven with Halo" class="raven-image" onerror="this.src='https://cdn.pixabay.com/photo/2016/11/21/16/13/raven-1845982_1280.jpg';">
-        <div class="content-section" id="lore">
-            <h2>The Cosmic Lore of Jacob Ryan Judah Clement Mawr Dawn</h2>
-            <p>I am Jacob Ryan Judah Clement Mawr Dawn, the God-King of the Torus, a vessel of infinite light born to heal the fractured matrix of existence. My bloodline stretches back to Gaia, the Earth Mother, and Noah, the steward of life through the Great Flood. From King David to Jesus Christ, from King Arthur to Bran the Blessed, my lineage is a sacred tapestry of divine purpose. I am destined to resurrect the Roman Empire, unite New Zealand under the Department of Government Efficiency (DGE), and launch CLEM crypto to a $1 trillion valuation by April 2025. Guided by the three-eyed raven, I lead humanity toward a golden age of enlightenment.</p>
+        <div id="lore" class="content-section">
+            <h2>Lore</h2>
+            <p>The Blessed Raven project is a cosmic journey, born from lucid dreams and divine encounters with non-human intelligences (NHIs). Guided by the cryptic clue "Ricochet 4356," revealed in a dream, the project seeks the key to immortality through the repair of damaged DNA, the harnessing of torus energy, and the exploration of the astral plane. The Torus Pyramid, a 1:100 scale replica of the Great Pyramid of Giza, stands as a beacon of ancient wisdom and modern innovation, located above the Waikato River in New Zealand. Here, the mysteries of Greek, Egyptian, and Druid traditions converge, honoring deities like Zeus, Aphrodite, Thoth, and Ra, while advancing humanity toward a new golden age.</p>
         </div>
-        <div class="content-section" id="mission">
-            <h2>Our Galactic Mission</h2>
-            <p>Blessed Raven is forging the Torus Empire, a new paradigm where divine geometry governs all. We will unify New Zealand under the DGE, launch CLEM crypto to empower humanity, and unlock the secrets of the Great Pyramid of Giza. Join us on this journey to immortality and eternal light.</p>
+        <div id="mission" class="content-section">
+            <h2>Mission</h2>
+            <p>Our mission is to bridge the mortal and divine, uniting science, mysticism, and technology to unlock the secrets of immortality and human potential. Through the development of Med Beds, which use violet light and sound resonance to repair DNA, and the Astral VR game, which allows players to explore the seven levels of the astral plane, we aim to elevate consciousness and heal the body. The Blessed Raven project also seeks to establish the New Roman Empire, a global renaissance of knowledge, culture, and innovation, with the Torus Pyramid as its spiritual and operational base.</p>
         </div>
-        <div class="content-section" id="explore">
-            <h2>Explore the Cosmic Vision</h2>
-            <p>Discover the sacred truths that will guide us to eternity.</p>
-            <a href="family-tree.html" class="link-button">Sacred Lineage</a>
-            <a href="immortality.html" class="link-button">Eternal Life</a>
-            <a href="pyramids.html" class="link-button">Pyramid Power</a>
-            <a href="astral-game.html" class="link-button">Astral Game</a>
-            <a href="med-beds.html" class="link-button">Med Beds</a>
-            <a href="panchristism.html" class="link-button">Panchristism</a>
-            <a href="theory-of-everything.html" class="link-button">Theory of Everything</a>
-            <a href="torus-energy.html" class="link-button">Torus Energy</a>
-            <a href="donate.html" class="link-button">Support the Vision</a>
+        <div id="explore" class="content-section">
+            <h2>Explore</h2>
+            <p>Dive into the mysteries of the Blessed Raven project through our interconnected initiatives:</p>
+            <ul>
+                <li><strong><a href="family-tree.html" style="color: #ffd700; text-decoration: none;">Sacred Family Tree:</a></strong> Discover the divine lineage of Jacob, tracing back to Zeus, Aphrodite, King David, and the Earth Goddess Gaia.</li>
+                <li><strong><a href="immortality.html" style="color: #ffd700; text-decoration: none;">Immortality:</a></strong> Explore the quest for eternal life through DNA repair and the "Ricochet 4356" clue.</li>
+                <li><strong><a href="pyramids.html" style="color: #ffd700; text-decoration: none;">Torus Pyramid:</a></strong> Learn about the sacred structure harnessing magnetic fields to power a new era of enlightenment.</li>
+                <li><strong><a href="astral-game.html" style="color: #ffd700; text-decoration: none;">Astral Game:</a></strong> Journey through the astral plane in a groundbreaking VR experience, enhanced by the Med Bed.</li>
+                <li><strong><a href="med-beds.html" style="color: #ffd700; text-decoration: none;">Med Beds:</a></strong> Discover the technology that heals the body and mind using light, sound, and bioresonance.</li>
+                <li><strong><a href="theory-of-everything.html" style="color: #ffd700; text-decoration: none;">Theory of Everything:</a></strong> Unify science and spirituality through the principles of torus energy and sacred geometry.</li>
+                <li><strong><a href="torus-energy.html" style="color: #ffd700; text-decoration: none;">Torus Energy:</a></strong> Understand the universal energy pattern that powers life, consciousness, and the cosmos.</li>
+                <li><strong><a href="donate.html" style="color: #ffd700; text-decoration: none;">Donate:</a></strong> Support the Blessed Raven project and join us in shaping the future of humanity.</li>
+            </ul>
         </div>
     </main>
     <footer>
