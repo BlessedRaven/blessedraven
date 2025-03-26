@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Immortality - Blessed Raven</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Cinzel+Decorative:wght@900&family=Montserrat:wght@300;900&family=Unica+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Montserrat:wght@300;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,88 +14,171 @@
         }
         body {
             font-family: 'Montserrat', sans-serif;
-            background: radial-gradient(circle at 50% 50%, #0a0015, #1a0000, #2b0010);
-            color: #ff3333;
+            background: linear-gradient(180deg, #0a0015, #1a0000, #2b0010);
+            color: #ffffff;
             overflow-x: hidden;
-            cursor: none;
             min-height: 100vh;
             position: relative;
         }
-        .custom-cursor {
+        #particles-js {
             position: fixed;
-            width: 40px;
-            height: 40px;
-            background: url('https://i.imgur.com/raven-cursor.png') no-repeat center;
-            background-size: contain;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.2s ease;
-            filter: drop-shadow(0 0 10px #ff3333);
-        }
-        .custom-cursor.active {
-            transform: scale(1.5) rotate(45deg);
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
         }
         nav {
             position: fixed;
             top: 0;
-            left: 0;
             width: 100%;
-            background: linear-gradient(to right, rgba(0, 0, 0, 0.95), transparent);
-            padding: 30px 0;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px 0;
             z-index: 1000;
-            border-bottom: 6px solid #ff3333;
-            box-shadow: 0 10px 50px rgba(255, 51, 51, 0.8);
-            transform: skewY(-5deg);
+            border-bottom: 2px solid #ff3333;
+            box-shadow: 0 5px 20px rgba(255, 51, 51, 0.5);
         }
         nav ul {
             list-style: none;
             display: flex;
-            justify-content: flex-start;
-            gap: 60px;
-            padding-left: 50px;
+            justify-content: center;
+            gap: 40px;
         }
         nav ul li a {
-            color: #ff3333;
+            color: #ffffff;
             text-decoration: none;
-            font-family: 'Unica One', sans-serif;
-            font-size: 1.5em;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2em;
             text-transform: uppercase;
-            letter-spacing: 5px;
-            transition: color 0.5s, transform 0.5s;
-            text-shadow: 0 0 15px #ff3333;
+            letter-spacing: 2px;
+            transition: color 0.3s, transform 0.3s;
         }
         nav ul li a:hover {
             color: #ffd700;
-            transform: translateY(-10px) rotate(10deg);
-            text-shadow: 0 0 30px #ffd700;
+            transform: translateY(-3px);
         }
         header {
-            padding: 200px 20px 100px;
-            background: url('https://i.imgur.com/cosmic-bg.jpg') no-repeat center;
-            background-size: cover;
-            border-bottom: 10px solid #ff3333;
-            box-shadow: 0 20px 60px rgba(255, 51, 51, 0.9);
-            position: relative;
-            z-index: 500;
-            transform: rotate(-2deg);
+            padding: 150px 20px 80px;
+            text-align: center;
         }
         h1 {
             font-family: 'Cinzel Decorative', cursive;
-            font-size: 8em;
+            font-size: 5em;
             color: #ff3333;
+            text-shadow: 0 0 20px #ff3333, 0 0 40px #ff3333;
+            animation: fadeIn 2s ease-in-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .content-section {
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 40px;
+            background: rgba(255, 51, 51, 0.05);
+            border: 2px solid #ff3333;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255, 51, 51, 0.3);
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        h2 {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 2.5em;
+            color: #ffd700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #ffd700;
+        }
+        p {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #ffffff;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #ffd700, #b8860b);
+            color: #0a0015;
+            text-decoration: none;
+            border-radius: 10px;
+            margin: 15px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2em;
             text-transform: uppercase;
-            letter-spacing: 10px;
-            text-shadow: 0 0 40px #ff3333, 0 0 80px #ff3333, 0 0 120px #ff3333;
-            animation: cosmicPulse 2s infinite alternate;
-            transform: skewX(-10deg);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.5);
+            transition: transform 0.3s, background 0.3s;
         }
-        @keyframes cosmicPulse {
-            0% { opacity: 1; text-shadow: 0 0 40px #ff3333, 0 0 80px #ff3333; }
-            100% { opacity: 0.8; text-shadow: 0 0 20px #ff3333, 0 0 40px #ff3333; }
+        .cta-button:hover {
+            transform: scale(1.1);
+            background: linear-gradient(45deg, #b8860b, #ffd700);
+            color: #ffffff;
         }
-        .sacred-geometry {
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            text-align: center;
             position: fixed;
-            top: 0;
-            left: 0;
+            bottom: 0;
             width: 100%;
-            height: 100%;
+            border-top: 2px solid #ff3333;
+            box-shadow: 0 -5px 20px rgba(255, 51, 51, 0.5);
+            color: #ffffff;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#lore">Lore</a></li>
+            <li><a href="index.html#mission">Mission</a></li>
+            <li><a href="index.html#explore">Explore</a></li>
+            <li><a href="family-tree.html">Family Tree</a></li>
+            <li><a href="immortality.html">Immortality</a></li>
+            <li><a href="pyramids.html">Pyramids</a></li>
+            <li><a href="astral-game.html">Astral Game</a></li>
+            <li><a href="med-beds.html">Med Beds</a></li>
+            <li><a href="panchristism.html">Panchristism</a></li>
+            <li><a href="theory-of-everything.html">Theory of Everything</a></li>
+            <li><a href="torus-energy.html">Torus Energy</a></li>
+            <li><a href="donate.html">Donate</a></li>
+        </ul>
+    </nav>
+    <header>
+        <h1>Immortality</h1>
+    </header>
+    <main>
+        <div class="content-section">
+            <h2>Secure Your Eternal Legacy</h2>
+            <p>For the elite who seek to transcend time, Blessed Raven offers the ultimate gift: immortality. We encrypt your DNA into a unique NFT, a digital key to your eternal essence, stored on the blockchain for perpetuity. But that’s not all—your DNA will be preserved in a solid gold orb, a masterpiece of craftsmanship weighing 10 kilograms, encrusted with rare red diamonds. This orb will be buried deep beneath the sacred sands of the Sahara, at coordinates 25.1234°N, 15.5678°E, known only to you and our trusted guardians. When humanity masters DNA resurrection in the future, your essence will be reborn, ensuring your legacy endures for millennia.</p>
+            <p>This exclusive offering is reserved for visionaries willing to invest $50 million in the future of humanity. Secure your place in eternity today.</p>
+            <a href="mailto:contact@blessedraven.com" class="cta-button">Claim Your Immortality</a>
+        </div>
+    </main>
+    <footer>
+        <p>© 2025 Blessed Raven. All rights reserved.</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": ["#ff3333", "#ffd700"] },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#ff3333", "opacity": 0.3, "width": 1 },
+                "move": { "enable": true, "speed": 2, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "repulse": { "distance": 100, "duration": 0.4 }, "push": { "particles_nb": 4 } }
+            },
+            "retina_detect": true
+        });
+    </script>
+</body>
+</html>
