@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panchristism - Blessed Raven</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, #000000, #1a0000, #330000);
+            color: #ff0000;
+            text-align: center;
+            overflow-x: hidden;
+            cursor: none;
+            min-height: 100vh;
+            position: relative;
+        }
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.8), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 15px 0;
+            z-index: 1000;
+            border-bottom: 3px solid #ff0000;
+            box-shadow: 0 5px 20px rgba(255, 0, 0, 0.7);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+        nav ul li a {
+            color: #ff0000;
+            text-decoration: none;
+            font-size: 1.2em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: color 0.3s, transform 0.3s;
+        }
+        nav ul li a:hover {
+            color: #ffffff;
+            transform: scale(1.2);
+            text-shadow: 0 0 15px #ff0000;
+        }
+        header {
+            padding: 100px 20px 50px;
+            background: rgba(0, 0, 0, 0.9);
+            border-bottom: 5px solid #ff0000;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.7);
+            position: relative;
+            z-index: 500;
+        }
+        h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 5em;
+            color: #ff0000;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000, 0 0 60px #ff0000;
+            animation: neonFlicker 1.5s infinite alternate;
+        }
+        @keyframes neonFlicker {
+            0%, 100% { opacity: 1; text-shadow
