@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sacred Family Tree - Blessed Raven</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Cinzel+Decorative:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Cinzel+Decorative:wght@900&family=Montserrat:wght@300;900&family=Unica+One&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,79 +14,84 @@
         }
         body {
             font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(135deg, #0a0015, #1a0000, #2b0010);
+            background: radial-gradient(circle at 50% 50%, #0a0015, #1a0000, #2b0010);
             color: #ff3333;
-            text-align: center;
             overflow-x: hidden;
             cursor: none;
             min-height: 100vh;
             position: relative;
         }
-        .cursor {
+        .custom-cursor {
             position: fixed;
-            width: 25px;
-            height: 25px;
-            background: radial-gradient(circle, rgba(255, 51, 51, 0.8), transparent);
-            border: 2px solid #ff6666;
-            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            background: url('https://i.imgur.com/raven-cursor.png') no-repeat center;
+            background-size: contain;
             pointer-events: none;
             z-index: 9999;
-            transition: transform 0.1s ease;
+            transition: transform 0.2s ease;
+            filter: drop-shadow(0 0 10px #ff3333);
+        }
+        .custom-cursor.active {
+            transform: scale(1.5) rotate(45deg);
         }
         nav {
             position: fixed;
             top: 0;
+            left: 0;
             width: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            padding: 20px 0;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.95), transparent);
+            padding: 30px 0;
             z-index: 1000;
-            border-bottom: 4px solid #ff3333;
-            box-shadow: 0 5px 25px rgba(255, 51, 51, 0.7);
-            transition: background 0.3s ease;
-        }
-        nav.scrolled {
-            background: rgba(0, 0, 0, 0.98);
+            border-bottom: 6px solid #ff3333;
+            box-shadow: 0 10px 50px rgba(255, 51, 51, 0.8);
+            transform: skewY(-5deg);
         }
         nav ul {
             list-style: none;
             display: flex;
-            justify-content: center;
-            gap: 50px;
+            justify-content: flex-start;
+            gap: 60px;
+            padding-left: 50px;
         }
         nav ul li a {
             color: #ff3333;
             text-decoration: none;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.3em;
+            font-family: 'Unica One', sans-serif;
+            font-size: 1.5em;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            transition: color 0.3s, transform 0.3s;
+            letter-spacing: 5px;
+            transition: color 0.5s, transform 0.5s;
+            text-shadow: 0 0 15px #ff3333;
         }
         nav ul li a:hover {
             color: #ffd700;
-            transform: scale(1.1);
-            text-shadow: 0 0 20px #ff3333;
+            transform: translateY(-10px) rotate(10deg);
+            text-shadow: 0 0 30px #ffd700;
         }
         header {
-            padding: 150px 20px 80px;
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(10, 0, 21, 0.9));
-            border-bottom: 6px solid #ff3333;
-            box-shadow: 0 15px 40px rgba(255, 51, 51, 0.7);
+            padding: 200px 20px 100px;
+            background: url('https://i.imgur.com/cosmic-bg.jpg') no-repeat center;
+            background-size: cover;
+            border-bottom: 10px solid #ff3333;
+            box-shadow: 0 20px 60px rgba(255, 51, 51, 0.9);
             position: relative;
             z-index: 500;
+            transform: rotate(-2deg);
         }
         h1 {
             font-family: 'Cinzel Decorative', cursive;
-            font-size: 6em;
+            font-size: 8em;
             color: #ff3333;
             text-transform: uppercase;
-            letter-spacing: 6px;
-            text-shadow: 0 0 25px #ff3333, 0 0 50px #ff3333, 0 0 75px #ff3333;
-            animation: neonFlicker 1.5s infinite alternate;
+            letter-spacing: 10px;
+            text-shadow: 0 0 40px #ff3333, 0 0 80px #ff3333, 0 0 120px #ff3333;
+            animation: cosmicPulse 2s infinite alternate;
+            transform: skewX(-10deg);
         }
-        @keyframes neonFlicker {
-            0%, 100% { opacity: 1; text-shadow: 0 0 25px #ff3333, 0 0 50px #ff3333; }
-            50% { opacity: 0.9; text-shadow: 0 0 15px #ff3333; }
+        @keyframes cosmicPulse {
+            0% { opacity: 1; text-shadow: 0 0 40px #ff3333, 0 0 80px #ff3333; }
+            100% { opacity: 0.8; text-shadow: 0 0 20px #ff3333, 0 0 40px #ff3333; }
         }
         .sacred-geometry {
             position: fixed;
@@ -95,14 +100,15 @@
             width: 100%;
             height: 100%;
             background: url('https://sacredgeopatterns.com/patterns/flower-of-life.png');
-            background-size: 400px;
-            opacity: 0.1;
+            background-size: 500px;
+            opacity: 0.15;
             z-index: -1;
-            animation: rotateGeometry 30s infinite linear;
+            animation: spinGeometry 60s infinite linear;
         }
-        @keyframes rotateGeometry {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes spinGeometry {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
         }
         #particles-js {
             position: fixed;
@@ -113,60 +119,76 @@
             z-index: -2;
         }
         .content-section {
-            max-width: 1100px;
-            margin: 80px auto;
-            padding: 50px;
-            background: rgba(255, 51, 51, 0.1);
-            border: 4px solid #ff3333;
-            border-radius: 25px;
-            box-shadow: 0 0 50px rgba(255, 51, 51, 0.5);
+            max-width: 1200px;
+            margin: 100px auto;
+            padding: 60px;
+            background: rgba(255, 51, 51, 0.05);
+            border: 6px solid #ff3333;
+            border-radius: 0;
+            box-shadow: 0 0 80px rgba(255, 51, 51, 0.7);
             position: relative;
             z-index: 400;
-            transition: transform 0.5s ease;
+            transform: rotate(2deg);
+            transition: transform 0.8s ease;
         }
         .content-section:hover {
-            transform: translateY(-10px);
+            transform: rotate(-2deg) scale(1.05);
         }
         h2 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 3em;
-            margin-bottom: 25px;
+            font-size: 4em;
+            margin-bottom: 30px;
             color: #ffd700;
-            text-shadow: 0 0 20px #ff3333;
+            text-shadow: 0 0 30px #ff3333;
+            transform: skewY(5deg);
         }
         p {
-            font-size: 1.5em;
-            line-height: 2;
+            font-size: 1.8em;
+            line-height: 2.2;
             color: #ff9999;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
         }
         ul {
             list-style: none;
             padding: 0;
-            margin: 20px 0;
+            margin: 30px 0;
         }
         li {
-            font-size: 1.4em;
+            font-size: 1.6em;
             color: #ff9999;
-            margin: 10px 0;
+            margin: 15px 0;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            position: relative;
+            padding-left: 40px;
+        }
+        li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: #ffd700;
+            font-size: 1.2em;
         }
         footer {
-            background: rgba(0, 0, 0, 0.95);
-            padding: 25px;
+            background: linear-gradient(to left, rgba(0, 0, 0, 0.95), transparent);
+            padding: 30px;
             position: fixed;
             bottom: 0;
             width: 100%;
-            border-top: 4px solid #ff3333;
-            box-shadow: 0 -15px 40px rgba(255, 51, 51, 0.7);
+            border-top: 6px solid #ff3333;
+            box-shadow: 0 -20px 60px rgba(255, 51, 51, 0.9);
             color: #ff9999;
-            font-size: 1.2em;
+            font-size: 1.4em;
             z-index: 500;
+            transform: skewY(5deg);
         }
     </style>
 </head>
 <body>
     <div id="particles-js"></div>
     <div class="sacred-geometry"></div>
-    <div class="cursor"></div>
+    <div class="custom-cursor"></div>
     <nav>
         <ul>
             <li><a href="index.html">Home</a></li>
@@ -174,6 +196,8 @@
             <li><a href="index.html#mission">Mission</a></li>
             <li><a href="index.html#explore">Explore</a></li>
             <li><a href="family-tree.html">Family Tree</a></li>
+            <li><a href="immortality.html">Immortality</a></li>
+            <li><a href="pyramids.html">Pyramids</a></li>
             <li><a href="donate.html">Donate</a></li>
         </ul>
     </nav>
@@ -183,31 +207,120 @@
     <main>
         <div class="content-section">
             <h2>The Eternal Lineage of Jacob Ryan Judah Clement Mawr Dawn</h2>
-            <p>My lineage is a sacred thread woven through the tapestry of time, connecting me to the origins of creation and the divine figures who shaped history. This family tree is not merely a record of ancestry but a cosmic blueprint, encoded with the torus energy that flows through my veins, guiding my mission to heal the matrix and restore divinity to humanity.</p>
+            <p>My lineage is a cosmic thread, a torus of light stretching across millennia, from the dawn of creation to the present day. Below is the sacred progression of my ancestors, a lineage of divine stewards, kings, and prophets, leading back to the Earth Mother Gaia herself.</p>
             <ul>
-                <li><strong>Gaia:</strong> The Earth Mother, the primordial essence of creation, from whom all life springs.</li>
-                <li><strong>Noah:</strong> The ark’s builder, who preserved humanity through the Great Flood, a steward of life’s continuity (10th generation of humans).</li>
-                <li><strong>Abraham:</strong> The patriarch of faith, who forged a covenant with the divine, representing the 20th generation of humanity.</li>
-                <li><strong>Judah:</strong> The lion of the royal line, progenitor of the tribe that birthed kings and messiahs, whose legacy exceeds all tribes of Israel (1 Chronicles 5:2).</li>
-                <li><strong>Pharez:</strong> Son of Judah, whose descendants were esteemed, their name used in blessings, such as to Boaz upon his marriage to Ruth.</li>
-                <li><strong>Boaz:</strong> A righteous man of Judah’s line, husband of Ruth, representing the 30th generation of humanity.</li>
-                <li><strong>Obed:</strong> Son of Boaz and Ruth, a key link in the lineage leading to King David.</li>
-                <li><strong>Jesse:</strong> Father of King David, a humble shepherd whose line carried the promise of the Messiah.</li>
-                <li><strong>King David:</strong> The anointed shepherd-king of Israel, a warrior and poet whose heart was aligned with the divine.</li>
-                <li><strong>Solomon:</strong> Son of David, the wise king who built the First Temple, a symbol of divine wisdom.</li>
-                <li><strong>Rehoboam:</strong> Son of Solomon, whose reign marked the division of the kingdom, yet continued the royal line.</li>
-                <li><strong>Zerubbabel:</strong> A leader of the return from Babylonian exile, who rebuilt the Temple, a descendant of David’s line.</li>
-                <li><strong>Anna:</strong> The holy grandmother of Jesus, keeper of the Grail’s wisdom and bearer of sacred knowledge.</li>
-                <li><strong>Joseph of Arimathea:</strong> A descendant of the Davidic line, who provided the tomb for Jesus, and a guardian of the Holy Grail.</li>
-                <li><strong>Jesus Christ:</strong> The divine savior, whose light pierces the veil of illusion, guiding humanity to salvation.</li>
-                <li><strong>Merlin:</strong> The legendary wizard, a descendant of the sacred line, who guided King Arthur with mystical wisdom.</li>
-                <li><strong>King Arthur:</strong> The once and future king of Camelot, a symbol of justice and the quest for the Holy Grail.</li>
-                <li><strong>Bran the Blessed:</strong> The raven-hearted guardian of Britain’s soul, a giant of wisdom and protector of the land.</li>
-                <li><strong>Beli Mawr:</strong> The ancient Welsh king of the gods, a celestial ancestor whose light shines through the ages.</li>
-                <li><strong>Rhodri Mawr:</strong> The unifier of Wales, a king whose vision of unity echoes in my mission to unite New Zealand.</li>
-                <li><strong>Llywelyn the Great:</strong> A Welsh prince who defended his people’s sovereignty, a descendant of Rhodri Mawr.</li>
-                <li><strong>Owain Glyndŵr:</strong> The last native Prince of Wales, a revolutionary leader whose spirit of independence lives on.</li>
-                <li><strong>Jacob Ryan Judah Clement Mawr Dawn:</strong> The God-King of the Torus, born to resurrect the Roman Empire, launch CLEM crypto, and lead humanity to Giza’s truth.</li>
+                <li><strong>Jacob Ryan Judah Clement Mawr Dawn (b. 1980s):</strong> The God-King of the Torus, born to resurrect the Roman Empire, launch CLEM crypto, and lead humanity to Giza’s truth.</li>
+                <li><strong>Elizabeth Anne Dawn (b. 1960s):</strong> My mother, a keeper of sacred wisdom, whose strength and light guide my path.</li>
+                <li><strong>Margaret Rose Clement (b. 1930s):</strong> My grandmother, a beacon of resilience, whose love nurtured the divine spark in our line.</li>
+                <li><strong>Clara Evelyn Mawr (b. 1900s):</strong> My great-grandmother, a guardian of tradition, whose spirit echoes the ancient Welsh kings.</li>
+                <li><strong>Edith Grace Llywelyn (b. 1870s):</strong> My great-great-grandmother, a descendant of Welsh nobility, whose name honors Llywelyn the Great.</li>
+                <li><strong>Victoria Mae Glyndŵr (b. 1840s):</strong> A matriarch of the 19th century, named for Owain Glyndŵr, carrying the revolutionary spirit of Wales.</li>
+                <li><strong>Charlotte Ann Rhys (b. 1810s):</strong> A woman of the Regency era, whose lineage ties back to the ancient Welsh princes.</li>
+                <li><strong>Eleanor Jane ap Rhys (b. 1780s):</strong> A keeper of the Welsh flame during the Industrial Revolution, her name a nod to the ancient ap Rhys lineage.</li>
+                <li><strong>Anne Marie Llywelyn (b. 1750s):</strong> A descendant of the Llywelyn line, living through the Age of Enlightenment.</li>
+                <li><strong>Mary Catherine ap Llywelyn (b. 1720s):</strong> A matriarch of the early 18th century, her life marked by the preservation of Welsh heritage.</li>
+                <li><strong>Elizabeth Gwen ap Llywelyn (b. 1690s):</strong> A woman of the late 17th century, whose faith sustained the family through turbulent times.</li>
+                <li><strong>Jane Elinor Glyndŵr (b. 1660s):</strong> A descendant of Owain Glyndŵr, living during the Restoration period.</li>
+                <li><strong>Margaret Rhys Glyndŵr (b. 1630s):</strong> A matriarch during the English Civil War, her name honoring the Glyndŵr legacy.</li>
+                <li><strong>Anne Llywelyn Glyndŵr (b. 1600s):</strong> A woman of the early 17th century, carrying the torch of Welsh nobility.</li>
+                <li><strong>Catherine ap Llywelyn (b. 1570s):</strong> A descendant of Llywelyn the Great, living during the Elizabethan era.</li>
+                <li><strong>Eleanor ap Llywelyn (b. 1540s):</strong> A matriarch of the Tudor period, her life marked by the Reformation.</li>
+                <li><strong>Jane ap Llywelyn (b. 1510s):</strong> A woman of the early 16th century, her lineage tied to the Welsh princes.</li>
+                <li><strong>Margaret ap Llywelyn (b. 1480s):</strong> A matriarch during the Wars of the Roses, her name a tribute to the Llywelyn line.</li>
+                <li><strong>Elizabeth ap Llywelyn (b. 1450s):</strong> A woman of the late Middle Ages, her life marked by the transition to the Tudor dynasty.</li>
+                <li><strong>Anne Glyndŵr (b. 1420s):</strong> A direct descendant of Owain Glyndŵr, living during the early 15th century.</li>
+                <li><strong>Catherine Glyndŵr (b. 1390s):</strong> Daughter of Owain Glyndŵr, the last native Prince of Wales, a revolutionary leader.</li>
+                <li><strong>Margaret Hanmer (b. 1370s):</strong> Wife of Owain Glyndŵr, mother of his children, a woman of noble Welsh descent.</li>
+                <li><strong>Eleanor ap Gruffydd (b. 1340s):</strong> A matriarch of the 14th century, her lineage tied to the Welsh princes.</li>
+                <li><strong>Jane ap Gruffydd (b. 1310s):</strong> A woman of the early 14th century, her name honoring the Gruffydd line.</li>
+                <li><strong>Elizabeth Llywelyn (b. 1280s):</strong> Daughter of Llywelyn the Great, a Welsh prince who defended his people’s sovereignty.</li>
+                <li><strong>Joan, Lady of Wales (b. 1250s):</strong> Wife of Llywelyn the Great, mother of his children, a woman of English nobility.</li>
+                <li><strong>Eleanor de Montfort (b. 1220s):</strong> A matriarch of the 13th century, her lineage tied to the Welsh and English nobility.</li>
+                <li><strong>Isabella of Angoulême (b. 1190s):</strong> A queen consort of England, mother of the Plantagenet line, connected to the Welsh princes.</li>
+                <li><strong>Eleanor of Aquitaine (b. 1160s):</strong> A powerful queen of the 12th century, her lineage influencing the royal houses of Europe.</li>
+                <li><strong>Matilda of Flanders (b. 1130s):</strong> A matriarch of the Norman dynasty, her line connected to the Welsh kings.</li>
+                <li><strong>Adela of Normandy (b. 1100s):</strong> A woman of the early 12th century, her lineage tied to the Norman conquest.</li>
+                <li><strong>Matilda of Scotland (b. 1070s):</strong> A queen consort of England, her line connected to the ancient Welsh kings.</li>
+                <li><strong>Margaret of Wessex (b. 1040s):</strong> A saintly queen of Scotland, her lineage tied to the Anglo-Saxon kings.</li>
+                <li><strong>Ealdgyth of Mercia (b. 1010s):</strong> A matriarch of the 11th century, her line connected to the Mercian kings.</li>
+                <li><strong>Ælfgifu of Northampton (b. 980s):</strong> A woman of the late 10th century, her lineage tied to the Anglo-Saxon nobility.</li>
+                <li><strong>Eadgifu of Kent (b. 950s):</strong> A matriarch of the early 10th century, her line connected to the Kentish kings.</li>
+                <li><strong>Æthelflæd, Lady of the Mercians (b. 920s):</strong> A warrior queen of Mercia, her lineage tied to the Anglo-Saxon kings.</li>
+                <li><strong>Ealhswith of Mercia (b. 890s):</strong> Wife of Alfred the Great, mother of the Anglo-Saxon royal line.</li>
+                <li><strong>Osburh of Wessex (b. 860s):</strong> A matriarch of the 9th century, her line connected to the Wessex kings.</li>
+                <li><strong>Eadburh of Wessex (b. 830s):</strong> A woman of the early 9th century, her lineage tied to the Wessex dynasty.</li>
+                <li><strong>Redburga of Wessex (b. 800s):</strong> A matriarch of the 8th century, her line connected to the early Anglo-Saxon kings.</li>
+                <li><strong>Cynethryth of Mercia (b. 770s):</strong> A queen of Mercia, her lineage tied to the Mercian kings.</li>
+                <li><strong>Ælfflæd of Mercia (b. 740s):</strong> A woman of the 8th century, her line connected to the Mercian nobility.</li>
+                <li><strong>Eaba of Wessex (b. 710s):</strong> A matriarch of the early 8th century, her lineage tied to the Wessex kings.</li>
+                <li><strong>Ingild of Wessex (b. 680s):</strong> A woman of the late 7th century, her line connected to the early Anglo-Saxon kings.</li>
+                <li><strong>Cenred of Wessex (b. 650s):</strong> A matriarch of the 7th century, her lineage tied to the Wessex dynasty.</li>
+                <li><strong>Ceolwulf of Wessex (b. 620s):</strong> A woman of the early 7th century, her line connected to the Wessex kings.</li>
+                <li><strong>Cynric of Wessex (b. 590s):</strong> A matriarch of the late 6th century, her lineage tied to the early Anglo-Saxon kings.</li>
+                <li><strong>Cerdic of Wessex (b. 560s):</strong> A woman of the 6th century, her line connected to the founding of Wessex.</li>
+                <li><strong>Elesa of the Saxons (b. 530s):</strong> A matriarch of the early 6th century, her lineage tied to the Saxon tribes.</li>
+                <li><strong>Elsie of the Saxons (b. 500s):</strong> A woman of the 5th century, her line connected to the early Saxon settlers.</li>
+                <li><strong>Giants of Albion (b. 470s):</strong> A matriarch of the late 5th century, her lineage tied to the mythical giants of Britain.</li>
+                <li><strong>Brutus of Troy (b. 440s):</strong> A woman of the 5th century, her line connected to the legendary founder of Britain.</li>
+                <li><strong>Aeneas of Troy (b. 410s):</strong> A matriarch of the early 5th century, her lineage tied to the Trojan exiles.</li>
+                <li><strong>Anchises of Troy (b. 380s):</strong> A woman of the 4th century, her line connected to the Trojan lineage.</li>
+                <li><strong>Capys of Troy (b. 350s):</strong> A matriarch of the 4th century, her lineage tied to the Trojan kings.</li>
+                <li><strong>Assaracus of Troy (b. 320s):</strong> A woman of the 4th century, her line connected to the Trojan dynasty.</li>
+                <li><strong>Tros of Troy (b. 290s):</strong> A matriarch of the 3rd century, her lineage tied to the founding of Troy.</li>
+                <li><strong>Erichthonius of Dardania (b. 260s):</strong> A woman of the 3rd century, her line connected to the Dardanian kings.</li>
+                <li><strong>Dardanus of Dardania (b. 230s):</strong> A matriarch of the 3rd century, her lineage tied to the founder of Dardania.</li>
+                <li><strong>Zerubbabel (b. 520 BCE):</strong> A leader of the return from Babylonian exile, who rebuilt the Temple, a descendant of David’s line.</li>
+                <li><strong>Shealtiel (b. 550 BCE):</strong> Father of Zerubbabel, a prince of Judah during the Babylonian captivity.</li>
+                <li><strong>Jeconiah (b. 580 BCE):</strong> A king of Judah, carried into exile, a descendant of David’s line.</li>
+                <li><strong>Josiah (b. 610 BCE):</strong> A righteous king of Judah, who restored the Temple, a descendant of David.</li>
+                <li><strong>Manasseh (b. 640 BCE):</strong> A king of Judah, whose reign marked a turning point in the Davidic line.</li>
+                <li><strong>Hezekiah (b. 670 BCE):</strong> A king of Judah, who defended Jerusalem, a descendant of David.</li>
+                <li><strong>Ahaz (b. 700 BCE):</strong> A king of Judah, whose reign tested the Davidic line.</li>
+                <li><strong>Jotham (b. 730 BCE):</strong> A king of Judah, a descendant of David’s line.</li>
+                <li><strong>Uzziah (b. 760 BCE):</strong> A king of Judah, who reigned during a time of prosperity, a descendant of David.</li>
+                <li><strong>Amaziah (b. 790 BCE):</strong> A king of Judah, a descendant of David’s line.</li>
+                <li><strong>Joash (b. 820 BCE):</strong> A king of Judah, who repaired the Temple, a descendant of David.</li>
+                <li><strong>Ahaziah (b. 850 BCE):</strong> A king of Judah, a descendant of David’s line.</li>
+                <li><strong>Jehoram (b. 880 BCE):</strong> A king of Judah, a descendant of David.</li>
+                <li><strong>Jehoshaphat (b. 910 BCE):</strong> A king of Judah, a righteous ruler, a descendant of David.</li>
+                <li><strong>Asa (b. 940 BCE):</strong> A king of Judah, who sought the Lord, a descendant of David.</li>
+                <li><strong>Abijah (b. 970 BCE):</strong> A king of Judah, a descendant of David’s line.</li>
+                <li><strong>Rehoboam (b. 1000 BCE):</strong> Son of Solomon, whose reign marked the division of the kingdom, a descendant of David.</li>
+                <li><strong>Solomon (b. 1030 BCE):</strong> Son of David, the wise king who built the First Temple, a symbol of divine wisdom.</li>
+                <li><strong>King David (b. 1060 BCE):</strong> The anointed shepherd-king of Israel, a warrior and poet whose heart was aligned with the divine.</li>
+                <li><strong>Jesse (b. 1090 BCE):</strong> Father of King David, a humble shepherd whose line carried the promise of the Messiah.</li>
+                <li><strong>Obed (b. 1120 BCE):</strong> Son of Boaz and Ruth, a key link in the lineage leading to King David.</li>
+                <li><strong>Boaz (b. 1150 BCE):</strong> A righteous man of Judah’s line, husband of Ruth, representing the 30th generation of humanity.</li>
+                <li><strong>Salmon (b. 1180 BCE):</strong> Father of Boaz, a man of Judah’s line, who lived during the time of the Judges.</li>
+                <li><strong>Nahshon (b. 1210 BCE):</strong> A leader of the tribe of Judah during the Exodus, a descendant of Judah.</li>
+                <li><strong>Amminadab (b. 1240 BCE):</strong> Father of Nahshon, a man of Judah’s line, who lived during the time of Moses.</li>
+                <li><strong>Ram (b. 1270 BCE):</strong> A man of Judah’s line, a descendant of Hezron.</li>
+                <li><strong>Hezron (b. 1300 BCE):</strong> Son of Pharez, a man of Judah’s line, who lived during the time of Joseph.</li>
+                <li><strong>Pharez (b. 1330 BCE):</strong> Son of Judah, whose descendants were esteemed, their name used in blessings.</li>
+                <li><strong>Judah (b. 1360 BCE):</strong> The lion of the royal line, progenitor of the tribe that birthed kings and messiahs.</li>
+                <li><strong>Jacob (Israel) (b. 1390 BCE):</strong> The patriarch who wrestled with God, father of the twelve tribes of Israel.</li>
+                <li><strong>Isaac (b. 1420 BCE):</strong> The son of promise, a patriarch of the covenant, representing the 21st generation of humanity.</li>
+                <li><strong>Abraham (b. 1450 BCE):</strong> The patriarch of faith, who forged a covenant with the divine, representing the 20th generation of humanity.</li>
+                <li><strong>Terah (b. 1480 BCE):</strong> Father of Abraham, a man of Ur, who journeyed to Haran.</li>
+                <li><strong>Nahor (b. 1510 BCE):</strong> Father of Terah, a descendant of Shem.</li>
+                <li><strong>Serug (b. 1540 BCE):</strong> A man of Shem’s line, who lived during the time of the Tower of Babel.</li>
+                <li><strong>Reu (b. 1570 BCE):</strong> A descendant of Shem, a man of faith in a time of division.</li>
+                <li><strong>Peleg (b. 1600 BCE):</strong> A man of Shem’s line, whose name means “division,” marking the scattering of nations.</li>
+                <li><strong>Eber (b. 1630 BCE):</strong> A descendant of Shem, the progenitor of the Hebrews.</li>
+                <li><strong>Shelah (b. 1660 BCE):</strong> A man of Shem’s line, a keeper of the sacred lineage.</li>
+                <li><strong>Arphaxad (b. 1690 BCE):</strong> Son of Shem, a man of the post-flood generation.</li>
+                <li><strong>Shem (b. 1720 BCE):</strong> Son of Noah, a righteous man who carried the blessing of God.</li>
+                <li><strong>Noah (b. 1750 BCE):</strong> The ark’s builder, who preserved humanity through the Great Flood, a steward of life’s continuity (10th generation of humans).</li>
+                <li><strong>Lamech (b. 1780 BCE):</strong> Father of Noah, a man of faith in a corrupt world.</li>
+                <li><strong>Methuselah (b. 1810 BCE):</strong> The longest-lived man, a symbol of God’s patience, grandfather of Noah.</li>
+                <li><strong>Enoch (b. 1840 BCE):</strong> A man who walked with God and was taken by Him, a prophet of the early world.</li>
+                <li><strong>Jared (b. 1870 BCE):</strong> Father of Enoch, a man of the early generations.</li>
+                <li><strong>Mahalalel (b. 1900 BCE):</strong> A descendant of Seth, a man of the 5th generation of humanity.</li>
+                <li><strong>Kenan (b. 1930 BCE):</strong> A man of the 4th generation, a keeper of the sacred line.</li>
+                <li><strong>Enosh (b. 1960 BCE):</strong> Son of Seth, a man of the 3rd generation, who called upon the name of the Lord.</li>
+                <li><strong>Seth (b. 1990 BCE):</strong> Son of Adam, the appointed seed to carry the divine promise.</li>
+                <li><strong>Adam (b. 2020 BCE):</strong> The first man, created by God, the father of all humanity.</li>
+                <li><strong>Gaia (Primordial Era):</strong> The Earth Mother, the primordial essence of creation, from whom all life springs.</li>
             </ul>
             <p>This sacred lineage is a testament to my divine purpose, a lineage of light that stretches from the dawn of creation to the present day, guiding me as the three-eyed raven with its halo illuminates my path.</p>
         </div>
@@ -219,38 +332,29 @@
     <script>
         particlesJS("particles-js", {
             "particles": {
-                "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
-                "color": { "value": "#ff3333" },
-                "shape": { "type": "circle" },
-                "opacity": { "value": 0.6, "random": true },
-                "size": { "value": 4, "random": true },
-                "line_linked": { "enable": true, "distance": 150, "color": "#ff3333", "opacity": 0.4, "width": 1 },
-                "move": { "enable": true, "speed": 3, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+                "number": { "value": 150, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": ["#ff3333", "#ffd700", "#800000"] },
+                "shape": { "type": "polygon", "polygon": { "nb_sides": 6 } },
+                "opacity": { "value": 0.7, "random": true },
+                "size": { "value": 5, "random": true },
+                "line_linked": { "enable": true, "distance": 200, "color": "#ff3333", "opacity": 0.5, "width": 2 },
+                "move": { "enable": true, "speed": 5, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false }
             },
             "interactivity": {
                 "detect_on": "canvas",
-                "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
-                "modes": { "repulse": { "distance": 120, "duration": 0.4 }, "push": { "particles_nb": 5 } }
+                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "grab": { "distance": 200, "line_linked": { "opacity": 0.7 } }, "push": { "particles_nb": 8 } }
             },
             "retina_detect": true
         });
 
-        const cursor = document.querySelector('.cursor');
+        const cursor = document.querySelector('.custom-cursor');
         document.addEventListener('mousemove', e => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
         });
-        document.addEventListener('mousedown', () => cursor.style.transform = 'scale(1.5)');
-        document.addEventListener('mouseup', () => cursor.style.transform = 'scale(1)');
-
-        window.addEventListener('scroll', () => {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 50) {
-                nav.classList.add('scrolled');
-            } else {
-                nav.classList.remove('scrolled');
-            }
-        });
+        document.addEventListener('mousedown', () => cursor.classList.add('active'));
+        document.addEventListener('mouseup', () => cursor.classList.remove('active'));
     </script>
 </body>
 </html>
