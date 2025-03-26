@@ -1,84 +1,209 @@
-<!DOCTYPE html>  
-<html lang="en">  
-<head>  
-    <meta charset="UTF-8">  
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>Donate to the Cause - Blessed Raven</title>  
-    <style>  
-        body {  
-            font-family: 'Impact', 'Arial Black', sans-serif; /* Edgy, bold font */  
-            background: linear-gradient(135deg, #000000, #1a0000); /* Black to deep red base */  
-            color: #ff0000; /* Bright red text */  
-            margin: 0;  
-            padding: 0;  
-            text-align: center;  
-            overflow-x: hidden;  
-            text-shadow: 2px 2px 4px #800080, -2px -2px 4px #FFD700; /* Purple and gold shadow */  
-        }  
-        header {  
-            background: rgba(0, 0, 0, 0.9);  
-            padding: 20px;  
-            border-bottom: 5px solid #FFD700; /* Gold edge */  
-            box-shadow: 0 5px 15px rgba(128, 0, 128, 0.5); /* Purple glow */  
-        }  
-        h1 {  
-            font-size: 3.5em;  
-            margin: 20px 0;  
-            color: #FFD700; /* Gold text */  
-            text-transform: uppercase; /* Edgy, bold */  
-            letter-spacing: 3px;  
-            text-shadow: 0 0 15px #800080, 0 0 30px #ff0000; /* Purple and red glow */  
-            animation: glow 2s infinite alternate; /* Flashy glow */  
-        }  
-        @keyframes glow {  
-            0% { text-shadow: 0 0 15px #800080, 0 0 30px #ff0000; }  
-            100% { text-shadow: 0 0 30px #800080, 0 0 60px #ff0000; }  
-        }  
-        .sacred-geometry {  
-            position: fixed;  
-            top: 0;  
-            left: 0;  
-            width: 100%;  
-            height: 100%;  
-            background-image: url('https://cdn.pixabay.com/photo/2020/07/07/22/50/mandala-5382738_1280.jpg'); /* True sacred geometry (Flower of Life pattern) */  
-            background-size: 300px; /* Larger pattern size for visibility */  
-            background-repeat: repeat;  
-            opacity: 0.5; /* Increased opacity to make it visible */  
-            z-index: -1;  
-            animation: rotateGeometry 60s infinite linear, pulseGeometry 10s infinite ease-in-out; /* Rotating and pulsing */  
-        }  
-        @keyframes rotateGeometry {  
-            0% { transform: rotate(0deg); }  
-            100% { transform: rotate(360deg); }  
-        }  
-        @keyframes pulseGeometry {  
-            0% { opacity: 0.5; transform: scale(1); }  
-            50% { opacity: 0.7; transform: scale(1.05); }  
-            100% { opacity: 0.5; transform: scale(1); }  
-        }  
-        .content {  
-            max-width: 900px;  
-            margin: 40px auto;  
-            padding: 25px;  
-            background: rgba(128, 0, 128, 0.3); /* Deeper purple glow */  
-            border: 3px solid #FFD700; /* Gold border */  
-            border-radius: 15px;  
-            box-shadow: 0 0 25px rgba(255, 215, 0, 0.7), 0 0 50px rgba(128, 0, 128, 0.5); /* Gold and purple glow */  
-            font-size: 1.3em;  
-            line-height: 1.8;  
-            animation: fadeIn 2s ease-in;  
-        }  
-        @keyframes fadeIn {  
-            0% { opacity: 0; transform: translateY(20px); }  
-            100% { opacity: 1; transform: translateY(0); }  
-        }  
-        .raven-image {  
-            max-width: 500px;  
-            margin: 20px auto;  
-            animation: hoverGlow 4s infinite ease-in-out; /* Flashy hover and glow */  
-            border: 3px solid #800080; /* Purple border */  
-            border-radius: 50%; /* Circular for divine energy */  
-            box-shadow: 0 0 20px #FFD700, 0 0 40px #800080; /* Gold and purple glow */  
-            position: relative;  
-        }  
-        .r
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate - Blessed Raven</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, #000000, #1a0000, #330000);
+            color: #ff0000;
+            text-align: center;
+            overflow-x: hidden;
+            cursor: none;
+            min-height: 100vh;
+            position: relative;
+        }
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.8), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 15px 0;
+            z-index: 1000;
+            border-bottom: 3px solid #ff0000;
+            box-shadow: 0 5px 20px rgba(255, 0, 0, 0.7);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+        nav ul li a {
+            color: #ff0000;
+            text-decoration: none;
+            font-size: 1.2em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: color 0.3s, transform 0.3s;
+        }
+        nav ul li a:hover {
+            color: #ffffff;
+            transform: scale(1.2);
+            text-shadow: 0 0 15px #ff0000;
+        }
+        header {
+            padding: 100px 20px 50px;
+            background: rgba(0, 0, 0, 0.9);
+            border-bottom: 5px solid #ff0000;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.7);
+            position: relative;
+            z-index: 500;
+        }
+        h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 5em;
+            color: #ff0000;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000, 0 0 60px #ff0000;
+            animation: neonFlicker 1.5s infinite alternate;
+        }
+        @keyframes neonFlicker {
+            0%, 100% { opacity: 1; text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000; }
+            50% { opacity: 0.85; text-shadow: 0 0 10px #ff0000; }
+        }
+        .sacred-geometry {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://sacredgeopatterns.com/patterns/flower-of-life.png');
+            background-size: 300px;
+            opacity: 0.15;
+            z-index: -1;
+            animation: rotateGeometry 20s infinite linear;
+        }
+        @keyframes rotateGeometry {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -2;
+        }
+        .content-section {
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 40px;
+            background: rgba(255, 0, 0, 0.15);
+            border: 3px solid #ff0000;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.5);
+            position: relative;
+            z-index: 400;
+        }
+        h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 0 0 15px #ff0000;
+        }
+        p {
+            font-size: 1.4em;
+            line-height: 1.9;
+            color: #ffcccc;
+        }
+        a {
+            color: #ffffff;
+            text-decoration: underline;
+            transition: color 0.3s;
+        }
+        a:hover {
+            color: #ffcccc;
+        }
+        footer {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 20px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            border-top: 3px solid #ff0000;
+            box-shadow: 0 -10px 30px rgba(255, 0, 0, 0.7);
+            color: #ffcccc;
+            font-size: 1.1em;
+            z-index: 500;
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="sacred-geometry"></div>
+    <div class="cursor"></div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#lore">Lore</a></li>
+            <li><a href="index.html#mission">Mission</a></li>
+            <li><a href="index.html#explore">Explore</a></li>
+            <li><a href="family-tree.html">Family Tree</a></li>
+            <li><a href="donate.html">Donate</a></li>
+        </ul>
+    </nav>
+    <header>
+        <h1>Donate</h1>
+    </header>
+    <main>
+        <div class="content-section">
+            <h2>Support the Vision</h2>
+            <p>Your support helps us continue our mission to heal the matrix, activate torus energy, and bring forth a new era of enlightenment. Donate using cryptocurrency or join our community on Discord to connect with like-minded individuals.</p>
+            <p><strong>Crypto Wallet Address:</strong> <a href="https://etherscan.io/address/0xE8787D2Ddc6022ADe1b75D42D2440E6F0BAd6864" target="_blank">0xE8787D2Ddc6022ADe1b75D42D2440E6F0BAd6864</a></p>
+            <p><strong>Join Our Discord:</strong> <a href="https://discord.gg/Bw57a5Gd22" target="_blank">https://discord.gg/Bw57a5Gd22</a></p>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 Blessed Raven. All rights reserved.</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#ff0000" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#ff0000", "opacity": 0.4, "width": 1 },
+                "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "repulse": { "distance": 100, "duration": 0.4 }, "push": { "particles_nb": 4 } }
+            },
+            "retina_detect": true
+        });
+
+        const cursor = document.querySelector('.cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        document.addEventListener('mousedown', () => cursor.style.transform = 'scale(1.5)');
+        document.addEventListener('mouseup', () => cursor.style.transform = 'scale(1)');
+    </script>
+</body>
+</html>
