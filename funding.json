@@ -1,6 +1,6 @@
 {
   "headline": "Seed the nest",
-  "lede": "Back the inventions — runway for prototypes, tooling, and the long quiet work between sketches and something you can hold. Every contribution feeds the nest.",
+  "lede": "Back the inventions \u2014 runway for prototypes, tooling, and the long quiet work between sketches and something you can hold. Every contribution feeds the nest.",
   "goal": {
     "amount": 10000,
     "currency": "NZD",
@@ -13,7 +13,7 @@
   "methods": {
     "paypal": "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=jakeryanlankshear%40gmail.com&item_name=Blessed%20Raven%20%E2%80%94%20seed%20/%20project%20backing&currency_code=NZD&button_subtype=services&no_note=0&bn=PP%2dBuyNowBF",
     "revolut": "",
-    "cryptoEth": "",
+    "cryptoEth": "0xaB35cE94dA5eF7535a3d99520982064733b5D4A0",
     "discord": "",
     "bankNz": {
       "bank": "Revolut NZ",
@@ -27,28 +27,14 @@
         "id": "eth",
         "label": "Ethereum",
         "symbol": "ETH",
-        "address": "",
+        "address": "0xaB35cE94dA5eF7535a3d99520982064733b5D4A0",
         "network": "Ethereum"
-      },
-      {
-        "id": "btc",
-        "label": "Bitcoin",
-        "symbol": "BTC",
-        "address": "",
-        "network": "Bitcoin"
-      },
-      {
-        "id": "sol",
-        "label": "Solana",
-        "symbol": "SOL",
-        "address": "",
-        "network": "Solana"
       },
       {
         "id": "usdc",
         "label": "USDC",
         "symbol": "USDC",
-        "address": "",
+        "address": "0xaB35cE94dA5eF7535a3d99520982064733b5D4A0",
         "network": "Ethereum (ERC-20)"
       }
     ],
@@ -61,17 +47,17 @@
     {
       "inventionId": "med-bed",
       "label": "Back Med Bed",
-      "blurb": "Sensory tank, violet light, and biofeedback — first healing chamber prototype."
+      "blurb": "Sensory tank, violet light, and biofeedback \u2014 first healing chamber prototype."
     },
     {
       "inventionId": "astral-game",
       "label": "Back Astral",
-      "blurb": "VR astral levels steered by brainwaves — one playable level and a BCI path."
+      "blurb": "VR astral levels steered by brainwaves \u2014 one playable level and a BCI path."
     },
     {
       "inventionId": "torus-energy",
       "label": "Back Torus Energy",
-      "blurb": "Hole-less superconducting torus sketch — model the field before any power claim."
+      "blurb": "Hole-less superconducting torus sketch \u2014 model the field before any power claim."
     }
   ]
 }
