@@ -12,8 +12,9 @@
   let activeFilter = "all";
   let lastFocus = null;
   let scrollTriggers = [];
-  let morphT = 0; // 0..1 global morph scrubbed by page scroll
+  let morphT = 0;
   let raf = 0;
+  const plateAnims = [];
 
   const escapeHtml = (v) =>
     String(v ?? "")
@@ -30,42 +31,146 @@
 
   const glyph = (type) => ({ invention: "Σ", idea: "◇", prototype: "Δ" }[type] || "·");
 
-  /* ---------- Particle field (scroll-scrubbed morph) ---------- */
-  const shapes = {
-    cloud: (i, n, r) => {
-      const a = (i / n) * Math.PI * 2;
-      const wobble = 0.65 + ((i * 17) % 7) * 0.05;
-      return { x: Math.cos(a) * r * wobble, y: Math.sin(a) * r * wobble * 0.72 };
-    },
-    ring: (i, n, r) => {
-      const a = (i / n) * Math.PI * 2;
-      return { x: Math.cos(a) * r, y: Math.sin(a) * r };
-    },
-    raven: (i, n, r) => {
-      // Stylized wing / chevron silhouette points
-      const t = i / (n - 1);
-      const wing = Math.sin(t * Math.PI);
-      const x = (t - 0.5) * r * 2.1;
-      const y = -wing * r * 0.55 + Math.abs(t - 0.5) * r * 0.35;
-      const layer = i % 3;
-      return { x: x * (0.85 + layer * 0.08), y: y + layer * r * 0.06 };
-    },
-    lattice: (i, n, r) => {
-      const cols = Math.ceil(Math.sqrt(n));
-      const row = Math.floor(i / cols);
-      const col = i % cols;
-      const x = ((col / (cols - 1)) - 0.5) * r * 1.8;
-      const y = ((row / (cols - 1)) - 0.5) * r * 1.8;
-      return { x, y };
-    },
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+
+  /* ---------- B&W research outline shapes (unit space ~ -1..1) ---------- */
+  const ptsCircle = (n, r = 1, ox = 0, oy = 0) => {
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2 - Math.PI / 2;
+      out.push({ x: ox + Math.cos(a) * r, y: oy + Math.sin(a) * r });
+    }
+    return out;
   };
 
-  const shapeKeys = ["cloud", "ring", "raven", "lattice"];
+  const ptsRing = (n) => ptsCircle(n, 0.92);
 
-  const particles = [];
+  const ptsTorus = (n) => {
+    const out = [];
+    const R = 0.58;
+    const r = 0.28;
+    for (let i = 0; i < n; i++) {
+      const t = (i / n) * Math.PI * 2;
+      // figure-8 / torus silhouette projection
+      const x = (R + r * Math.cos(2 * t)) * Math.cos(t);
+      const y = (R + r * Math.cos(2 * t)) * Math.sin(t) * 0.72;
+      out.push({ x, y });
+    }
+    return out;
+  };
+
+  const ptsConstellation = (n) => {
+    const hubs = [
+      [0, -0.75], [0.55, -0.35], [-0.55, -0.3], [0.2, 0.15],
+      [-0.35, 0.4], [0.65, 0.45], [-0.7, 0.1], [0, 0.8],
+      [0.35, -0.7], [-0.2, -0.15],
+    ];
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      const h0 = hubs[i % hubs.length];
+      const h1 = hubs[(i + 3) % hubs.length];
+      const t = (i % 7) / 6;
+      out.push({
+        x: lerp(h0[0], h1[0], t) + Math.sin(i * 1.7) * 0.04,
+        y: lerp(h0[1], h1[1], t) + Math.cos(i * 1.3) * 0.04,
+      });
+    }
+    return out;
+  };
+
+  const ptsSeed = (n) => {
+    const out = [];
+    const petals = 6;
+    for (let i = 0; i < n; i++) {
+      const ring = Math.floor((i / n) * petals);
+      const local = ((i / n) * petals) % 1;
+      const a = (ring / petals) * Math.PI * 2;
+      const cx = Math.cos(a) * 0.38;
+      const cy = Math.sin(a) * 0.38;
+      const pa = local * Math.PI * 2;
+      out.push({ x: cx + Math.cos(pa) * 0.38, y: cy + Math.sin(pa) * 0.38 });
+    }
+    return out;
+  };
+
+  const ptsPyramid = (n) => {
+    const verts = [
+      [0, -0.85], [-0.75, 0.7], [0.75, 0.7], [0, 0.15], [-0.35, 0.7], [0.35, 0.7],
+    ];
+    const edges = [[0,1],[0,2],[1,2],[0,3],[1,3],[2,3],[1,4],[4,5],[5,2]];
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      const e = edges[i % edges.length];
+      const t = (Math.floor(i / edges.length) + (i % 5) / 4) % 1;
+      const a = verts[e[0]];
+      const b = verts[e[1]];
+      out.push({ x: lerp(a[0], b[0], t), y: lerp(a[1], b[1], t) });
+    }
+    return out;
+  };
+
+  const ptsHelix = (n) => {
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      const t = i / (n - 1);
+      const a = t * Math.PI * 6;
+      const strand = i % 2 === 0 ? 1 : -1;
+      out.push({
+        x: Math.cos(a) * 0.42 * strand,
+        y: (t - 0.5) * 1.7,
+      });
+    }
+    return out;
+  };
+
+  const ptsRaven = (n) => {
+    // Stylized wing / perched silhouette (nice-to-have brand accent)
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      const t = i / (n - 1);
+      const wing = Math.sin(t * Math.PI);
+      const x = (t - 0.5) * 1.85;
+      const y = -wing * 0.55 + Math.abs(t - 0.5) * 0.32 + (i % 3) * 0.05;
+      out.push({ x, y });
+    }
+    return out;
+  };
+
+  const shapeFns = {
+    ring: ptsRing,
+    torus: ptsTorus,
+    constellation: ptsConstellation,
+    seed: ptsSeed,
+    pyramid: ptsPyramid,
+    helix: ptsHelix,
+    raven: ptsRaven,
+  };
+
+  const motifForItem = (item) => {
+    const id = String(item.id || "");
+    const tags = (item.tags || []).join(" ").toLowerCase();
+    if (id.includes("torus") || tags.includes("torus") || tags.includes("energy")) return ["torus", "ring", "seed"];
+    if (id.includes("dna") || tags.includes("biotech") || tags.includes("light")) return ["helix", "constellation", "ring"];
+    if (id.includes("pyramid") || tags.includes("architecture")) return ["pyramid", "seed", "ring"];
+    if (id.includes("astral") || tags.includes("vr") || tags.includes("consciousness")) return ["constellation", "seed", "raven"];
+    if (id.includes("med") || tags.includes("healing") || tags.includes("bci")) return ["ring", "helix", "seed"];
+    if (item.type === "invention") return ["torus", "seed", "ring"];
+    if (item.type === "prototype") return ["constellation", "raven", "ring"];
+    return ["seed", "constellation", "pyramid"];
+  };
+
+  /* ---------- Global ambient field (faint B&W strokes) ---------- */
   let W = 0;
   let H = 0;
   let dpr = 1;
+  let fieldPaths = [];
+
+  const buildFieldPaths = () => {
+    const count = reduced ? 48 : isMobile() ? 72 : 110;
+    const keys = ["ring", "torus", "constellation", "seed", "raven"];
+    fieldPaths = keys.map((k) => shapeFns[k](count));
+  };
 
   const resizeCanvas = () => {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -76,132 +181,77 @@
     canvas.style.width = `${W}px`;
     canvas.style.height = `${H}px`;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    seedParticles();
+    buildFieldPaths();
   };
 
-  const accentPalette = [
-    { rgb: "212, 168, 90", w: 0.45 }, // gold
-    { rgb: "255, 90, 42", w: 0.35 },  // ember
-    { rgb: "155, 140, 245", w: 0.2 }, // violet
-  ];
-
-  const pickAccent = () => {
-    const r = Math.random();
-    let acc = 0;
-    for (const a of accentPalette) {
-      acc += a.w;
-      if (r <= acc) return a.rgb;
-    }
-    return accentPalette[0].rgb;
-  };
-
-  const seedParticles = () => {
-    // Perf-safe: fewer on mobile; none when reduced-motion
-    const count = reduced ? 0 : isMobile() ? 55 : 140;
-    const r = Math.min(W, H) * 0.28;
-    particles.length = 0;
-    for (let i = 0; i < count; i++) {
-      const targets = shapeKeys.map((key) => shapes[key](i, count, r));
-      const isAccent = Math.random() < 0.1;
-      particles.push({
-        targets,
-        ox: (Math.random() - 0.5) * W * 0.15,
-        oy: (Math.random() - 0.5) * H * 0.15,
-        size: 0.55 + Math.random() * 1.45,
-        accent: isAccent,
-        accentRgb: isAccent ? pickAccent() : null,
-        phase: Math.random() * Math.PI * 2,
-      });
-    }
-  };
-
-  const lerp = (a, b, t) => a + (b - a) * t;
-  const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
-
-  const sampleShape = (p, t) => {
-    const segs = shapeKeys.length - 1;
-    const x = t * segs;
+  const samplePath = (paths, t) => {
+    const segs = paths.length - 1;
+    const x = Math.min(1, Math.max(0, t)) * segs;
     const i0 = Math.min(Math.floor(x), segs - 1);
     const i1 = i0 + 1;
     const local = easeInOut(x - i0);
-    const a = p.targets[i0];
-    const b = p.targets[i1];
-    return { x: lerp(a.x, b.x, local), y: lerp(a.y, b.y, local) };
+    const a = paths[i0];
+    const b = paths[i1];
+    const n = Math.min(a.length, b.length);
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      out.push({ x: lerp(a[i].x, b[i].x, local), y: lerp(a[i].y, b[i].y, local) });
+    }
+    return out;
+  };
+
+  const drawPolyline = (c, pts, cx, cy, scale, strokeStyle, lineWidth, close = true) => {
+    if (!pts.length) return;
+    c.beginPath();
+    c.moveTo(cx + pts[0].x * scale, cy + pts[0].y * scale);
+    for (let i = 1; i < pts.length; i++) {
+      c.lineTo(cx + pts[i].x * scale, cy + pts[i].y * scale);
+    }
+    if (close) c.closePath();
+    c.strokeStyle = strokeStyle;
+    c.lineWidth = lineWidth;
+    c.lineJoin = "round";
+    c.lineCap = "round";
+    c.stroke();
   };
 
   const drawField = (time) => {
     ctx.clearRect(0, 0, W, H);
-    if (!particles.length) return;
+    if (!fieldPaths.length) return;
 
-    const cx = W * 0.58;
+    const cx = W * 0.62;
     const cy = H * 0.48;
-    const breath = Math.sin(time * 0.00035) * 0.015;
-    const mobile = isMobile();
+    const scale = Math.min(W, H) * (isMobile() ? 0.28 : 0.34);
+    const breath = Math.sin((time || 0) * 0.0004) * 0.02;
+    const pts = samplePath(fieldPaths, morphT + breath);
 
-    // Soft void glow — gold / violet / ember wash
-    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.min(W, H) * 0.48);
-    g.addColorStop(0, "rgba(244,241,234,0.04)");
-    g.addColorStop(0.35, "rgba(212,168,90,0.03)");
-    g.addColorStop(0.65, "rgba(155,140,245,0.022)");
-    g.addColorStop(1, "rgba(0,0,0,0)");
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, W, H);
+    // faint construction arcs
+    ctx.save();
+    ctx.globalAlpha = 0.35;
+    drawPolyline(ctx, pts, cx, cy, scale, "rgba(18,18,18,0.22)", 1.1, true);
 
-    for (const p of particles) {
-      const pos = sampleShape(p, Math.min(1, Math.max(0, morphT + breath)));
-      const driftX = Math.cos(time * 0.0004 + p.phase) * 6;
-      const driftY = Math.sin(time * 0.00035 + p.phase) * 6;
-      const x = cx + pos.x + p.ox * 0.25 + driftX;
-      const y = cy + pos.y + p.oy * 0.25 + driftY;
-
-      if (p.accent) {
-        const pulse = 0.4 + Math.sin(time * 0.002 + p.phase) * 0.22;
-        // Soft glow halo (skip on mobile for FPS)
-        if (!mobile) {
-          const glow = ctx.createRadialGradient(x, y, 0, x, y, p.size * 5);
-          glow.addColorStop(0, `rgba(${p.accentRgb}, ${pulse * 0.35})`);
-          glow.addColorStop(1, `rgba(${p.accentRgb}, 0)`);
-          ctx.fillStyle = glow;
-          ctx.beginPath();
-          ctx.arc(x, y, p.size * 5, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(${p.accentRgb}, ${pulse})`;
-        ctx.arc(x, y, p.size * 1.15, 0, Math.PI * 2);
-        ctx.fill();
-      } else {
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(244, 241, 234, ${0.24 + p.size * 0.11})`;
-        ctx.arc(x, y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
+    // sparse node ticks
+    const step = isMobile() ? 8 : 5;
+    for (let i = 0; i < pts.length; i += step) {
+      const p = pts[i];
+      const x = cx + p.x * scale;
+      const y = cy + p.y * scale;
+      ctx.beginPath();
+      ctx.arc(x, y, 1.35, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(18,18,18,0.28)";
+      ctx.fill();
     }
 
-    // Faint connecting lines for nearby accents (sparse; fewer on mobile)
-    if (!mobile) {
-      ctx.lineWidth = 1;
-      let links = 0;
-      const maxLinks = 14;
-      for (let i = 0; i < particles.length && links < maxLinks; i++) {
-        if (!particles[i].accent) continue;
-        const a = sampleShape(particles[i], morphT);
-        for (let j = i + 1; j < particles.length && links < maxLinks; j++) {
-          if (!particles[j].accent) continue;
-          const b = sampleShape(particles[j], morphT);
-          const dx = a.x - b.x;
-          const dy = a.y - b.y;
-          if (dx * dx + dy * dy < 90 * 90) {
-            ctx.strokeStyle = `rgba(${particles[i].accentRgb}, 0.1)`;
-            ctx.beginPath();
-            ctx.moveTo(cx + a.x, cy + a.y);
-            ctx.lineTo(cx + b.x, cy + b.y);
-            ctx.stroke();
-            links++;
-          }
-        }
-      }
-    }
+    // crosshair research marks
+    ctx.strokeStyle = "rgba(18,18,18,0.08)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(cx - scale * 1.05, cy);
+    ctx.lineTo(cx + scale * 1.05, cy);
+    ctx.moveTo(cx, cy - scale * 1.05);
+    ctx.lineTo(cx, cy + scale * 1.05);
+    ctx.stroke();
+    ctx.restore();
   };
 
   let fieldRunning = false;
@@ -209,6 +259,10 @@
   const loop = (time) => {
     if (!fieldRunning) return;
     drawField(time || 0);
+    // update visible invention plates
+    for (const plate of plateAnims) {
+      if (plate.visible) plate.draw(time || 0);
+    }
     raf = requestAnimationFrame(loop);
   };
 
@@ -222,6 +276,111 @@
     fieldRunning = false;
     if (raf) cancelAnimationFrame(raf);
     raf = 0;
+  };
+
+  /* ---------- Per-chapter large outline plates ---------- */
+  const makePlate = (el, item) => {
+    const cnv = el.querySelector("canvas.inv-plate");
+    if (!cnv) return null;
+    const c = cnv.getContext("2d", { alpha: true });
+    const motifs = motifForItem(item);
+    const count = reduced ? 64 : isMobile() ? 90 : 140;
+    const paths = motifs.map((k) => shapeFns[k](count));
+    let localT = Math.random() * 0.2;
+    let visible = false;
+    let pw = 0;
+    let ph = 0;
+    let pdpr = 1;
+
+    const resize = () => {
+      const rect = el.getBoundingClientRect();
+      pdpr = Math.min(window.devicePixelRatio || 1, 2);
+      pw = Math.max(1, Math.floor(rect.width));
+      ph = Math.max(1, Math.floor(rect.height));
+      cnv.width = Math.floor(pw * pdpr);
+      cnv.height = Math.floor(ph * pdpr);
+      cnv.style.width = `${pw}px`;
+      cnv.style.height = `${ph}px`;
+      c.setTransform(pdpr, 0, 0, pdpr, 0, 0);
+    };
+
+    const draw = (time) => {
+      if (!pw || !ph) return;
+      c.clearRect(0, 0, pw, ph);
+
+      const cx = pw * 0.5;
+      const cy = ph * 0.5;
+      const scale = Math.min(pw, ph) * 0.38;
+      const breath = reduced ? 0 : Math.sin(time * 0.00055 + localT * 10) * 0.025;
+      const t = easeInOut((Math.sin(time * 0.00018 + localT * 6) * 0.5 + 0.5) * 0.85 + morphT * 0.15);
+      const pts = samplePath(paths, Math.min(0.999, t + breath));
+
+      // plate grid whisper
+      c.strokeStyle = "rgba(18,18,18,0.045)";
+      c.lineWidth = 1;
+      const g = 36;
+      for (let x = g; x < pw; x += g) {
+        c.beginPath();
+        c.moveTo(x, 0);
+        c.lineTo(x, ph);
+        c.stroke();
+      }
+      for (let y = g; y < ph; y += g) {
+        c.beginPath();
+        c.moveTo(0, y);
+        c.lineTo(pw, y);
+        c.stroke();
+      }
+
+      // outer construction circle
+      c.beginPath();
+      c.arc(cx, cy, scale * 1.05, 0, Math.PI * 2);
+      c.strokeStyle = "rgba(18,18,18,0.12)";
+      c.lineWidth = 1;
+      c.stroke();
+
+      c.beginPath();
+      c.arc(cx, cy, scale * 0.72, 0, Math.PI * 2);
+      c.strokeStyle = "rgba(18,18,18,0.07)";
+      c.lineWidth = 1;
+      c.stroke();
+
+      // main morphing outline
+      drawPolyline(c, pts, cx, cy, scale, "rgba(18,18,18,0.78)", isMobile() ? 1.25 : 1.55, true);
+
+      // secondary offset ghost stroke
+      drawPolyline(c, pts, cx + 1.5, cy + 1.5, scale * 0.985, "rgba(18,18,18,0.12)", 1, true);
+
+      // nodes
+      const step = isMobile() ? 7 : 4;
+      for (let i = 0; i < pts.length; i += step) {
+        const p = pts[i];
+        c.beginPath();
+        c.arc(cx + p.x * scale, cy + p.y * scale, 1.6, 0, Math.PI * 2);
+        c.fillStyle = "rgba(18,18,18,0.55)";
+        c.fill();
+      }
+
+      // motif caption ticks
+      c.fillStyle = "rgba(18,18,18,0.35)";
+      c.font = "10px Inter, system-ui, sans-serif";
+      c.fillText("PLATE / " + motifs[0].toUpperCase(), 18, 28);
+    };
+
+    resize();
+    draw(0);
+
+    return {
+      resize,
+      draw,
+      get visible() { return visible; },
+      set visible(v) { visible = v; },
+      el,
+    };
+  };
+
+  const clearPlates = () => {
+    plateAnims.length = 0;
   };
 
   /* ---------- Detail panel ---------- */
@@ -278,6 +437,7 @@
   };
 
   const observeReveals = (root) => {
+    if (!root) return;
     const nodes = root.querySelectorAll(".reveal");
     if (reduced) {
       nodes.forEach((n) => n.classList.add("is-in"));
@@ -300,6 +460,23 @@
     });
   };
 
+  const observePlates = () => {
+    if (!("IntersectionObserver" in window)) {
+      plateAnims.forEach((p) => { p.visible = true; });
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const plate = plateAnims.find((p) => p.el === entry.target);
+          if (plate) plate.visible = entry.isIntersecting;
+        });
+      },
+      { threshold: 0.15 }
+    );
+    plateAnims.forEach((p) => io.observe(p.el));
+  };
+
   const setupScrollMotion = () => {
     killTriggers();
     if (reduced || typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") {
@@ -309,7 +486,6 @@
 
     gsap.registerPlugin(ScrollTrigger);
 
-    // Global morph scrubbed across whole page
     const global = ScrollTrigger.create({
       trigger: document.body,
       start: "top top",
@@ -321,7 +497,6 @@
     });
     scrollTriggers.push(global);
 
-    // Hero progress rail
     const hero = document.querySelector(".hero-chapter");
     const fill = document.getElementById("hero-progress");
     if (hero && fill) {
@@ -337,15 +512,14 @@
       scrollTriggers.push(st);
     }
 
-    // Per-chapter subtle art parallax
     document.querySelectorAll(".chapter[data-id]").forEach((chapter) => {
       const art = chapter.querySelector(".inv-art");
       if (!art) return;
       const tween = gsap.fromTo(
         art,
-        { y: 40, opacity: 0.55 },
+        { y: 28, opacity: 0.7 },
         {
-          y: -20,
+          y: -12,
           opacity: 1,
           ease: "none",
           scrollTrigger: {
@@ -366,6 +540,8 @@
     const list = inventions.filter(
       (item) => activeFilter === "all" || item.type === activeFilter
     );
+
+    clearPlates();
 
     if (!list.length) {
       chaptersRoot.innerHTML = `
@@ -389,9 +565,11 @@
         const tags = (item.tags || [])
           .map((t) => `<li class="${t === "example" ? "accent" : ""}">${escapeHtml(t)}</li>`)
           .join("");
-        const art = item.image
+        const artInner = item.image
           ? `<img src="${escapeHtml(item.image)}" alt="" loading="lazy" />`
-          : `<span class="inv-glyph" aria-hidden="true">${glyph(item.type)}</span>`;
+          : `<canvas class="inv-plate" aria-hidden="true"></canvas>
+             <span class="inv-glyph" aria-hidden="true">${glyph(item.type)}</span>
+             <span class="inv-plate-label">research outline · ${escapeHtml(item.type)}</span>`;
 
         return `
           <section class="chapter" data-id="${escapeHtml(item.id)}" data-type="${escapeHtml(item.type)}">
@@ -410,7 +588,7 @@
                   <button type="button" class="inv-open reveal" data-open="${escapeHtml(item.id)}">Open details</button>
                 </div>
                 <div class="inv-art reveal" aria-hidden="true">
-                  ${art}
+                  ${artInner}
                   <div class="inv-art-frame"></div>
                   <span class="inv-corner tl"></span>
                   <span class="inv-corner tr"></span>
@@ -427,6 +605,14 @@
       btn.addEventListener("click", () => openDetail(btn.getAttribute("data-open")));
     });
 
+    list.forEach((item) => {
+      const art = chaptersRoot.querySelector(`.chapter[data-id="${CSS.escape(item.id)}"] .inv-art`);
+      if (!art || item.image) return;
+      const plate = makePlate(art, item);
+      if (plate) plateAnims.push(plate);
+    });
+
+    observePlates();
     observeReveals(chaptersRoot);
     setupScrollMotion();
   };
@@ -474,7 +660,6 @@
         }, 1600);
       }
     } catch {
-      // Fallback: select a temporary input
       const ta = document.createElement("textarea");
       ta.value = value;
       ta.setAttribute("readonly", "");
@@ -501,7 +686,6 @@
     const chapter = document.querySelector(`.chapter[data-id="${CSS.escape(id)}"]`);
     if (chapter) {
       chapter.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
-      // Open detail shortly after scroll starts so the chapter is findable
       setTimeout(() => openDetail(id), reduced ? 0 : 450);
       return;
     }
@@ -520,7 +704,6 @@
   const openDeepLink = () => {
     const id = deepLinkId();
     if (!id) return;
-    // Wait a tick so sticky chapters / ScrollTrigger layout settle
     requestAnimationFrame(() => {
       setTimeout(() => goToInvention(id), reduced ? 0 : 80);
     });
@@ -682,12 +865,10 @@
     if (inventions.length) openDeepLink();
   });
 
-  // Hero / close / fund reveals
   observeReveals(document.querySelector(".hero-chapter"));
   observeReveals(document.querySelector(".close-chapter"));
   if (fundRoot) observeReveals(fundRoot);
 
-  // Mobile nav hamburger
   const siteNav = document.getElementById("site-nav");
   const navToggle = document.getElementById("nav-toggle");
   if (siteNav && navToggle) {
@@ -710,10 +891,10 @@
   resizeCanvas();
   window.addEventListener("resize", () => {
     resizeCanvas();
+    plateAnims.forEach((p) => p.resize());
     if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
   });
 
-  // Pause particles when tab hidden (perf)
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) stopField();
     else startField();
