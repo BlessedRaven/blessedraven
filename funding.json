@@ -14,7 +14,13 @@
     "paypal": "https://www.paypal.com/donate/?business=jakeryanlankshear%40gmail.com&no_recurring=0&currency_code=NZD&item_name=Blessed%20Raven%20Seed",
     "revolut": "",
     "cryptoEth": "0xE8787D2Ddc6022ADe1b75D42D2440E6F0BAd6864",
-    "discord": "https://discord.gg/Bw57a5Gd22"
+    "discord": "https://discord.gg/Bw57a5Gd22",
+    "bankNz": {
+      "bank": "Revolut NZ",
+      "accountName": "J Lankshear",
+      "accountNumber": "04-2019-0576164-00",
+      "currency": "NZD"
+    }
   },
   "projects": [
     {
