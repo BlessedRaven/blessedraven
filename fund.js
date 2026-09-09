@@ -20,15 +20,33 @@
   let raf = 0;
   const particles = [];
 
+  const accentPalette = [
+    { rgb: "212, 168, 90", w: 0.45 },
+    { rgb: "255, 90, 42", w: 0.3 },
+    { rgb: "155, 140, 245", w: 0.25 },
+  ];
+
+  const pickAccent = () => {
+    const r = Math.random();
+    let acc = 0;
+    for (const a of accentPalette) {
+      acc += a.w;
+      if (r <= acc) return a.rgb;
+    }
+    return accentPalette[0].rgb;
+  };
+
   const seedParticles = () => {
-    const count = reduced ? 0 : isMobile() ? 70 : 140;
+    const count = reduced ? 0 : isMobile() ? 40 : 100;
     particles.length = 0;
     for (let i = 0; i < count; i++) {
+      const isAccent = Math.random() < 0.1;
       particles.push({
         x: Math.random() * W,
         y: Math.random() * H,
-        size: 0.5 + Math.random() * 1.5,
-        accent: Math.random() < 0.08,
+        size: 0.5 + Math.random() * 1.4,
+        accent: isAccent,
+        accentRgb: isAccent ? pickAccent() : null,
         phase: Math.random() * Math.PI * 2,
         speed: 0.15 + Math.random() * 0.35,
       });
@@ -53,9 +71,11 @@
 
     const cx = W * 0.5;
     const cy = H * 0.42;
-    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.min(W, H) * 0.5);
-    g.addColorStop(0, "rgba(255,255,255,0.03)");
-    g.addColorStop(0.55, "rgba(255,90,42,0.02)");
+    const mobile = isMobile();
+    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.min(W, H) * 0.52);
+    g.addColorStop(0, "rgba(244,241,234,0.035)");
+    g.addColorStop(0.4, "rgba(212,168,90,0.028)");
+    g.addColorStop(0.7, "rgba(155,140,245,0.02)");
     g.addColorStop(1, "rgba(0,0,0,0)");
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, W, H);
@@ -65,18 +85,49 @@
       const driftY = Math.sin(time * 0.0002 * p.speed + p.phase) * 8;
       const x = ((p.x + driftX) % W + W) % W;
       const y = ((p.y + driftY) % H + H) % H;
-      ctx.beginPath();
-      ctx.fillStyle = p.accent
-        ? `rgba(255, 90, 42, ${0.4 + Math.sin(time * 0.002 + p.phase) * 0.2})`
-        : `rgba(245, 245, 245, ${0.22 + p.size * 0.1})`;
-      ctx.arc(x, y, p.size, 0, Math.PI * 2);
-      ctx.fill();
+
+      if (p.accent) {
+        const pulse = 0.38 + Math.sin(time * 0.002 + p.phase) * 0.2;
+        if (!mobile) {
+          const glow = ctx.createRadialGradient(x, y, 0, x, y, p.size * 4.5);
+          glow.addColorStop(0, `rgba(${p.accentRgb}, ${pulse * 0.3})`);
+          glow.addColorStop(1, `rgba(${p.accentRgb}, 0)`);
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(x, y, p.size * 4.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(${p.accentRgb}, ${pulse})`;
+        ctx.arc(x, y, p.size * 1.1, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(244, 241, 234, ${0.2 + p.size * 0.1})`;
+        ctx.arc(x, y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
   };
 
+  let fieldRunning = false;
+
   const loop = (time) => {
+    if (!fieldRunning) return;
     drawField(time || 0);
     raf = requestAnimationFrame(loop);
+  };
+
+  const startField = () => {
+    if (reduced || fieldRunning) return;
+    fieldRunning = true;
+    raf = requestAnimationFrame(loop);
+  };
+
+  const stopField = () => {
+    fieldRunning = false;
+    if (raf) cancelAnimationFrame(raf);
+    raf = 0;
   };
 
   /* ---------- Reveals ---------- */
@@ -321,7 +372,11 @@
 
   resizeCanvas();
   window.addEventListener("resize", resizeCanvas);
-  if (!reduced) raf = requestAnimationFrame(loop);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopField();
+    else startField();
+  });
+  if (!reduced) startField();
   else {
     drawField(0);
   }

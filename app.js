@@ -79,18 +79,37 @@
     seedParticles();
   };
 
+  const accentPalette = [
+    { rgb: "212, 168, 90", w: 0.45 }, // gold
+    { rgb: "255, 90, 42", w: 0.35 },  // ember
+    { rgb: "155, 140, 245", w: 0.2 }, // violet
+  ];
+
+  const pickAccent = () => {
+    const r = Math.random();
+    let acc = 0;
+    for (const a of accentPalette) {
+      acc += a.w;
+      if (r <= acc) return a.rgb;
+    }
+    return accentPalette[0].rgb;
+  };
+
   const seedParticles = () => {
-    const count = reduced ? 0 : isMobile() ? 90 : 180;
+    // Perf-safe: fewer on mobile; none when reduced-motion
+    const count = reduced ? 0 : isMobile() ? 55 : 140;
     const r = Math.min(W, H) * 0.28;
     particles.length = 0;
     for (let i = 0; i < count; i++) {
       const targets = shapeKeys.map((key) => shapes[key](i, count, r));
+      const isAccent = Math.random() < 0.1;
       particles.push({
         targets,
         ox: (Math.random() - 0.5) * W * 0.15,
         oy: (Math.random() - 0.5) * H * 0.15,
-        size: 0.6 + Math.random() * 1.6,
-        accent: Math.random() < 0.08,
+        size: 0.55 + Math.random() * 1.45,
+        accent: isAccent,
+        accentRgb: isAccent ? pickAccent() : null,
         phase: Math.random() * Math.PI * 2,
       });
     }
@@ -117,11 +136,13 @@
     const cx = W * 0.58;
     const cy = H * 0.48;
     const breath = Math.sin(time * 0.00035) * 0.015;
+    const mobile = isMobile();
 
-    // Soft void glow
-    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.min(W, H) * 0.45);
-    g.addColorStop(0, "rgba(255,255,255,0.035)");
-    g.addColorStop(0.55, "rgba(255,90,42,0.025)");
+    // Soft void glow — gold / violet / ember wash
+    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.min(W, H) * 0.48);
+    g.addColorStop(0, "rgba(244,241,234,0.04)");
+    g.addColorStop(0.35, "rgba(212,168,90,0.03)");
+    g.addColorStop(0.65, "rgba(155,140,245,0.022)");
     g.addColorStop(1, "rgba(0,0,0,0)");
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, W, H);
@@ -133,40 +154,74 @@
       const x = cx + pos.x + p.ox * 0.25 + driftX;
       const y = cy + pos.y + p.oy * 0.25 + driftY;
 
-      ctx.beginPath();
-      ctx.fillStyle = p.accent
-        ? `rgba(255, 90, 42, ${0.45 + Math.sin(time * 0.002 + p.phase) * 0.2})`
-        : `rgba(245, 245, 245, ${0.28 + p.size * 0.12})`;
-      ctx.arc(x, y, p.size, 0, Math.PI * 2);
-      ctx.fill();
+      if (p.accent) {
+        const pulse = 0.4 + Math.sin(time * 0.002 + p.phase) * 0.22;
+        // Soft glow halo (skip on mobile for FPS)
+        if (!mobile) {
+          const glow = ctx.createRadialGradient(x, y, 0, x, y, p.size * 5);
+          glow.addColorStop(0, `rgba(${p.accentRgb}, ${pulse * 0.35})`);
+          glow.addColorStop(1, `rgba(${p.accentRgb}, 0)`);
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(x, y, p.size * 5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(${p.accentRgb}, ${pulse})`;
+        ctx.arc(x, y, p.size * 1.15, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(244, 241, 234, ${0.24 + p.size * 0.11})`;
+        ctx.arc(x, y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
 
-    // faint connecting lines for nearby accents (sparse)
-    ctx.strokeStyle = "rgba(255,90,42,0.08)";
-    ctx.lineWidth = 1;
-    let links = 0;
-    for (let i = 0; i < particles.length && links < 18; i++) {
-      if (!particles[i].accent) continue;
-      const a = sampleShape(particles[i], morphT);
-      for (let j = i + 1; j < particles.length && links < 18; j++) {
-        if (!particles[j].accent) continue;
-        const b = sampleShape(particles[j], morphT);
-        const dx = a.x - b.x;
-        const dy = a.y - b.y;
-        if (dx * dx + dy * dy < 90 * 90) {
-          ctx.beginPath();
-          ctx.moveTo(cx + a.x, cy + a.y);
-          ctx.lineTo(cx + b.x, cy + b.y);
-          ctx.stroke();
-          links++;
+    // Faint connecting lines for nearby accents (sparse; fewer on mobile)
+    if (!mobile) {
+      ctx.lineWidth = 1;
+      let links = 0;
+      const maxLinks = 14;
+      for (let i = 0; i < particles.length && links < maxLinks; i++) {
+        if (!particles[i].accent) continue;
+        const a = sampleShape(particles[i], morphT);
+        for (let j = i + 1; j < particles.length && links < maxLinks; j++) {
+          if (!particles[j].accent) continue;
+          const b = sampleShape(particles[j], morphT);
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          if (dx * dx + dy * dy < 90 * 90) {
+            ctx.strokeStyle = `rgba(${particles[i].accentRgb}, 0.1)`;
+            ctx.beginPath();
+            ctx.moveTo(cx + a.x, cy + a.y);
+            ctx.lineTo(cx + b.x, cy + b.y);
+            ctx.stroke();
+            links++;
+          }
         }
       }
     }
   };
 
+  let fieldRunning = false;
+
   const loop = (time) => {
+    if (!fieldRunning) return;
     drawField(time || 0);
     raf = requestAnimationFrame(loop);
+  };
+
+  const startField = () => {
+    if (reduced || fieldRunning) return;
+    fieldRunning = true;
+    raf = requestAnimationFrame(loop);
+  };
+
+  const stopField = () => {
+    fieldRunning = false;
+    if (raf) cancelAnimationFrame(raf);
+    raf = 0;
   };
 
   /* ---------- Detail panel ---------- */
@@ -632,12 +687,39 @@
   observeReveals(document.querySelector(".close-chapter"));
   if (fundRoot) observeReveals(fundRoot);
 
+  // Mobile nav hamburger
+  const siteNav = document.getElementById("site-nav");
+  const navToggle = document.getElementById("nav-toggle");
+  if (siteNav && navToggle) {
+    navToggle.addEventListener("click", () => {
+      const open = !siteNav.classList.contains("is-open");
+      siteNav.classList.toggle("is-open", open);
+      navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+      navToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    });
+    siteNav.querySelectorAll(".nav-chip, .nav-fund").forEach((el) => {
+      el.addEventListener("click", () => {
+        if (!siteNav.classList.contains("is-open")) return;
+        siteNav.classList.remove("is-open");
+        navToggle.setAttribute("aria-expanded", "false");
+        navToggle.setAttribute("aria-label", "Open menu");
+      });
+    });
+  }
+
   resizeCanvas();
   window.addEventListener("resize", () => {
     resizeCanvas();
     if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
   });
-  if (!reduced) raf = requestAnimationFrame(loop);
+
+  // Pause particles when tab hidden (perf)
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopField();
+    else startField();
+  });
+
+  if (!reduced) startField();
   else {
     morphT = 0.4;
     drawField(0);
