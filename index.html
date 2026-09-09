@@ -1,192 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blessed Raven - Home</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Montserrat:wght@300;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            scroll-behavior: smooth;
-        }
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(180deg, #0a0015, #1a0000, #2b0010);
-            color: #ffffff;
-            overflow-x: hidden;
-            min-height: 100vh;
-            position: relative;
-        }
-        #particles-js {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: -1;
-        }
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            padding: 20px 0;
-            z-index: 1000;
-            border-bottom: 2px solid #ff3333;
-            box-shadow: 0 5px 20px rgba(255, 51, 51, 0.5);
-        }
-        nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-        }
-        nav ul li a {
-            color: #ffffff;
-            text-decoration: none;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.2em;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: color 0.3s, transform 0.3s;
-        }
-        nav ul li a:hover {
-            color: #ffd700;
-            transform: translateY(-3px);
-        }
-        header {
-            padding: 150px 20px 80px;
-            text-align: center;
-            background: url('https://i.imgur.com/blessed-raven-logo.jpg') no-repeat center;
-            background-size: cover;
-            border-bottom: 2px solid #ff3333;
-            box-shadow: 0 5px 20px rgba(255, 51, 51, 0.5);
-        }
-        h1 {
-            font-family: 'Cinzel Decorative', cursive;
-            font-size: 5em;
-            color: #ff3333;
-            text-shadow: 0 0 20px #ff3333, 0 0 40px #ff3333;
-            animation: fadeIn 2s ease-in-out;
-        }
-        @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        .content-section {
-            max-width: 1000px;
-            margin: 60px auto;
-            padding: 40px;
-            background: rgba(255, 51, 51, 0.05);
-            border: 2px solid #ff3333;
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(255, 51, 51, 0.3);
-            animation: fadeIn 1.5s ease-in-out;
-        }
-        h2 {
-            font-family: 'Cinzel Decorative', cursive;
-            font-size: 2.5em;
-            color: #ffd700;
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px #ffd700;
-        }
-        p, ul {
-            font-size: 1.2em;
-            line-height: 1.8;
-            color: #ffffff;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 20px 0;
-        }
-        li {
-            margin: 10px 0;
-        }
-        footer {
-            background: rgba(0, 0, 0, 0.9);
-            padding: 20px;
-            text-align: center;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            border-top: 2px solid #ff3333;
-            box-shadow: 0 -5px 20px rgba(255, 51, 51, 0.5);
-            color: #ffffff;
-            font-size: 1em;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="BlessedRaven — inventions, ideas, and prototypes." />
+  <meta name="theme-color" content="#000000" />
+  <title>BlessedRaven — Inventions & Ideas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <div id="particles-js"></div>
-    <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="#lore">Lore</a></li>
-            <li><a href="#mission">Mission</a></li>
-            <li><a href="#explore">Explore</a></li>
-            <li><a href="family-tree.html">Family Tree</a></li>
-            <li><a href="immortality.html">Immortality</a></li>
-            <li><a href="pyramids.html">Pyramids</a></li>
-            <li><a href="astral-game.html">Astral Game</a></li>
-            <li><a href="med-beds.html">Med Beds</a></li>
-            <li><a href="theory-of-everything.html">Theory of Everything</a></li>
-            <li><a href="torus-energy.html">Torus Energy</a></li>
-            <li><a href="donate.html">Donate</a></li>
-        </ul>
+  <canvas id="field" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a class="logo" href="#top">BlessedRaven</a>
+    <nav class="nav-filters" aria-label="Filters">
+      <button type="button" class="nav-chip is-on" data-filter="all">All</button>
+      <button type="button" class="nav-chip" data-filter="invention">Invention</button>
+      <button type="button" class="nav-chip" data-filter="idea">Idea</button>
+      <button type="button" class="nav-chip" data-filter="prototype">Prototype</button>
     </nav>
-    <header>
-        <h1>Blessed Raven</h1>
-    </header>
-    <main>
-        <div id="lore" class="content-section">
-            <h2>Lore</h2>
-            <p>The Blessed Raven project is a cosmic journey, born from lucid dreams and divine encounters with non-human intelligences (NHIs). Guided by the cryptic clue "Ricochet 4356," revealed in a dream, the project seeks the key to immortality through the repair of damaged DNA, the harnessing of torus energy, and the exploration of the astral plane. The Torus Pyramid, a sacred structure inspired by the Great Pyramid of Giza, stands as a beacon of ancient wisdom and modern innovation, located above the Clutha River / Mata-Au in New Zealand—a river historically significant to the Kāi Tahu for fishing and spiritual rituals. Within the Torus Pyramid, the Egyptian, Greek, and Druid mystery schools converge, honoring deities like Aphrodite, Zeus, Pan, Athena, Christ, and Thoth, while smaller pyramid replicas are available for home use to channel sacred energies.</p>
+  </header>
+
+  <main id="top">
+    <!-- Hero: tall sticky storytelling over particle morph -->
+    <section class="chapter hero-chapter" data-chapter="hero">
+      <div class="chapter-pin">
+        <div class="hero-copy">
+          <p class="eyebrow reveal">Inventions &amp; Ideas</p>
+          <h1 class="headline reveal">
+            Thinking in<br /><span class="italic">ink &amp; void</span>
+          </h1>
+          <p class="lede reveal">
+            A cinematic sketchbook of concepts from Blessed Raven.
+            Scroll to morph the field — each chapter is a working thought.
+          </p>
+          <p class="crow-line reveal">brother crow keeps the margins</p>
         </div>
-        <div id="mission" class="content-section">
-            <h2>Mission</h2>
-            <p>Our mission is to bridge the mortal and divine, uniting science, mysticism, and technology to unlock the secrets of immortality and human potential. Through the development of Med Beds, which use violet light and sound resonance to repair DNA, and the Astral VR game, which allows players to explore the seven levels of the astral plane, we aim to elevate consciousness and heal the body. The Blessed Raven project also seeks to establish the New Roman Empire, a global renaissance of knowledge, culture, and innovation, with the Torus Pyramid as its spiritual and operational base.</p>
+        <div class="progress-rail" aria-hidden="true">
+          <div class="progress-fill" id="hero-progress"></div>
         </div>
-        <div id="explore" class="content-section">
-            <h2>Explore</h2>
-            <p>Dive into the mysteries of the Blessed Raven project through our interconnected initiatives:</p>
-            <ul>
-                <li><strong><a href="family-tree.html" style="color: #ffd700; text-decoration: none;">Sacred Family Tree:</a></strong> Discover the divine lineage of Jacob, tracing back to Zeus, Aphrodite, King David, and the Earth Goddess Gaia.</li>
-                <li><strong><a href="immortality.html" style="color: #ffd700; text-decoration: none;">Immortality:</a></strong> Fund research into DNA repair and preserve your genome on the blockchain.</li>
-                <li><strong><a href="pyramids.html" style="color: #ffd700; text-decoration: none;">Torus Pyramid:</a></strong> Learn about the sacred structure and its mystery schools, plus smaller replicas for home use.</li>
-                <li><strong><a href="astral-game.html" style="color: #ffd700; text-decoration: none;">Astral Game:</a></strong> Journey through the astral plane in a groundbreaking VR experience.</li>
-                <li><strong><a href="med-beds.html" style="color: #ffd700; text-decoration: none;">Med Beds:</a></strong> Discover the technology that heals the body and mind using light and sound.</li>
-                <li><strong><a href="theory-of-everything.html" style="color: #ffd700; text-decoration: none;">Theory of Everything:</a></strong> Unify science and spirituality through sacred geometry.</li>
-                <li><strong><a href="torus-energy.html" style="color: #ffd700; text-decoration: none;">Torus Energy:</a></strong> Understand the universal energy pattern that powers life and consciousness.</li>
-                <li><strong><a href="donate.html" style="color: #ffd700; text-decoration: none;">Donate:</a></strong> Support the Blessed Raven project and join us in shaping the future of humanity.</li>
-            </ul>
-        </div>
-    </main>
-    <footer>
-        <p>© 2025 Blessed Raven. All rights reserved.</p>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script>
-        particlesJS("particles-js", {
-            "particles": {
-                "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
-                "color": { "value": ["#ff3333", "#ffd700"] },
-                "shape": { "type": "circle" },
-                "opacity": { "value": 0.5, "random": true },
-                "size": { "value": 3, "random": true },
-                "line_linked": { "enable": true, "distance": 150, "color": "#ff3333", "opacity": 0.3, "width": 1 },
-                "move": { "enable": true, "speed": 2, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false }
-            },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
-                "modes": { "repulse": { "distance": 100, "duration": 0.4 }, "push": { "particles_nb": 4 } }
-            },
-            "retina_detect": true
-        });
-    </script>
+      </div>
+    </section>
+
+    <div id="chapters" class="chapters" aria-live="polite"></div>
+
+    <section class="chapter close-chapter" data-chapter="close">
+      <div class="chapter-pin compact">
+        <p class="eyebrow reveal">Authoring</p>
+        <h2 class="headline sm reveal">Add a concept<br />in under a minute.</h2>
+        <p class="lede reveal">
+          Edit <code>inventions.json</code>, commit, push.
+          The gallery redraws. Details live in the README.
+        </p>
+        <p class="crow-line reveal">
+          <a href="https://github.com/BlessedRaven/blessedraven">GitHub</a>
+          · sketched with CROW
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <div id="detail" class="detail" hidden>
+    <div class="detail-shade" data-close></div>
+    <article class="detail-panel" role="dialog" aria-modal="true" aria-labelledby="d-title">
+      <button type="button" class="detail-x" data-close aria-label="Close">×</button>
+      <div class="detail-meta">
+        <span id="d-type" class="tag"></span>
+        <span id="d-status" class="tag soft"></span>
+        <span id="d-example" class="tag accent" hidden>example</span>
+      </div>
+      <h2 id="d-title"></h2>
+      <p id="d-summary" class="detail-summary"></p>
+      <div id="d-body" class="detail-body"></div>
+      <ul id="d-tags" class="tag-row"></ul>
+      <div id="d-links" class="link-row"></div>
+      <p id="d-dates" class="detail-dates"></p>
+    </article>
+  </div>
+
+  <noscript><p class="noscript">Enable JavaScript to load inventions.json.</p></noscript>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="app.js" defer></script>
 </body>
 </html>

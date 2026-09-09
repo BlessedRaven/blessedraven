@@ -1,0 +1,54 @@
+[
+  {
+    "id": "example-resonant-harvester",
+    "title": "Resonant Ambient Harvester",
+    "type": "invention",
+    "summary": "A compact coil array that scavenges micro-watt RF and vibrational energy for always-on sensors.",
+    "description": "EXAMPLE — replace with your own invention.\n\nThis concept explores a dual-mode energy scavenger: a broadband RF rectenna paired with a piezoelectric membrane tuned to common urban vibration bands. The goal is a postage-stamp module that keeps low-power IoT nodes alive without batteries.\n\nKey ideas: impedance matching across ISM bands, stacked flex PCB coils, and a tiny supercapacitor buffer. Status is exploratory — physics sketches and napkin efficiency estimates only.",
+    "status": "exploring",
+    "tags": ["energy", "rf", "iot", "example"],
+    "created": "2026-01-12",
+    "updated": "2026-03-01",
+    "links": [
+      { "label": "Concept notes (placeholder)", "url": "https://www.blessedraven.com" }
+    ]
+  },
+  {
+    "id": "example-memory-lattice",
+    "title": "Memory Lattice Notebook",
+    "type": "idea",
+    "summary": "A spatial note system where ideas live as nodes in a navigable 3D lattice instead of flat files.",
+    "description": "EXAMPLE — replace with your own idea.\n\nImagine writing where every thought is a luminous node. Related ideas auto-cluster by semantic proximity; you fly through the lattice with keyboard and gaze. Version history becomes trails of light between revisions.\n\nNot built — this is a product vision for knowledge work that feels more like exploration than filing.",
+    "status": "draft",
+    "tags": ["software", "knowledge", "ux", "example"],
+    "created": "2026-02-08",
+    "updated": "2026-02-08"
+  },
+  {
+    "id": "example-tidal-filter",
+    "title": "Tidal Micro-Filter Array",
+    "type": "prototype",
+    "summary": "Passive coastal filter tiles that trap microplastics on each tide cycle without pumps.",
+    "description": "EXAMPLE — replace with your own prototype.\n\nA modular ceramic lattice designed to sit in intertidal zones. As water flows through honeycomb channels, density and surface chemistry pull microplastics into replaceable cartridges. No motors — only tide and gravity.\n\nCurrent work: foam-printed channel geometries and lab flow tests with dyed microspheres. Field trials not started.",
+    "status": "prototype",
+    "tags": ["environment", "materials", "ocean", "example"],
+    "created": "2025-11-20",
+    "updated": "2026-04-15",
+    "image": "",
+    "links": []
+  },
+  {
+    "id": "example-gesture-loom",
+    "title": "Gesture Loom Interface",
+    "type": "invention",
+    "summary": "A wearable that turns subtle finger and wrist gestures into programmable shortcuts for makerspaces.",
+    "description": "EXAMPLE — replace with your own invention.\n\nIMU + stretch-sensor glove mapping continuous gesture space to tool control: laser cutter jog, CNC pause, synth parameter morphs. Emphasis on low latency and muscle-memory-friendly chords rather than camera-based recognition.\n\nBuilt as a rough bench prototype with ESP32 and OpenSound Control output. Needs better ergonomics and a visual chord trainer.",
+    "status": "built",
+    "tags": ["wearable", "hci", "makerspace", "example"],
+    "created": "2025-09-03",
+    "updated": "2026-05-22",
+    "links": [
+      { "label": "BlessedRaven home", "url": "https://www.blessedraven.com" }
+    ]
+  }
+]
