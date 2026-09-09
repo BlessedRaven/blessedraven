@@ -56,15 +56,50 @@ Seed entries with `id` starting with `example-` (and/or tag `example`) are marke
 
 ## Funding / donate
 
-Edit [`funding.json`](./funding.json) to control the **Fund** chapter.
+Live page: [`fund.html`](./fund.html) → [www.blessedraven.com/fund.html](https://www.blessedraven.com/fund.html).
 
-1. Set `methods.paypal` to your PayPal.me or PayPal Donate URL (live now if set).
-2. Set `methods.revolut` to your Revolut.me / payment link when ready.
-3. Leave either field as `""` to **hide** that button in the UI.
-4. `methods.cryptoEth` and `methods.discord` are shown when non-empty.
-5. Adjust `goal` / `raised` and the `projects` cards (each `inventionId` should match an entry in `inventions.json`).
+The index scroll still has a short **Fund** teaser that links to the full page. Edit [`funding.json`](./funding.json) to control both.
+
+### Authoring raised totals
+
+1. When money comes in, bump `raised.amount` (NZD) in `funding.json`.
+2. Commit and push to `main`. The live progress bar updates after Pages rebuilds.
+3. Totals are **manually updated** until payment webhooks exist — keep the on-page note honest.
+
+### Payment methods
+
+Leave any URL or address as `""` to **hide** that card in the UI.
+
+| Field | Notes |
+| --- | --- |
+| `methods.paypal` | Personal PayPal send / Buy Now link (not a charity Donate URL) |
+| `methods.paypalEmail` | Copyable PayPal email |
+| `methods.bankNz` | NZ bank transfer (`accountName`, `accountNumber`, `bank`, `currency`) |
+| `methods.wallets[]` | Crypto wallets — see below |
+| `methods.cryptoEth` | Legacy single ETH string (still works if `wallets` empty); prefer `wallets` |
+| `methods.revolut` | Revolut.me / payment link |
+| `methods.kofi` | Ko-fi URL |
+| `methods.buyMeACoffee` | Buy Me a Coffee URL |
+| `methods.givealittle` | Givealittle (NZ) campaign URL |
+| `methods.stripe` | Stripe Payment Link |
+| `methods.discord` | Optional community link — leave `""` to hide |
+
+Adjust `goal` / `raised` and the `projects` cards (each `inventionId` should match an entry in `inventions.json`).
+
+### Add a crypto wallet
+
+1. Open `funding.json` → `methods.wallets`.
+2. Find the slot (`eth`, `btc`, `sol`, `usdc`, …) or append a new object:
+   ```json
+   { "id": "eth", "label": "Ethereum", "symbol": "ETH", "address": "0xYOUR_ADDRESS", "network": "Ethereum" }
+   ```
+3. Only set `address` when you have a real address you control. Empty `address` strings are **hidden** in the UI (placeholders stay in JSON for later).
+4. Do not paste retired or unknown addresses. Commit and push to `main`.
+
+Project cards on `fund.html` deep-link to the gallery via `index.html#<inventionId>` (also supports `index.html?id=<inventionId>`).
 
 Do not invent usernames — only paste real payment links you control. Visa is accepted through PayPal/Revolut; no separate Visa button.
+
 
 ## Local preview
 

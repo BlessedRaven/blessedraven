@@ -24,7 +24,7 @@
         <button type="button" class="nav-chip" data-filter="idea">Idea</button>
         <button type="button" class="nav-chip" data-filter="prototype">Prototype</button>
       </nav>
-      <a class="nav-fund" href="#fund">Fund</a>
+      <a class="nav-fund" href="fund.html">Fund</a>
     </div>
   </header>
 
@@ -54,28 +54,24 @@
 
     <section class="chapter fund-chapter" id="fund" data-chapter="fund">
       <div class="chapter-pin fund-pin">
-        <div class="fund-layout" id="fund-root">
-          <div class="fund-copy">
-            <p class="eyebrow reveal">Funding</p>
-            <h2 class="headline sm reveal" id="fund-headline">Seed the nest</h2>
-            <p class="lede reveal" id="fund-lede"></p>
-            <div class="fund-goal reveal" id="fund-goal" hidden>
-              <div class="fund-goal-meta">
-                <span id="fund-goal-label"></span>
-                <span id="fund-goal-nums"></span>
-              </div>
-              <div class="fund-rail" aria-hidden="true">
-                <div class="fund-rail-fill" id="fund-rail-fill"></div>
-              </div>
+        <div class="fund-teaser-layout" id="fund-root">
+          <p class="eyebrow reveal">Funding</p>
+          <h2 class="headline sm reveal" id="fund-headline">Seed the nest</h2>
+          <p class="lede reveal" id="fund-lede"></p>
+          <div class="fund-goal reveal" id="fund-goal" hidden>
+            <div class="fund-goal-meta">
+              <span id="fund-goal-label"></span>
+              <span id="fund-goal-nums"></span>
             </div>
+            <div class="fund-rail" aria-hidden="true">
+              <div class="fund-rail-fill" id="fund-rail-fill"></div>
+            </div>
+            <p class="crow-line fund-note">Manually updated · full payment methods on the Funds page</p>
           </div>
-          <div class="fund-panel reveal">
-            <p class="fund-panel-label">Ways to back</p>
-            <div class="fund-methods" id="fund-methods"></div>
-            <p class="fund-panel-label fund-projects-label">Back a project</p>
-            <div class="fund-projects" id="fund-projects"></div>
-            <p class="crow-line fund-note">Visa via PayPal or Revolut · ANZ NZ bank transfer details later · Revolut link appears when set in funding.json</p>
-          </div>
+          <a class="fund-teaser-cta reveal" href="fund.html">Open full Funds page</a>
+          <!-- Keep empty mounts so app.js renderFunding stays safe if methods/projects nodes are absent -->
+          <div id="fund-methods" hidden></div>
+          <div id="fund-projects" hidden></div>
         </div>
       </div>
     </section>

@@ -453,6 +453,24 @@
     openDetail(id);
   };
 
+  const deepLinkId = () => {
+    const params = new URLSearchParams(window.location.search);
+    const fromQuery = params.get("id");
+    if (fromQuery) return fromQuery;
+    const hash = (window.location.hash || "").replace(/^#/, "");
+    if (!hash || hash === "top" || hash === "fund") return "";
+    return hash;
+  };
+
+  const openDeepLink = () => {
+    const id = deepLinkId();
+    if (!id) return;
+    // Wait a tick so sticky chapters / ScrollTrigger layout settle
+    requestAnimationFrame(() => {
+      setTimeout(() => goToInvention(id), reduced ? 0 : 80);
+    });
+  };
+
   const renderFunding = (data) => {
     funding = data || {};
     const headline = document.getElementById("fund-headline");
@@ -484,6 +502,22 @@
     const methods = funding.methods || {};
     const methodNodes = [];
 
+    const liveWallets = () => {
+      const list = Array.isArray(methods.wallets) ? methods.wallets : [];
+      const withAddr = list.filter((w) => w && String(w.address || "").trim());
+      if (withAddr.length) return withAddr;
+      if (methods.cryptoEth) {
+        return [{
+          id: "eth",
+          label: "Ethereum",
+          symbol: "ETH",
+          address: methods.cryptoEth,
+          network: "Ethereum",
+        }];
+      }
+      return [];
+    };
+
     if (methods.paypal) {
       methodNodes.push(`
         <a class="fund-method fund-method-paypal" href="${escapeHtml(methods.paypal)}" target="_blank" rel="noopener noreferrer">
@@ -504,15 +538,6 @@
         </div>`);
     }
 
-    if (methods.revolut) {
-      methodNodes.push(`
-        <a class="fund-method" href="${escapeHtml(methods.revolut)}" target="_blank" rel="noopener noreferrer">
-          <span class="fund-method-kicker">Primary</span>
-          <span class="fund-method-title">Revolut</span>
-          <span class="fund-method-hint">Pay / donate · Visa via Revolut</span>
-        </a>`);
-    }
-
     const bank = methods.bankNz;
     if (bank && bank.accountNumber) {
       const bankLabel = [bank.bank, bank.currency].filter(Boolean).join(" · ");
@@ -528,15 +553,36 @@
         </div>`);
     }
 
-    if (methods.cryptoEth) {
+    liveWallets().forEach((w) => {
+      const symbol = w.symbol || w.label || "Crypto";
+      const title = w.label || symbol;
+      const network = w.network ? escapeHtml(w.network) : "";
       methodNodes.push(`
-        <div class="fund-method fund-crypto">
-          <span class="fund-method-kicker">ETH</span>
-          <span class="fund-method-title">Crypto</span>
-          <code class="fund-addr" title="${escapeHtml(methods.cryptoEth)}">${escapeHtml(methods.cryptoEth)}</code>
-          <button type="button" class="fund-copy" data-copy="${escapeHtml(methods.cryptoEth)}">Copy address</button>
+        <div class="fund-method fund-crypto" data-wallet="${escapeHtml(w.id || symbol)}">
+          <span class="fund-method-kicker">${escapeHtml(symbol)}</span>
+          <span class="fund-method-title">${escapeHtml(title)}</span>
+          <code class="fund-addr" title="${escapeHtml(w.address)}">${escapeHtml(w.address)}</code>
+          <button type="button" class="fund-copy" data-copy="${escapeHtml(w.address)}">Copy address</button>
+          ${network ? `<span class="fund-method-hint">${network}</span>` : ""}
         </div>`);
-    }
+    });
+
+    [
+      { key: "revolut", title: "Revolut", kicker: "Link", hint: "Pay / donate · Visa via Revolut" },
+      { key: "kofi", title: "Ko-fi", kicker: "Tips", hint: "Support on Ko-fi" },
+      { key: "buyMeACoffee", title: "Buy Me a Coffee", kicker: "Tips", hint: "Global tip jar" },
+      { key: "givealittle", title: "Givealittle", kicker: "NZ", hint: "NZ crowdfunding" },
+      { key: "stripe", title: "Card (Stripe)", kicker: "Card", hint: "Pay by card" },
+    ].forEach(({ key, title, kicker, hint }) => {
+      const url = methods[key];
+      if (!url) return;
+      methodNodes.push(`
+        <a class="fund-method" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">
+          <span class="fund-method-kicker">${escapeHtml(kicker)}</span>
+          <span class="fund-method-title">${escapeHtml(title)}</span>
+          <span class="fund-method-hint">${escapeHtml(hint)}</span>
+        </a>`);
+    });
 
     if (methods.discord) {
       methodNodes.push(`
@@ -577,6 +623,10 @@
     if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
   };
 
+  window.addEventListener("hashchange", () => {
+    if (inventions.length) openDeepLink();
+  });
+
   // Hero / close / fund reveals
   observeReveals(document.querySelector(".hero-chapter"));
   observeReveals(document.querySelector(".close-chapter"));
@@ -612,6 +662,7 @@
       inventions = Array.isArray(invData) ? invData : [];
       renderChapters();
       if (fundData) renderFunding(fundData);
+      openDeepLink();
     })
     .catch((err) => {
       chaptersRoot.innerHTML = `

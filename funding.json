@@ -1,6 +1,6 @@
 {
   "headline": "Seed the nest",
-  "lede": "Back the inventions \u2014 runway for prototypes, tooling, and the long quiet work between sketches and something you can hold. Every contribution feeds the nest.",
+  "lede": "Back the inventions — runway for prototypes, tooling, and the long quiet work between sketches and something you can hold. Every contribution feeds the nest.",
   "goal": {
     "amount": 10000,
     "currency": "NZD",
@@ -22,23 +22,56 @@
       "currency": "NZD"
     },
     "paypalEmail": "jakeryanlankshear@gmail.com",
-    "wallets": []
+    "wallets": [
+      {
+        "id": "eth",
+        "label": "Ethereum",
+        "symbol": "ETH",
+        "address": "",
+        "network": "Ethereum"
+      },
+      {
+        "id": "btc",
+        "label": "Bitcoin",
+        "symbol": "BTC",
+        "address": "",
+        "network": "Bitcoin"
+      },
+      {
+        "id": "sol",
+        "label": "Solana",
+        "symbol": "SOL",
+        "address": "",
+        "network": "Solana"
+      },
+      {
+        "id": "usdc",
+        "label": "USDC",
+        "symbol": "USDC",
+        "address": "",
+        "network": "Ethereum (ERC-20)"
+      }
+    ],
+    "kofi": "",
+    "buyMeACoffee": "",
+    "givealittle": "",
+    "stripe": ""
   },
   "projects": [
     {
       "inventionId": "med-bed",
       "label": "Back Med Bed",
-      "blurb": "Sensory tank, violet light, and biofeedback \u2014 first healing chamber prototype."
+      "blurb": "Sensory tank, violet light, and biofeedback — first healing chamber prototype."
     },
     {
       "inventionId": "astral-game",
       "label": "Back Astral",
-      "blurb": "VR astral levels steered by brainwaves \u2014 one playable level and a BCI path."
+      "blurb": "VR astral levels steered by brainwaves — one playable level and a BCI path."
     },
     {
       "inventionId": "torus-energy",
       "label": "Back Torus Energy",
-      "blurb": "Hole-less superconducting torus sketch \u2014 model the field before any power claim."
+      "blurb": "Hole-less superconducting torus sketch — model the field before any power claim."
     }
   ]
 }
