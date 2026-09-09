@@ -489,8 +489,19 @@
         <a class="fund-method fund-method-paypal" href="${escapeHtml(methods.paypal)}" target="_blank" rel="noopener noreferrer">
           <span class="fund-method-kicker">Primary</span>
           <span class="fund-method-title">PayPal</span>
-          <span class="fund-method-hint">Donate with PayPal</span>
+          <span class="fund-method-hint">Send with PayPal (personal)</span>
         </a>`);
+    }
+
+    if (methods.paypalEmail) {
+      methodNodes.push(`
+        <div class="fund-method">
+          <span class="fund-method-kicker">PayPal</span>
+          <span class="fund-method-title">Email</span>
+          <code class="fund-addr" title="${escapeHtml(methods.paypalEmail)}">${escapeHtml(methods.paypalEmail)}</code>
+          <button type="button" class="fund-copy" data-copy="${escapeHtml(methods.paypalEmail)}">Copy email</button>
+          <span class="fund-method-hint">Friends &amp; family / send money</span>
+        </div>`);
     }
 
     if (methods.revolut) {
