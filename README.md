@@ -53,6 +53,19 @@ Example entry:
 
 Seed entries with `id` starting with `example-` (and/or tag `example`) are marked as examples — replace or delete them when you add real work.
 
+
+## Funding / donate
+
+Edit [`funding.json`](./funding.json) to control the **Fund** chapter.
+
+1. Set `methods.paypal` to your PayPal.me or PayPal Donate URL (live now if set).
+2. Set `methods.revolut` to your Revolut.me / payment link when ready.
+3. Leave either field as `""` to **hide** that button in the UI.
+4. `methods.cryptoEth` and `methods.discord` are shown when non-empty.
+5. Adjust `goal` / `raised` and the `projects` cards (each `inventionId` should match an entry in `inventions.json`).
+
+Do not invent usernames — only paste real payment links you control. Visa is accepted through PayPal/Revolut; no separate Visa button.
+
 ## Local preview
 
 ```bash

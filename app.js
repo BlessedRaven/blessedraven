@@ -386,9 +386,175 @@
     });
   });
 
-  // Hero reveals
+  /* ---------- Funding ---------- */
+  const fundRoot = document.getElementById("fund-root");
+  const fundMethods = document.getElementById("fund-methods");
+  const fundProjects = document.getElementById("fund-projects");
+  let funding = null;
+
+  const formatMoney = (amount, currency) => {
+    try {
+      return new Intl.NumberFormat(undefined, {
+        style: "currency",
+        currency: currency || "NZD",
+        maximumFractionDigits: 0,
+      }).format(Number(amount) || 0);
+    } catch {
+      return `${currency || "NZD"} ${Number(amount) || 0}`;
+    }
+  };
+
+  const copyText = async (text, btn) => {
+    const value = String(text || "");
+    if (!value) return;
+    try {
+      await navigator.clipboard.writeText(value);
+      if (btn) {
+        const prev = btn.textContent;
+        btn.textContent = "Copied";
+        btn.classList.add("is-copied");
+        setTimeout(() => {
+          btn.textContent = prev;
+          btn.classList.remove("is-copied");
+        }, 1600);
+      }
+    } catch {
+      // Fallback: select a temporary input
+      const ta = document.createElement("textarea");
+      ta.value = value;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+        if (btn) {
+          const prev = btn.textContent;
+          btn.textContent = "Copied";
+          setTimeout(() => {
+            btn.textContent = prev;
+          }, 1600);
+        }
+      } finally {
+        ta.remove();
+      }
+    }
+  };
+
+  const goToInvention = (id) => {
+    const chapter = document.querySelector(`.chapter[data-id="${CSS.escape(id)}"]`);
+    if (chapter) {
+      chapter.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+      // Open detail shortly after scroll starts so the chapter is findable
+      setTimeout(() => openDetail(id), reduced ? 0 : 450);
+      return;
+    }
+    openDetail(id);
+  };
+
+  const renderFunding = (data) => {
+    funding = data || {};
+    const headline = document.getElementById("fund-headline");
+    const lede = document.getElementById("fund-lede");
+    if (headline && funding.headline) headline.textContent = funding.headline;
+    if (lede) lede.textContent = funding.lede || "";
+
+    const goalEl = document.getElementById("fund-goal");
+    const goal = funding.goal || {};
+    const raised = funding.raised || {};
+    if (goalEl && goal.amount != null) {
+      goalEl.hidden = false;
+      const label = document.getElementById("fund-goal-label");
+      const nums = document.getElementById("fund-goal-nums");
+      const fill = document.getElementById("fund-rail-fill");
+      if (label) label.textContent = goal.label || "Goal";
+      const raisedAmt = Number(raised.amount) || 0;
+      const goalAmt = Number(goal.amount) || 0;
+      const cur = raised.currency || goal.currency || "NZD";
+      if (nums) {
+        nums.textContent = `${formatMoney(raisedAmt, cur)} / ${formatMoney(goalAmt, goal.currency || cur)}`;
+      }
+      if (fill) {
+        const pct = goalAmt > 0 ? Math.min(100, Math.max(0, (raisedAmt / goalAmt) * 100)) : 0;
+        fill.style.width = `${pct}%`;
+      }
+    }
+
+    const methods = funding.methods || {};
+    const methodNodes = [];
+
+    if (methods.paypal) {
+      methodNodes.push(`
+        <a class="fund-method fund-method-paypal" href="${escapeHtml(methods.paypal)}" target="_blank" rel="noopener noreferrer">
+          <span class="fund-method-kicker">Primary</span>
+          <span class="fund-method-title">PayPal</span>
+          <span class="fund-method-hint">Donate with PayPal</span>
+        </a>`);
+    }
+
+    if (methods.revolut) {
+      methodNodes.push(`
+        <a class="fund-method" href="${escapeHtml(methods.revolut)}" target="_blank" rel="noopener noreferrer">
+          <span class="fund-method-kicker">Primary</span>
+          <span class="fund-method-title">Revolut</span>
+          <span class="fund-method-hint">Pay / donate · Visa via Revolut</span>
+        </a>`);
+    }
+
+    if (methods.cryptoEth) {
+      methodNodes.push(`
+        <div class="fund-method fund-crypto">
+          <span class="fund-method-kicker">ETH</span>
+          <span class="fund-method-title">Crypto</span>
+          <code class="fund-addr" title="${escapeHtml(methods.cryptoEth)}">${escapeHtml(methods.cryptoEth)}</code>
+          <button type="button" class="fund-copy" data-copy="${escapeHtml(methods.cryptoEth)}">Copy address</button>
+        </div>`);
+    }
+
+    if (methods.discord) {
+      methodNodes.push(`
+        <a class="fund-method" href="${escapeHtml(methods.discord)}" target="_blank" rel="noopener noreferrer">
+          <span class="fund-method-kicker">Community</span>
+          <span class="fund-method-title">Discord</span>
+          <span class="fund-method-hint">Ask how to back a project</span>
+        </a>`);
+    }
+
+    if (fundMethods) {
+      fundMethods.innerHTML = methodNodes.join("");
+      fundMethods.querySelectorAll("[data-copy]").forEach((btn) => {
+        btn.addEventListener("click", () => copyText(btn.getAttribute("data-copy"), btn));
+      });
+    }
+
+    const projects = Array.isArray(funding.projects) ? funding.projects : [];
+    if (fundProjects) {
+      fundProjects.innerHTML = projects
+        .map(
+          (p) => `
+        <button type="button" class="fund-project" data-back="${escapeHtml(p.inventionId || "")}">
+          <span class="fund-project-label">${escapeHtml(p.label || "Back project")}</span>
+          <span class="fund-project-blurb">${escapeHtml(p.blurb || "")}</span>
+        </button>`
+        )
+        .join("");
+      fundProjects.querySelectorAll("[data-back]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-back");
+          if (id) goToInvention(id);
+        });
+      });
+    }
+
+    if (fundRoot) observeReveals(fundRoot);
+    if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
+  };
+
+  // Hero / close / fund reveals
   observeReveals(document.querySelector(".hero-chapter"));
   observeReveals(document.querySelector(".close-chapter"));
+  if (fundRoot) observeReveals(fundRoot);
 
   resizeCanvas();
   window.addEventListener("resize", () => {
@@ -401,14 +567,25 @@
     drawField(0);
   }
 
-  fetch("inventions.json", { cache: "no-store" })
-    .then((r) => {
+  Promise.all([
+    fetch("inventions.json", { cache: "no-store" }).then((r) => {
       if (!r.ok) throw new Error(`Failed to load inventions.json (${r.status})`);
       return r.json();
-    })
-    .then((data) => {
-      inventions = Array.isArray(data) ? data : [];
+    }),
+    fetch("funding.json", { cache: "no-store" })
+      .then((r) => {
+        if (!r.ok) throw new Error(`Failed to load funding.json (${r.status})`);
+        return r.json();
+      })
+      .catch((err) => {
+        console.warn(err);
+        return null;
+      }),
+  ])
+    .then(([invData, fundData]) => {
+      inventions = Array.isArray(invData) ? invData : [];
       renderChapters();
+      if (fundData) renderFunding(fundData);
     })
     .catch((err) => {
       chaptersRoot.innerHTML = `

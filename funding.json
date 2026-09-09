@@ -1,0 +1,36 @@
+{
+  "headline": "Seed the nest",
+  "lede": "Back the inventions \u2014 runway for prototypes, tooling, and the long quiet work between sketches and something you can hold. Every contribution feeds the nest.",
+  "goal": {
+    "amount": 10000,
+    "currency": "NZD",
+    "label": "Runway & first prototypes"
+  },
+  "raised": {
+    "amount": 0,
+    "currency": "NZD"
+  },
+  "methods": {
+    "paypal": "https://www.paypal.com/donate/?business=jakeryanlankshear%40gmail.com&no_recurring=0&currency_code=NZD&item_name=Blessed%20Raven%20Seed",
+    "revolut": "",
+    "cryptoEth": "0xE8787D2Ddc6022ADe1b75D42D2440E6F0BAd6864",
+    "discord": "https://discord.gg/Bw57a5Gd22"
+  },
+  "projects": [
+    {
+      "inventionId": "med-bed",
+      "label": "Back Med Bed",
+      "blurb": "Sensory tank, violet light, and biofeedback \u2014 first healing chamber prototype."
+    },
+    {
+      "inventionId": "astral-game",
+      "label": "Back Astral",
+      "blurb": "VR astral levels steered by brainwaves \u2014 one playable level and a BCI path."
+    },
+    {
+      "inventionId": "torus-energy",
+      "label": "Back Torus Energy",
+      "blurb": "Hole-less superconducting torus sketch \u2014 model the field before any power claim."
+    }
+  ]
+}
