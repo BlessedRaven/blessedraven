@@ -3,14 +3,17 @@
 Personal GitHub Pages site for inventions, ideas, and prototypes.
 Live at [www.blessedraven.com](https://www.blessedraven.com).
 
-Vanilla HTML / CSS / JS. No build step. GitHub Pages serves from the repo root on `main`.
+Vanilla HTML / CSS / JS (GSAP + ScrollTrigger via CDN). No build step.
+GitHub Pages serves from the repo root on `main`.
+
+The experience is a cinematic sticky-scroll gallery: a particle field morphs as you scroll, and each invention is a full-viewport chapter. Click **Open details** for the full write-up.
 
 ## Add an invention in under a minute
 
 1. Open [`inventions.json`](./inventions.json).
 2. Copy an existing object and paste it as a new array item.
 3. Fill in the fields (see schema below). Use a unique `id`.
-4. Commit and push to `main` (or merge a PR). GitHub Pages will update shortly.
+4. Commit and push to `main` (or merge a PR). GitHub Pages updates shortly.
 
 Example entry:
 
@@ -19,7 +22,7 @@ Example entry:
   "id": "my-new-thing",
   "title": "My New Thing",
   "type": "idea",
-  "summary": "One-line hook shown on the card.",
+  "summary": "One-line hook shown in the chapter.",
   "description": "Full write-up shown in the detail panel.",
   "status": "draft",
   "tags": ["hardware", "notes"],
@@ -36,10 +39,10 @@ Example entry:
 
 | Field | Required | Notes |
 | --- | --- | --- |
-| `id` | yes | Unique slug (used in the UI) |
+| `id` | yes | Unique slug |
 | `title` | yes | Display name |
 | `type` | yes | `invention` \| `idea` \| `prototype` |
-| `summary` | yes | Short card text |
+| `summary` | yes | Short chapter text |
 | `description` | yes | Full detail (plain text; newlines kept) |
 | `status` | yes | `draft` \| `exploring` \| `prototype` \| `built` |
 | `tags` | yes | Array of strings |
@@ -48,18 +51,16 @@ Example entry:
 | `image` | no | URL or path to an image |
 | `links` | no | Array of `{ "label", "url" }` |
 
-Seed entries with `id` starting with `example-` (and/or tag `example`) are clearly marked as examples in the UI — replace or delete them when you add real work.
+Seed entries with `id` starting with `example-` (and/or tag `example`) are marked as examples — replace or delete them when you add real work.
 
 ## Local preview
-
-Any static server from the repo root works, for example:
 
 ```bash
 python3 -m http.server 8080
 ```
 
-Then open `http://localhost:8080`.
+Open `http://localhost:8080`.
 
 ## Custom domain
 
-The `CNAME` file must stay as `www.blessedraven.com` for GitHub Pages.
+Keep the `CNAME` file exactly as `www.blessedraven.com` for GitHub Pages.

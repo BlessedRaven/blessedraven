@@ -4,82 +4,88 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="BlessedRaven — inventions, ideas, and prototypes." />
+  <meta name="theme-color" content="#000000" />
   <title>BlessedRaven — Inventions & Ideas</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="noise" aria-hidden="true"></div>
-  <div class="aurora" aria-hidden="true"></div>
+  <canvas id="field" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
 
-  <header class="site-header">
-    <a class="brand" href="#top" id="brand-link">
-      <span class="brand-mark" aria-hidden="true"></span>
-      <span class="brand-text">BlessedRaven</span>
-    </a>
-    <p class="tagline">Inventions · Ideas · Prototypes</p>
-    <nav class="header-nav" aria-label="Filters">
-      <button type="button" class="filter-btn is-active" data-filter="all">All</button>
-      <button type="button" class="filter-btn" data-filter="invention">Inventions</button>
-      <button type="button" class="filter-btn" data-filter="idea">Ideas</button>
-      <button type="button" class="filter-btn" data-filter="prototype">Prototypes</button>
+  <header class="nav">
+    <a class="logo" href="#top">BlessedRaven</a>
+    <nav class="nav-filters" aria-label="Filters">
+      <button type="button" class="nav-chip is-on" data-filter="all">All</button>
+      <button type="button" class="nav-chip" data-filter="invention">Invention</button>
+      <button type="button" class="nav-chip" data-filter="idea">Idea</button>
+      <button type="button" class="nav-chip" data-filter="prototype">Prototype</button>
     </nav>
   </header>
 
-  <main id="top" class="scroll-stage" tabindex="-1">
-    <section class="hero panel" data-panel="hero">
-      <div class="hero-inner">
-        <p class="eyebrow">Personal invention hub · v1</p>
-        <h1>Build what does not exist yet.</h1>
-        <p class="lede">
-          A vertical gallery of inventions, ideas, and prototypes.
-          Scroll to explore. Tap a card for the full story.
-        </p>
-        <p class="hint">Scroll <span aria-hidden="true">↓</span></p>
+  <main id="top">
+    <!-- Hero: tall sticky storytelling over particle morph -->
+    <section class="chapter hero-chapter" data-chapter="hero">
+      <div class="chapter-pin">
+        <div class="hero-copy">
+          <p class="eyebrow reveal">Inventions &amp; Ideas</p>
+          <h1 class="headline reveal">
+            Thinking in<br /><span class="italic">ink &amp; void</span>
+          </h1>
+          <p class="lede reveal">
+            A cinematic sketchbook of concepts from Blessed Raven.
+            Scroll to morph the field — each chapter is a working thought.
+          </p>
+          <p class="crow-line reveal">brother crow keeps the margins</p>
+        </div>
+        <div class="progress-rail" aria-hidden="true">
+          <div class="progress-fill" id="hero-progress"></div>
+        </div>
       </div>
     </section>
 
-    <div id="cards" class="cards" aria-live="polite"></div>
+    <div id="chapters" class="chapters" aria-live="polite"></div>
 
-    <section class="footer-panel panel" data-panel="footer">
-      <div class="footer-inner">
-        <h2>Add your own</h2>
-        <p>
-          Edit <code>inventions.json</code>, commit, and push.
-          See the README for a one-minute walkthrough.
+    <section class="chapter close-chapter" data-chapter="close">
+      <div class="chapter-pin compact">
+        <p class="eyebrow reveal">Authoring</p>
+        <h2 class="headline sm reveal">Add a concept<br />in under a minute.</h2>
+        <p class="lede reveal">
+          Edit <code>inventions.json</code>, commit, push.
+          The gallery redraws. Details live in the README.
         </p>
-        <p class="footer-meta">
+        <p class="crow-line reveal">
           <a href="https://github.com/BlessedRaven/blessedraven">GitHub</a>
-          · www.blessedraven.com
+          · sketched with CROW
         </p>
       </div>
     </section>
   </main>
 
-  <div id="modal" class="modal" hidden>
-    <div class="modal-backdrop" data-close></div>
-    <article class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <button type="button" class="modal-close" data-close aria-label="Close">&times;</button>
-      <div class="modal-body">
-        <p class="modal-meta">
-          <span id="modal-type" class="badge"></span>
-          <span id="modal-status" class="status"></span>
-        </p>
-        <h2 id="modal-title"></h2>
-        <p id="modal-summary" class="modal-summary"></p>
-        <div id="modal-description" class="modal-description"></div>
-        <ul id="modal-tags" class="tag-list"></ul>
-        <div id="modal-links" class="link-list"></div>
-        <p class="modal-dates"><span id="modal-dates"></span></p>
+  <div id="detail" class="detail" hidden>
+    <div class="detail-shade" data-close></div>
+    <article class="detail-panel" role="dialog" aria-modal="true" aria-labelledby="d-title">
+      <button type="button" class="detail-x" data-close aria-label="Close">×</button>
+      <div class="detail-meta">
+        <span id="d-type" class="tag"></span>
+        <span id="d-status" class="tag soft"></span>
+        <span id="d-example" class="tag accent" hidden>example</span>
       </div>
+      <h2 id="d-title"></h2>
+      <p id="d-summary" class="detail-summary"></p>
+      <div id="d-body" class="detail-body"></div>
+      <ul id="d-tags" class="tag-row"></ul>
+      <div id="d-links" class="link-row"></div>
+      <p id="d-dates" class="detail-dates"></p>
     </article>
   </div>
 
-  <noscript>
-    <p class="noscript">Enable JavaScript to load inventions from inventions.json.</p>
-  </noscript>
+  <noscript><p class="noscript">Enable JavaScript to load inventions.json.</p></noscript>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script src="app.js" defer></script>
 </body>
 </html>

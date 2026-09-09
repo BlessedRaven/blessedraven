@@ -3,8 +3,9 @@
 ## Now (v1)
 
 - Static site on GitHub Pages (repo root, custom domain via `CNAME`).
-- `inventions.json` is the single source of truth for cards.
-- `index.html` + `styles.css` + `app.js` render a full-viewport snap-scroll gallery and a detail modal.
+- `inventions.json` is the single source of truth for chapters.
+- `index.html` + `styles.css` + `app.js` render a cinematic sticky-scroll gallery with a canvas particle field scrubbed by scroll progress (GSAP ScrollTrigger via CDN).
+- Detail panel/modal for full descriptions.
 - No backend, no auth, no build tooling.
 
 ## Later (not built)
