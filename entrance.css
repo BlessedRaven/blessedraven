@@ -1,0 +1,329 @@
+/* BlessedRaven — crow → eye → whirlwind entrance (CSS-first, mobile-safe) */
+
+:root {
+  --raven-void: #050505;
+  --raven-void-2: #0c0c0c;
+  --raven-gold: #d4b56a;
+  --raven-gold-soft: rgba(212, 181, 106, 0.55);
+  --raven-ink: #e8e4d8;
+}
+
+html.raven-entrance-pending,
+html.raven-entrance-pending body {
+  overflow: hidden !important;
+  height: 100%;
+}
+
+html.raven-entrance-done #raven-entrance {
+  display: none !important;
+}
+
+.raven-entrance {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(120% 90% at 50% 42%, #121212 0%, var(--raven-void) 55%, #000 100%);
+  color: var(--raven-ink);
+  isolation: isolate;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  -webkit-mask-image: radial-gradient(circle at 50% 48%, #000 0%, #000 100%);
+  mask-image: radial-gradient(circle at 50% 48%, #000 0%, #000 100%);
+}
+
+.raven-entrance.is-exit {
+  pointer-events: none;
+}
+
+.raven-entrance.is-gone {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.raven-skip {
+  position: absolute;
+  top: max(0.85rem, env(safe-area-inset-top));
+  right: max(0.85rem, env(safe-area-inset-right));
+  z-index: 5;
+  appearance: none;
+  border: 1px solid rgba(232, 228, 216, 0.28);
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(232, 228, 216, 0.85);
+  font: 500 0.7rem/1 Inter, system-ui, sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.7rem 1rem;
+  min-height: 44px;
+  border-radius: 999px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.raven-skip:hover,
+.raven-skip:focus-visible {
+  color: #fff;
+  border-color: var(--raven-gold-soft);
+  background: rgba(20, 16, 8, 0.55);
+  outline: none;
+}
+
+.raven-stage {
+  position: relative;
+  width: min(92vw, 720px);
+  aspect-ratio: 1;
+  max-height: min(78vh, 720px);
+  display: grid;
+  place-items: center;
+  transform-origin: 50% 48%;
+  will-change: transform, filter, opacity;
+}
+
+.raven-crow {
+  position: absolute;
+  inset: -8% -12%;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transform: scale(1.08);
+  filter: blur(0.5px);
+  transition: none;
+  pointer-events: none;
+}
+
+.raven-crow svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.raven-crow-sil {
+  fill: #000;
+  opacity: 0.92;
+  filter: drop-shadow(0 0 28px rgba(0, 0, 0, 0.85));
+}
+
+.raven-eye {
+  position: relative;
+  z-index: 2;
+  width: min(68%, 420px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transform: scale(0.92);
+}
+
+.raven-eye-aperture {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  /* closed horizontal slit → almond eye */
+  clip-path: ellipse(42% 0.4% at 50% 50%);
+  -webkit-clip-path: ellipse(42% 0.4% at 50% 50%);
+  will-change: clip-path;
+}
+
+.raven-eye-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 18px rgba(212, 181, 106, 0.18));
+}
+
+.raven-eye-svg .cls-1,
+.raven-eye-svg .cls-2,
+.raven-eye-svg .cls-3,
+.raven-eye-svg .cls-4,
+.raven-eye-svg .cls-5,
+.raven-eye-svg .cls-6 {
+  stroke: var(--raven-gold) !important;
+  fill: none !important;
+}
+
+.raven-eye-svg .cls-7 {
+  fill: rgba(212, 181, 106, 0.12) !important;
+  stroke: none !important;
+}
+
+.raven-eye-svg path,
+.raven-eye-svg circle,
+.raven-eye-svg ellipse,
+.raven-eye-svg line,
+.raven-eye-svg polyline,
+.raven-eye-svg polygon {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.raven-pupil {
+  position: absolute;
+  z-index: 3;
+  width: 9%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.35), transparent 45%),
+    radial-gradient(circle at 50% 50%, #0a0a0a 0%, #000 70%, transparent 72%);
+  box-shadow:
+    0 0 0 1px rgba(212, 181, 106, 0.35),
+    0 0 22px rgba(212, 181, 106, 0.45),
+    0 0 48px rgba(212, 181, 106, 0.2);
+  opacity: 0;
+  transform: scale(0.4);
+  pointer-events: none;
+}
+
+.raven-whirl {
+  position: absolute;
+  inset: -20%;
+  z-index: 1;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  background:
+    repeating-conic-gradient(
+      from 0deg,
+      rgba(212, 181, 106, 0.0) 0deg 8deg,
+      rgba(212, 181, 106, 0.14) 8deg 12deg,
+      rgba(0, 0, 0, 0.0) 12deg 22deg
+    );
+  -webkit-mask-image: radial-gradient(circle, transparent 12%, #000 28%, #000 58%, transparent 72%);
+  mask-image: radial-gradient(circle, transparent 12%, #000 28%, #000 58%, transparent 72%);
+  mix-blend-mode: screen;
+  filter: blur(0.4px);
+  will-change: transform, opacity;
+}
+
+.raven-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 48%, transparent 20%, rgba(0, 0, 0, 0.55) 70%, #000 100%);
+  opacity: 0.85;
+}
+
+/* Phase classes driven by entrance.js */
+
+.raven-entrance.is-crow .raven-crow {
+  animation: ravenCrowIn 1.05s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.raven-entrance.is-eye .raven-eye {
+  animation: ravenEyeFade 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.raven-entrance.is-open .raven-eye-aperture {
+  animation: ravenEyeOpen 1.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.raven-entrance.is-lock .raven-pupil {
+  animation: ravenPupilLock 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.raven-entrance.is-whirl .raven-whirl {
+  animation: ravenWhirlSpin 1.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.raven-entrance.is-whirl .raven-stage {
+  animation: ravenWhirlStage 1.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.raven-entrance.is-whirl {
+  animation: ravenMaskReveal 1.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes ravenCrowIn {
+  0% { opacity: 0; transform: scale(1.12); filter: blur(6px); }
+  55% { opacity: 1; transform: scale(1.01); filter: blur(0.2px); }
+  100% { opacity: 0.88; transform: scale(1); filter: blur(0); }
+}
+
+@keyframes ravenEyeFade {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes ravenEyeOpen {
+  0% {
+    clip-path: ellipse(42% 0.4% at 50% 50%);
+    -webkit-clip-path: ellipse(42% 0.4% at 50% 50%);
+  }
+  35% {
+    clip-path: ellipse(44% 8% at 50% 50%);
+    -webkit-clip-path: ellipse(44% 8% at 50% 50%);
+  }
+  100% {
+    clip-path: ellipse(48% 36% at 50% 50%);
+    -webkit-clip-path: ellipse(48% 36% at 50% 50%);
+  }
+}
+
+@keyframes ravenPupilLock {
+  0% { opacity: 0; transform: scale(0.35); }
+  40% { opacity: 1; transform: scale(1.18); }
+  62% { opacity: 1; transform: scale(0.92); }
+  78% { opacity: 1; transform: scale(1.06); box-shadow: 0 0 0 1px rgba(212,181,106,0.5), 0 0 28px rgba(212,181,106,0.65), 0 0 60px rgba(212,181,106,0.28); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes ravenWhirlSpin {
+  0% { opacity: 0; transform: scale(0.55) rotate(0deg); }
+  18% { opacity: 0.85; transform: scale(0.9) rotate(90deg); }
+  100% { opacity: 0; transform: scale(2.4) rotate(640deg); }
+}
+
+@keyframes ravenWhirlStage {
+  0% { transform: scale(1) rotate(0deg); filter: blur(0); opacity: 1; }
+  45% { transform: scale(1.35) rotate(160deg); filter: blur(2px); opacity: 1; }
+  100% { transform: scale(4.2) rotate(420deg); filter: blur(14px); opacity: 0; }
+}
+
+@keyframes ravenMaskReveal {
+  0% {
+    -webkit-mask-image: radial-gradient(circle at 50% 48%, transparent 0%, #000 0%, #000 100%);
+    mask-image: radial-gradient(circle at 50% 48%, transparent 0%, #000 0%, #000 100%);
+  }
+  35% {
+    -webkit-mask-image: radial-gradient(circle at 50% 48%, transparent 8%, #000 18%, #000 100%);
+    mask-image: radial-gradient(circle at 50% 48%, transparent 8%, #000 18%, #000 100%);
+  }
+  100% {
+    -webkit-mask-image: radial-gradient(circle at 50% 48%, transparent 72%, transparent 73%, #000 100%);
+    mask-image: radial-gradient(circle at 50% 48%, transparent 72%, transparent 73%, #000 100%);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .raven-stage {
+    width: min(96vw, 520px);
+    max-height: min(70vh, 520px);
+  }
+  .raven-eye {
+    width: min(78%, 340px);
+  }
+  .raven-skip {
+    font-size: 0.65rem;
+    padding: 0.65rem 0.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .raven-entrance,
+  .raven-crow,
+  .raven-eye,
+  .raven-eye-aperture,
+  .raven-pupil,
+  .raven-whirl,
+  .raven-stage {
+    animation: none !important;
+    transition: none !important;
+  }
+}
