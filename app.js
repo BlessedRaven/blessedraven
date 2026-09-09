@@ -502,6 +502,21 @@
         </a>`);
     }
 
+    const bank = methods.bankNz;
+    if (bank && bank.accountNumber) {
+      const bankLabel = [bank.bank, bank.currency].filter(Boolean).join(" · ");
+      const nameLine = bank.accountName ? escapeHtml(bank.accountName) : "";
+      methodNodes.push(`
+        <div class="fund-method fund-bank">
+          <span class="fund-method-kicker">NZ transfer</span>
+          <span class="fund-method-title">${escapeHtml(bank.bank || "Bank")}</span>
+          ${nameLine ? `<span class="fund-method-hint">${nameLine}</span>` : ""}
+          <code class="fund-addr" title="${escapeHtml(bank.accountNumber)}">${escapeHtml(bank.accountNumber)}</code>
+          <button type="button" class="fund-copy" data-copy="${escapeHtml(bank.accountNumber)}">Copy account</button>
+          <span class="fund-method-hint">${escapeHtml(bankLabel || "NZD")}</span>
+        </div>`);
+    }
+
     if (methods.cryptoEth) {
       methodNodes.push(`
         <div class="fund-method fund-crypto">
