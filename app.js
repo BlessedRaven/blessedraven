@@ -36,7 +36,6 @@
     svg.setAttribute("role", "img");
     svg.setAttribute("aria-label", "Blessed Raven sigil");
     svg.setAttribute("focusable", "false");
-    svg.style.background = "#fff";
 
     const defs = src.querySelector("defs");
     if (defs) svg.appendChild(document.importNode(defs, true));
@@ -46,11 +45,9 @@
 
     const orbit = document.createElementNS("http://www.w3.org/2000/svg", "g");
     orbit.setAttribute("class", "orbit");
-    // Explicit SVG origin for browsers that ignore CSS transform-origin on <g>
     orbit.setAttribute("style", `transform-origin: ${CX}px ${CY}px; transform-box: view-box;`);
 
     const kids = Array.from(src.children).filter((el) => el.tagName.toLowerCase() !== "defs");
-    // First graphical group is the central vortex; remainder orbit.
     let sawCenter = false;
     kids.forEach((el) => {
       const node = document.importNode(el, true);
@@ -62,14 +59,11 @@
       }
     });
 
-    // Outer under center so center stays visually crisp on top
     svg.appendChild(orbit);
     svg.appendChild(center);
     host.innerHTML = "";
     host.appendChild(svg);
-
-    if (!reduced) mark.classList.add("is-ready");
-    else mark.classList.add("is-ready"); // still show; CSS disables motion
+    mark.classList.add("is-ready");
   };
 
   if (document.readyState === "loading") {
@@ -78,8 +72,7 @@
     mount();
   }
 
-
-  /* Matrix rain — phrases, dark, strictly behind sigil */
+  /* Floating phrases — not Matrix columns; z-index keeps them behind the sigil */
   const canvas = document.querySelector("[data-matrix]");
   if (canvas && !reduced) {
     const ctx = canvas.getContext("2d");
@@ -98,12 +91,25 @@
       "light",
       "lux",
     ];
-    let drops = [];
+    let items = [];
     let w = 0;
     let h = 0;
-    let font = 13;
-    let colW = 0;
     let raf = 0;
+
+    const spawn = (partial) => {
+      const text = phrases[(Math.random() * phrases.length) | 0];
+      return {
+        text,
+        x: Math.random() * (w || 300),
+        y: partial ? Math.random() * (h || 300) : (h || 300) + 20 + Math.random() * 80,
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: -(0.25 + Math.random() * 0.45),
+        rot: (Math.random() - 0.5) * 0.4,
+        vr: (Math.random() - 0.5) * 0.002,
+        size: 11 + Math.random() * 7,
+        alpha: 0.14 + Math.random() * 0.14,
+      };
+    };
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -112,39 +118,29 @@
       canvas.width = Math.floor(w * dpr);
       canvas.height = Math.floor(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      font = w < 640 ? 11 : 13;
-      colW = font * 1.15;
-      const n = Math.max(8, Math.ceil(w / colW));
-      drops = Array.from({ length: n }, (_, i) => ({
-        y: Math.random() * h,
-        phrase: phrases[i % phrases.length],
-        i: 0,
-        speed: 0.55 + Math.random() * 0.75,
-      }));
+      const n = w < 640 ? 18 : 28;
+      items = Array.from({ length: n }, () => spawn(true));
     };
 
     const tick = () => {
-      // fade trail on white — does not cover the sigil (sigil has white plate + higher z)
-      ctx.fillStyle = "rgba(255,255,255,0.22)";
-      ctx.fillRect(0, 0, w, h);
-      ctx.font = `${font}px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`;
-      ctx.textBaseline = "top";
-
-      drops.forEach((d, col) => {
-        const text = d.phrase;
-        const ch = text[d.i % text.length];
-        const x = col * colW;
-        // darker matrix on white
-        ctx.fillStyle = col % 5 === 0 ? "rgba(0, 0, 0, 0.35)" : "rgba(0, 0, 0, 0.2)";
-        ctx.fillText(ch, x, d.y);
-        d.i += 1;
-        d.y += font * d.speed;
-        if (d.y > h + font * 2) {
-          d.y = -font * (1 + Math.random() * 8);
-          d.phrase = phrases[(Math.random() * phrases.length) | 0];
-          d.i = 0;
-          d.speed = 0.55 + Math.random() * 0.75;
+      ctx.clearRect(0, 0, w, h);
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      items.forEach((it, idx) => {
+        it.x += it.vx;
+        it.y += it.vy;
+        it.rot += it.vr;
+        if (it.y < -40 || it.x < -120 || it.x > w + 120) {
+          items[idx] = spawn(false);
+          return;
         }
+        ctx.save();
+        ctx.translate(it.x, it.y);
+        ctx.rotate(it.rot);
+        ctx.font = `${it.size}px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`;
+        ctx.fillStyle = `rgba(0,0,0,${it.alpha})`;
+        ctx.fillText(it.text, 0, 0);
+        ctx.restore();
       });
       raf = requestAnimationFrame(tick);
     };
@@ -157,6 +153,4 @@
     });
     raf = requestAnimationFrame(tick);
   }
-
-
 })();

@@ -1,4 +1,4 @@
-/* Blessed Raven — landing (A breathe + C outer orbit) */
+/* Blessed Raven — landing: soft breath + 360° outer orbit + floating phrases */
 
 *,
 *::before,
@@ -47,22 +47,7 @@ body {
   height: 100%;
   z-index: 0;
   pointer-events: none;
-  opacity: 1;
-  /* Rain only in margins — never under the sigil */
-  -webkit-mask-image: radial-gradient(
-    ellipse 52% 56% at 50% 52%,
-    transparent 0%,
-    transparent 72%,
-    #000 78%,
-    #000 100%
-  );
-  mask-image: radial-gradient(
-    ellipse 52% 56% at 50% 52%,
-    transparent 0%,
-    transparent 72%,
-    #000 78%,
-    #000 100%
-  );
+  opacity: 0.9;
 }
 
 .landing > .mark,
@@ -74,61 +59,26 @@ body {
 
 .mark {
   position: relative;
-  /* Near full-viewport / ~2x prior presence */
   width: min(100vw, calc(100dvh * 923.86 / 886.31), 2000px);
   max-width: none;
   aspect-ratio: 923.86 / 886.31;
   transform-origin: 50% 55%;
   will-change: transform, filter;
-  isolation: isolate;
 }
 
-/* Keeps Matrix rain from showing through / tinting the black strokes */
-.mark-plate {
-  position: absolute;
-  inset: 0;
-  background: #fff;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.mark-host,
-.hits {
-  z-index: 1;
-}
-
-/* A — quiet breathe on the whole mark */
 .mark.is-ready {
-  animation: br-breathe 9.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
-  filter: drop-shadow(0 0 0 rgba(18, 18, 18, 0));
+  animation: br-breathe 11s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 
 @keyframes br-breathe {
   0%,
   100% {
     transform: scale(1);
-    filter: drop-shadow(0 0 2px rgba(18, 18, 18, 0.08));
+    filter: drop-shadow(0 0 1px rgba(18, 18, 18, 0.05));
   }
   50% {
-    transform: scale(1.082);
-    filter: drop-shadow(0 0 42px rgba(18, 18, 18, 0.32));
-  }
-}
-
-/* Center expands a touch more (lungs); outer lag via delayed orbit breathe */
-.mark-host svg.sigil .center {
-  transform-box: view-box;
-  transform-origin: 447.56px 484.96px;
-  animation: br-center-breath 9.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
-}
-
-@keyframes br-center-breath {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.052);
+    transform: scale(1.04);
+    filter: drop-shadow(0 0 18px rgba(18, 18, 18, 0.16));
   }
 }
 
@@ -150,63 +100,36 @@ body {
   object-fit: contain;
 }
 
-/* C — outer symbols slow orbit; center group stays still */
-.mark-host svg.sigil .orbit,
-.hits .hits-orbit {
+.mark-host svg.sigil .center {
   transform-box: view-box;
   transform-origin: 447.56px 484.96px;
-  animation: br-orbit 24s ease-in-out infinite;
+  animation: br-center-breath 11s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 
-/* Outer ring lag-breathe (opacity/glow only so it doesn't fight rotate transform) */
-.mark-host svg.sigil .orbit {
-  animation: br-orbit 24s ease-in-out infinite;
-}
-
-@keyframes br-orbit {
-  0%,
-  100% {
-    transform: rotate(-6.75deg);
-  }
-  50% {
-    transform: rotate(6.75deg);
-  }
-}
-
-/* Per-symbol shimmer / micro-pulse on outer art */
-.mark-host svg.sigil .orbit > * {
-  transform-box: fill-box;
-  transform-origin: center;
-}
-
-
-  50% {
-    filter: drop-shadow(0 0 10px rgba(18, 18, 18, 0.3));
-  }
-}
-
-.hits .hits-orbit .hotspot {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: br-hit-bob 4.8s ease-in-out infinite;
-}
-
-.hits .hits-orbit .hotspot:nth-child(1) { animation-delay: 0s; }
-.hits .hits-orbit .hotspot:nth-child(2) { animation-delay: 0.35s; }
-.hits .hits-orbit .hotspot:nth-child(3) { animation-delay: 0.7s; }
-.hits .hits-orbit .hotspot:nth-child(4) { animation-delay: 1.05s; }
-.hits .hits-orbit .hotspot:nth-child(5) { animation-delay: 1.4s; }
-.hits .hits-orbit .hotspot:nth-child(6) { animation-delay: 1.75s; }
-.hits .hits-orbit .hotspot:nth-child(7) { animation-delay: 2.1s; }
-.hits .hits-orbit .hotspot:nth-child(8) { animation-delay: 2.45s; }
-
-@keyframes br-hit-bob {
+@keyframes br-center-breath {
   0%,
   100% {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.06);
+    transform: scale(1.02);
+  }
+}
+
+/* Outer symbols + hotspots: full 360° around center */
+.mark-host svg.sigil .orbit,
+.hits .hits-orbit {
+  transform-box: view-box;
+  transform-origin: 447.56px 484.96px;
+  animation: br-orbit-spin 80s linear infinite;
+}
+
+@keyframes br-orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 
@@ -320,14 +243,11 @@ body {
   .mark.is-ready,
   .mark-host svg.sigil .center,
   .mark-host svg.sigil .orbit,
-  .mark-host svg.sigil .orbit > *,
-  .hits .hits-orbit,
-  .hits .hits-orbit .hotspot {
+  .hits .hits-orbit {
     animation: none !important;
   }
 
   .mark {
-    opacity: 1;
     transform: none;
     filter: none;
   }
