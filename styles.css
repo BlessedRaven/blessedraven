@@ -59,13 +59,13 @@ body {
   0%,
   100% {
     transform: scale(1);
-    opacity: 0.88;
-    filter: drop-shadow(0 0 2px rgba(18, 18, 18, 0.06));
+    opacity: 0.82;
+    filter: drop-shadow(0 0 2px rgba(18, 18, 18, 0.08));
   }
   50% {
-    transform: scale(1.055);
+    transform: scale(1.082);
     opacity: 1;
-    filter: drop-shadow(0 0 28px rgba(18, 18, 18, 0.22));
+    filter: drop-shadow(0 0 42px rgba(18, 18, 18, 0.32));
   }
 }
 
@@ -82,7 +82,7 @@ body {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.035);
+    transform: scale(1.052);
   }
 }
 
@@ -109,13 +109,13 @@ body {
 .hits .hits-orbit {
   transform-box: view-box;
   transform-origin: 447.56px 484.96px;
-  animation: br-orbit 36s ease-in-out infinite;
+  animation: br-orbit 24s ease-in-out infinite;
 }
 
 /* Outer ring lag-breathe (opacity/glow only so it doesn't fight rotate transform) */
 .mark-host svg.sigil .orbit {
   animation:
-    br-orbit 36s ease-in-out infinite,
+    br-orbit 24s ease-in-out infinite,
     br-orbit-glow 9.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
   animation-delay: 0s, 0.4s;
 }
@@ -123,7 +123,7 @@ body {
 @keyframes br-orbit-glow {
   0%,
   100% {
-    opacity: 0.82;
+    opacity: 0.7;
   }
   50% {
     opacity: 1;
@@ -133,10 +133,10 @@ body {
 @keyframes br-orbit {
   0%,
   100% {
-    transform: rotate(-4.5deg);
+    transform: rotate(-6.75deg);
   }
   50% {
-    transform: rotate(4.5deg);
+    transform: rotate(6.75deg);
   }
 }
 
@@ -160,12 +160,12 @@ body {
 @keyframes br-symbol-pulse {
   0%,
   100% {
-    opacity: 0.78;
+    opacity: 0.65;
     filter: drop-shadow(0 0 0 transparent);
   }
   50% {
     opacity: 1;
-    filter: drop-shadow(0 0 6px rgba(18, 18, 18, 0.2));
+    filter: drop-shadow(0 0 10px rgba(18, 18, 18, 0.3));
   }
 }
 
@@ -190,7 +190,7 @@ body {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.04);
+    transform: scale(1.06);
   }
 }
 
