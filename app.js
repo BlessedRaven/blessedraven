@@ -34,8 +34,9 @@
   const wrapOrbitSyms = (svg, orbit, center) => {
     center.setAttribute("data-sym", "center");
 
-    const kids = Array.from(orbit.children);
-    kids.forEach((el) => {
+    // One .sym group per hotspot id (merge near-duplicates). Hover scales only that group.
+    const wraps = new Map();
+    Array.from(orbit.children).forEach((el) => {
       let bb;
       try {
         bb = el.getBBox();
@@ -44,10 +45,14 @@
       }
       if (!bb.width && !bb.height) return;
       const id = nearestSym(bb.x + bb.width / 2, bb.y + bb.height / 2);
-      const wrap = document.createElementNS("http://www.w3.org/2000/svg", "g");
-      wrap.setAttribute("class", "sym");
-      wrap.setAttribute("data-sym", id);
-      orbit.insertBefore(wrap, el);
+      let wrap = wraps.get(id);
+      if (!wrap) {
+        wrap = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        wrap.setAttribute("class", "sym");
+        wrap.setAttribute("data-sym", id);
+        orbit.insertBefore(wrap, el);
+        wraps.set(id, wrap);
+      }
       wrap.appendChild(el);
     });
   };
@@ -57,29 +62,22 @@
     const centerSym = svg.querySelector('.center[data-sym="center"]');
 
     const clear = () => {
-      mark.classList.remove("is-paused");
       orbitSyms().forEach((s) => s.classList.remove("is-active", "is-dim"));
       if (centerSym) centerSym.classList.remove("is-active", "is-dim");
     };
 
+    // Isolation: animate ONLY the single matched .sym (never .sigil / whole .orbit).
     const activate = (id) => {
-      mark.classList.add("is-paused");
+      clear();
       if (id === "center") {
-        if (centerSym) {
-          centerSym.classList.add("is-active");
-          centerSym.classList.remove("is-dim");
-        }
-        orbitSyms().forEach((s) => {
-          s.classList.remove("is-active");
-          s.classList.add("is-dim");
-        });
+        if (centerSym) centerSym.classList.add("is-active");
+        orbitSyms().forEach((s) => s.classList.add("is-dim"));
         return;
       }
-      if (centerSym) centerSym.classList.remove("is-active", "is-dim");
+      const match = svg.querySelector(`.orbit > .sym[data-sym="${id}"]`);
       orbitSyms().forEach((s) => {
-        const match = s.getAttribute("data-sym") === id;
-        s.classList.toggle("is-active", match);
-        s.classList.toggle("is-dim", !match);
+        if (s === match) s.classList.add("is-active");
+        else s.classList.add("is-dim");
       });
     };
 

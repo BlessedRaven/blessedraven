@@ -134,7 +134,8 @@ body {
   }
 }
 
-/* Per-symbol hover: each outer piece scales/glows alone; siblings dim */
+/* Isolation rule: hover scale/glow ONLY on the matched .sym / .center.is-active.
+   Never transform .sigil or .orbit as a whole for hover. Dim siblings OK. */
 .mark-host svg.sigil .sym {
   transform-box: fill-box;
   transform-origin: center;
@@ -150,17 +151,10 @@ body {
   opacity: 0.3;
 }
 
-/* Center is separate from orbit .sym wrappers */
 .mark-host svg.sigil .center.is-active {
   animation-play-state: paused;
   transform: scale(1.16);
   filter: drop-shadow(0 0 14px rgba(18, 18, 18, 0.42));
-}
-
-/* Pause 360° orbit while a hotspot is hovered / focused */
-.mark.is-paused .mark-host svg.sigil .orbit,
-.mark.is-paused .hits .hits-orbit {
-  animation-play-state: paused;
 }
 
 .hits {
