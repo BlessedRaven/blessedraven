@@ -86,12 +86,47 @@
     let activeId = null;
     let pressed = false;
 
+    // Freeze current angle, then ease back to 0 (no snap).
+    const releaseSpin = (el) => {
+      if (!el) return;
+      if (!el.classList.contains("is-active")) {
+        el.classList.remove("is-dim");
+        return;
+      }
+      const matrix = getComputedStyle(el).transform;
+      el.classList.remove("is-active");
+      el.getAnimations().forEach((a) => a.cancel());
+      el.style.transition = "none";
+      el.style.transform = matrix === "none" ? "rotate(0deg)" : matrix;
+      void el.getBoundingClientRect();
+      el.style.transition = "transform 0.7s ease-out";
+      el.style.transform = "rotate(0deg)";
+      const finish = (e) => {
+        if (e && e.propertyName && e.propertyName !== "transform") return;
+        el.style.transition = "";
+        el.style.transform = "";
+        el.removeEventListener("transitionend", finish);
+      };
+      el.addEventListener("transitionend", finish);
+    };
+
+    const clearDims = () => {
+      orbitSyms().forEach((s) => s.classList.remove("is-dim"));
+      if (centerSym) centerSym.classList.remove("is-dim");
+    };
+
     const clear = () => {
       activeId = null;
       pressed = false;
       mark.classList.remove("is-hovering");
-      orbitSyms().forEach((s) => s.classList.remove("is-active", "is-dim"));
-      if (centerSym) centerSym.classList.remove("is-active", "is-dim");
+      orbitSyms().forEach((s) => {
+        if (s.classList.contains("is-active")) releaseSpin(s);
+        else s.classList.remove("is-dim");
+      });
+      if (centerSym) {
+        if (centerSym.classList.contains("is-active")) releaseSpin(centerSym);
+        else centerSym.classList.remove("is-dim");
+      }
     };
 
     // Isolation: animate ONLY the single matched .sym for as long as hover/press lasts.
@@ -100,20 +135,32 @@
         mark.classList.add("is-hovering");
         return; // keep spinning — do not restart
       }
+      // Ease out whoever was spinning, then start the new one.
+      orbitSyms().forEach((s) => {
+        if (s.classList.contains("is-active")) releaseSpin(s);
+      });
+      if (centerSym && centerSym.classList.contains("is-active")) releaseSpin(centerSym);
+      clearDims();
+
       activeId = id;
       mark.classList.add("is-hovering");
-      orbitSyms().forEach((s) => s.classList.remove("is-active", "is-dim"));
-      if (centerSym) centerSym.classList.remove("is-active", "is-dim");
+
+      const arm = (el) => {
+        if (!el) return;
+        el.style.transition = "";
+        el.style.transform = "";
+        el.classList.add("is-active");
+      };
 
       if (id === "center") {
-        if (centerSym) centerSym.classList.add("is-active");
+        arm(centerSym);
         orbitSyms().forEach((s) => s.classList.add("is-dim"));
         return;
       }
       const match = svg.querySelector(`.orbit > .sym[data-sym="${id}"]`);
+      arm(match);
       orbitSyms().forEach((s) => {
-        if (s === match) s.classList.add("is-active");
-        else s.classList.add("is-dim");
+        if (s !== match) s.classList.add("is-dim");
       });
     };
 
