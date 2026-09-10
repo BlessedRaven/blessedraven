@@ -32,21 +32,181 @@
   <div id="raven-entrance" class="raven-entrance" role="dialog" aria-modal="true" aria-label="Blessed Raven entrance" aria-hidden="false">
     <button type="button" class="raven-skip" data-raven-skip>Skip</button>
     <div class="raven-vignette" aria-hidden="true"></div>
+    <div class="raven-glow" aria-hidden="true"></div>
     <div class="raven-stage" aria-hidden="true">
-      <div class="raven-crow">
-      <svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-        <path class="raven-crow-sil" d="M500 150c24-44 64-78 114-92 8 30-2 58-18 80 46-12 94-4 136 24 30 20 54 50 64 86-40-16-84-14-122 8 52 24 98 66 120 120 14 30 16 64 6 96-46-30-102-42-154-28 12 36 6 76-14 108-16 24-40 44-68 54 12-34 8-70-8-100-26 44-70 78-122 92-28 8-58 8-86-2 30-28 48-68 44-108-44 26-98 34-148 18-34-10-64-32-84-60 40 10 80 2 112-20-50-4-96-28-126-64-22-26-36-60-34-94 46 22 98 26 146 8-36-28-60-72-56-118 6-26 20-50 40-68 26 40 68 70 118 78-8-38 2-78 28-106 18-20 44-34 72-36-10 30-2 60 18 82z"/>
-        <path class="raven-crow-sil" d="M292 248c-36 14-76 8-110-16 26 44 70 74 120 80-6-22-6-44-10-64zm416-10c34-18 74-20 110-6-20 42-58 72-102 80-2-24-4-48-8-74z" opacity="0.9"/>
-        <circle class="raven-crow-sil" cx="456" cy="268" r="7" opacity="0.4"/>
-      </svg>
+      <div class="raven-crow" data-raven-crow>
+        <svg class="raven-crow-svg" viewBox="0 0 1000 1100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <defs>
+            <radialGradient id="crowBodyGrad" cx="50%" cy="38%" r="62%">
+              <stop offset="0%" stop-color="#1c1c22"/>
+              <stop offset="40%" stop-color="#0c0c10"/>
+              <stop offset="100%" stop-color="#000"/>
+            </radialGradient>
+            <linearGradient id="wingGradL" x1="100%" y1="30%" x2="0%" y2="70%">
+              <stop offset="0%" stop-color="#18181e"/>
+              <stop offset="55%" stop-color="#07070a"/>
+              <stop offset="100%" stop-color="#000"/>
+            </linearGradient>
+            <linearGradient id="wingGradR" x1="0%" y1="30%" x2="100%" y2="70%">
+              <stop offset="0%" stop-color="#18181e"/>
+              <stop offset="55%" stop-color="#07070a"/>
+              <stop offset="100%" stop-color="#000"/>
+            </linearGradient>
+            <radialGradient id="eyeRedGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff4a4a"/>
+              <stop offset="28%" stop-color="#e01818"/>
+              <stop offset="62%" stop-color="#6a0808" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="crowRim" x="-25%" y="-25%" width="150%" height="150%">
+              <feDropShadow dx="0" dy="0" stdDeviation="3.5" flood-color="#8a8a9a" flood-opacity="0.28"/>
+              <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#000" flood-opacity="0.9"/>
+            </filter>
+            <filter id="redBloom" x="-80%" y="-80%" width="260%" height="260%">
+              <feGaussianBlur stdDeviation="6" result="b"/>
+              <feMerge>
+                <feMergeNode in="b"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+            <clipPath id="thirdEyeClip">
+              <circle cx="0" cy="0" r="48"/>
+            </clipPath>
+          </defs>
+
+          <g class="crow-root" filter="url(#crowRim)">
+            <!-- LEFT WING — solid mass + layered primaries -->
+            <g class="crow-wing crow-wing-l">
+              <path class="crow-fill" fill="url(#wingGradL)" d="M445 430
+                C360 400 250 355 140 300
+                C95 275 45 245 28 220
+                C12 195 22 172 52 178
+                C110 192 190 235 270 285
+                C210 230 145 165 105 105
+                C85 75 78 40 98 28
+                C122 14 148 42 158 78
+                C175 130 220 205 275 275
+                C245 220 225 155 235 100
+                C242 65 268 48 292 68
+                C318 90 335 155 355 230
+                C370 290 400 360 430 415
+                Z"/>
+              <path class="crow-primary" d="M300 300 C230 250 160 185 120 130 C100 100 95 60 118 48 C140 38 158 70 168 105 C190 170 245 245 300 300 Z"/>
+              <path class="crow-primary" d="M340 350 C260 300 175 230 130 170 C108 140 95 95 120 82 C145 70 165 110 178 150 C205 220 275 295 340 350 Z"/>
+              <path class="crow-primary" d="M380 400 C295 355 200 290 150 230 C125 200 110 155 138 145 C162 136 180 175 195 215 C230 290 320 360 380 400 Z"/>
+              <path class="crow-feather" d="M420 420 C320 375 210 320 130 265"/>
+              <path class="crow-feather" d="M410 450 C310 410 200 355 125 305"/>
+              <path class="crow-feather" d="M400 480 C310 445 210 395 140 350"/>
+              <path class="crow-feather" d="M355 280 C290 220 235 155 205 100"/>
+              <path class="crow-feather" d="M320 250 C260 190 210 125 185 75"/>
+            </g>
+
+            <!-- RIGHT WING -->
+            <g class="crow-wing crow-wing-r">
+              <path class="crow-fill" fill="url(#wingGradR)" d="M555 430
+                C640 400 750 355 860 300
+                C905 275 955 245 972 220
+                C988 195 978 172 948 178
+                C890 192 810 235 730 285
+                C790 230 855 165 895 105
+                C915 75 922 40 902 28
+                C878 14 852 42 842 78
+                C825 130 780 205 725 275
+                C755 220 775 155 765 100
+                C758 65 732 48 708 68
+                C682 90 665 155 645 230
+                C630 290 600 360 570 415
+                Z"/>
+              <path class="crow-primary" d="M700 300 C770 250 840 185 880 130 C900 100 905 60 882 48 C860 38 842 70 832 105 C810 170 755 245 700 300 Z"/>
+              <path class="crow-primary" d="M660 350 C740 300 825 230 870 170 C892 140 905 95 880 82 C855 70 835 110 822 150 C795 220 725 295 660 350 Z"/>
+              <path class="crow-primary" d="M620 400 C705 355 800 290 850 230 C875 200 890 155 862 145 C838 136 820 175 805 215 C770 290 680 360 620 400 Z"/>
+              <path class="crow-feather" d="M580 420 C680 375 790 320 870 265"/>
+              <path class="crow-feather" d="M590 450 C690 410 800 355 875 305"/>
+              <path class="crow-feather" d="M600 480 C690 445 790 395 860 350"/>
+              <path class="crow-feather" d="M645 280 C710 220 765 155 795 100"/>
+              <path class="crow-feather" d="M680 250 C740 190 790 125 815 75"/>
+            </g>
+
+            <!-- TAIL -->
+            <g class="crow-tail">
+              <path class="crow-fill" d="M500 640
+                C455 720 400 840 365 960
+                C345 1025 330 1085 355 1090
+                C380 1094 405 1040 430 980
+                C460 900 485 800 500 730
+                C515 800 540 900 570 980
+                C595 1040 620 1094 645 1090
+                C670 1085 655 1025 635 960
+                C600 840 545 720 500 640 Z"/>
+              <path class="crow-primary" d="M500 660 C470 780 435 920 415 1035 C405 1075 430 1080 445 1035 C470 940 490 820 500 720 C510 820 530 940 555 1035 C570 1080 595 1075 585 1035 C565 920 530 780 500 660 Z"/>
+              <path class="crow-feather" d="M475 720 C450 850 420 980 405 1060"/>
+              <path class="crow-feather" d="M500 730 C500 860 500 990 500 1070"/>
+              <path class="crow-feather" d="M525 720 C550 850 580 980 595 1060"/>
+            </g>
+
+            <!-- TORSO -->
+            <g class="crow-torso">
+              <path class="crow-fill crow-body" fill="url(#crowBodyGrad)" d="M500 355
+                C420 360 355 415 335 510
+                C315 610 340 705 395 770
+                C440 820 480 845 500 850
+                C520 845 560 820 605 770
+                C660 705 685 610 665 510
+                C645 415 580 360 500 355 Z"/>
+              <path class="crow-chest" d="M500 420 C455 430 420 480 410 540 C400 610 425 680 470 730 C490 750 500 755 500 755 C500 755 510 750 530 730 C575 680 600 610 590 540 C580 480 545 430 500 420 Z"/>
+              <path class="crow-feather" d="M430 520 C460 570 485 625 500 680"/>
+              <path class="crow-feather" d="M570 520 C540 570 515 625 500 680"/>
+              <path class="crow-feather" d="M450 470 C475 520 490 580 500 630"/>
+              <path class="crow-feather" d="M550 470 C525 520 510 580 500 630"/>
+              <path class="crow-feather" d="M465 600 C485 650 495 700 500 745"/>
+              <path class="crow-feather" d="M535 600 C515 650 505 700 500 745"/>
+            </g>
+
+            <!-- HEAD -->
+            <g class="crow-head">
+              <path class="crow-fill" d="M500 155
+                C430 160 375 215 365 290
+                C355 365 390 430 455 460
+                C480 472 500 478 500 478
+                C500 478 520 472 545 460
+                C610 430 645 365 635 290
+                C625 215 570 160 500 155 Z"/>
+              <path class="crow-fill" d="M420 420 C450 455 475 472 500 478 C525 472 550 455 580 420 C555 455 530 478 500 490 C470 478 445 455 420 420 Z"/>
+              <!-- beak -->
+              <path class="crow-beak" d="M500 390 C480 398 465 418 460 445 C454 475 470 500 500 528 C530 500 546 475 540 445 C535 418 520 398 500 390 Z"/>
+              <path class="crow-beak-ridge" d="M500 398 L500 520"/>
+              <path class="crow-feather" d="M395 310 C378 340 375 380 390 415"/>
+              <path class="crow-feather" d="M605 310 C622 340 625 380 610 415"/>
+
+              <!-- side eyes -->
+              <g class="crow-side-eye">
+                <ellipse cx="438" cy="310" rx="16" ry="11" class="crow-eye-socket"/>
+                <ellipse cx="438" cy="310" rx="8" ry="8" class="crow-eye-red" filter="url(#redBloom)"/>
+                <circle cx="434" cy="306" r="2.4" class="crow-eye-glint"/>
+              </g>
+              <g class="crow-side-eye">
+                <ellipse cx="562" cy="310" rx="16" ry="11" class="crow-eye-socket"/>
+                <ellipse cx="562" cy="310" rx="8" ry="8" class="crow-eye-red" filter="url(#redBloom)"/>
+                <circle cx="558" cy="306" r="2.4" class="crow-eye-glint"/>
+              </g>
+
+              <!-- third eye well + geometry host (viewBox-aligned) -->
+              <g class="crow-third" transform="translate(500 255)">
+                <circle r="62" class="crow-third-halo" fill="url(#eyeRedGlow)" filter="url(#redBloom)" opacity="0.85"/>
+                <circle r="50" class="crow-third-ring"/>
+                <circle r="46" class="crow-third-well"/>
+                <g class="crow-third-geo" clip-path="url(#thirdEyeClip)" data-raven-eye-svg>
+                  <!-- geometry injected by entrance.js -->
+                </g>
+                <circle r="10" class="crow-third-pupil"/>
+              </g>
+            </g>
+          </g>
+        </svg>
       </div>
+
       <div class="raven-whirl" aria-hidden="true"></div>
-      <div class="raven-eye">
-        <div class="raven-eye-aperture">
-          <div data-raven-eye-svg></div>
-        </div>
-        <div class="raven-pupil" aria-hidden="true"></div>
-      </div>
+      <p class="raven-mark">Blessed Raven</p>
     </div>
   </div>
 

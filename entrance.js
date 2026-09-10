@@ -11,9 +11,7 @@
   const markSeen = () => {
     try {
       sessionStorage.setItem(STORAGE_KEY, "1");
-    } catch (_) {
-      /* private mode / blocked storage */
-    }
+    } catch (_) {}
   };
 
   const finish = () => {
@@ -24,7 +22,7 @@
     entrance.setAttribute("aria-hidden", "true");
     window.setTimeout(() => {
       if (entrance.parentNode) entrance.parentNode.removeChild(entrance);
-    }, 650);
+    }, 750);
   };
 
   if (reduced || root.classList.contains("raven-entrance-done")) {
@@ -65,6 +63,19 @@
     { passive: true }
   );
 
+  entrance.addEventListener(
+    "click",
+    (e) => {
+      if (e.target.closest("[data-raven-skip]")) return;
+      if (entrance.classList.contains("is-open") && !entrance.classList.contains("is-whirl")) {
+        cancelAll();
+        entrance.classList.add("is-whirl");
+        later(finish, 1550);
+      }
+    },
+    { passive: true }
+  );
+
   const prepareStrokeDraw = (svg) => {
     const nodes = svg.querySelectorAll("path, circle, ellipse, line, polyline, polygon");
     const animated = [];
@@ -73,14 +84,11 @@
         if (typeof node.getTotalLength !== "function") return;
         const len = node.getTotalLength();
         if (!Number.isFinite(len) || len < 2) return;
-        // Skip pure fills (cls-7) — no meaningful stroke draw
         if (node.classList && node.classList.contains("cls-7")) return;
         node.style.strokeDasharray = String(len);
         node.style.strokeDashoffset = String(len);
         animated.push({ node, len });
-      } catch (_) {
-        /* some browsers choke on degenerate geometry */
-      }
+      } catch (_) {}
     });
     return animated;
   };
@@ -88,14 +96,12 @@
   const drawStrokes = (animated, durationMs) => {
     if (!animated.length) return;
     const start = performance.now();
-    // Cap work on low-end phones: animate a subset if huge
-    const max = 90;
+    const max = 80;
     const list =
       animated.length > max
         ? animated.filter((_, i) => i % Math.ceil(animated.length / max) === 0)
         : animated;
 
-    // Instantly show non-animated leftover strokes at end via opacity on parent
     const tick = (now) => {
       if (cancelled) return;
       const t = Math.min(1, (now - start) / durationMs);
@@ -105,63 +111,64 @@
       }
       if (t < 1) requestAnimationFrame(tick);
       else {
-        for (const { node } of animated) {
-          node.style.strokeDashoffset = "0";
-        }
+        for (const { node } of animated) node.style.strokeDashoffset = "0";
       }
     };
     requestAnimationFrame(tick);
   };
 
+  const mountEye = (raw) => {
+    if (!eyeHost) return null;
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(raw, "image/svg+xml");
+    const src = doc.querySelector("svg");
+    if (!src) return null;
+
+    // Nest geometry into crow SVG, centered on third-eye origin (0,0 of host group)
+    const geo = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    geo.setAttribute("class", "raven-eye-svg");
+    geo.setAttribute("viewBox", src.getAttribute("viewBox") || "0 0 924 886");
+    geo.setAttribute("width", "108");
+    geo.setAttribute("height", "108");
+    geo.setAttribute("x", "-54");
+    geo.setAttribute("y", "-54");
+    geo.setAttribute("overflow", "visible");
+    geo.setAttribute("aria-hidden", "true");
+    geo.setAttribute("focusable", "false");
+
+    // Copy children (skip nested <defs> style conflicts by keeping defs)
+    Array.from(src.childNodes).forEach((n) => {
+      geo.appendChild(document.importNode(n, true));
+    });
+
+    eyeHost.innerHTML = "";
+    eyeHost.appendChild(geo);
+    return geo;
+  };
+
   const run = async () => {
     entrance.setAttribute("aria-hidden", "false");
     root.classList.add("raven-entrance-pending");
-
-    // 1) Crow silhouette
     entrance.classList.add("is-crow");
 
-    // 2) Load sacred-geometry eye SVG
     let svg = null;
     try {
       const res = await fetch("assets/jakel3726.svg", { cache: "force-cache" });
       if (!res.ok) throw new Error("eye asset missing");
-      const raw = await res.text();
-      if (eyeHost) {
-        eyeHost.innerHTML = raw;
-        svg = eyeHost.querySelector("svg");
-        if (svg) {
-          svg.classList.add("raven-eye-svg");
-          svg.removeAttribute("width");
-          svg.removeAttribute("height");
-          svg.setAttribute("aria-hidden", "true");
-          svg.setAttribute("focusable", "false");
-        }
-      }
+      svg = mountEye(await res.text());
     } catch (err) {
       console.warn("[raven-entrance]", err);
     }
 
-    later(() => {
-      entrance.classList.add("is-eye");
-    }, 420);
-
+    later(() => entrance.classList.add("is-alive"), 900);
+    later(() => entrance.classList.add("is-eye"), 1500);
     later(() => {
       entrance.classList.add("is-open");
-      if (svg) {
-        const animated = prepareStrokeDraw(svg);
-        drawStrokes(animated, 1300);
-      }
-    }, 780);
-
-    later(() => {
-      entrance.classList.add("is-lock");
-    }, 2100);
-
-    later(() => {
-      entrance.classList.add("is-whirl");
-    }, 3100);
-
-    later(finish, 4750);
+      if (svg) drawStrokes(prepareStrokeDraw(svg), 1400);
+    }, 2000);
+    later(() => entrance.classList.add("is-lock"), 3400);
+    later(() => entrance.classList.add("is-whirl"), 6400);
+    later(finish, 8000);
   };
 
   if (document.readyState === "loading") {
