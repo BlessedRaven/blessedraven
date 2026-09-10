@@ -1,5 +1,6 @@
 (() => {
   const STORAGE_KEY = "br-entrance-seen";
+  const WHIRL_MS = 920;
   const root = document.documentElement;
   const entrance = document.getElementById("raven-entrance");
   if (!entrance) return;
@@ -22,7 +23,7 @@
     entrance.setAttribute("aria-hidden", "true");
     window.setTimeout(() => {
       if (entrance.parentNode) entrance.parentNode.removeChild(entrance);
-    }, 750);
+    }, 400);
   };
 
   if (reduced || root.classList.contains("raven-entrance-done")) {
@@ -70,7 +71,7 @@
       if (entrance.classList.contains("is-open") && !entrance.classList.contains("is-whirl")) {
         cancelAll();
         entrance.classList.add("is-whirl");
-        later(finish, 1550);
+        later(finish, WHIRL_MS);
       }
     },
     { passive: true }
@@ -93,10 +94,17 @@
     return animated;
   };
 
+  // Calm start → decisive commit (no muddy ease)
+  const easeCommit = (t) => {
+    // approx cubic-bezier(0.25, 0.08, 0.12, 1)
+    const u = 1 - t;
+    return 1 - u * u * u * (1 - 0.35 * t);
+  };
+
   const drawStrokes = (animated, durationMs) => {
     if (!animated.length) return;
     const start = performance.now();
-    const max = 80;
+    const max = 72;
     const list =
       animated.length > max
         ? animated.filter((_, i) => i % Math.ceil(animated.length / max) === 0)
@@ -105,7 +113,7 @@
     const tick = (now) => {
       if (cancelled) return;
       const t = Math.min(1, (now - start) / durationMs);
-      const eased = 1 - Math.pow(1 - t, 3);
+      const eased = easeCommit(t);
       for (const { node, len } of list) {
         node.style.strokeDashoffset = String(len * (1 - eased));
       }
@@ -124,7 +132,6 @@
     const src = doc.querySelector("svg");
     if (!src) return null;
 
-    // Nest geometry into crow SVG, centered on third-eye origin (0,0 of host group)
     const geo = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     geo.setAttribute("class", "raven-eye-svg");
     geo.setAttribute("viewBox", src.getAttribute("viewBox") || "0 0 924 886");
@@ -136,7 +143,6 @@
     geo.setAttribute("aria-hidden", "true");
     geo.setAttribute("focusable", "false");
 
-    // Copy children (skip nested <defs> style conflicts by keeping defs)
     Array.from(src.childNodes).forEach((n) => {
       geo.appendChild(document.importNode(n, true));
     });
@@ -160,15 +166,16 @@
       console.warn("[raven-entrance]", err);
     }
 
-    later(() => entrance.classList.add("is-alive"), 900);
-    later(() => entrance.classList.add("is-eye"), 1500);
+    // Tighter beats — less dwell sludge
+    later(() => entrance.classList.add("is-alive"), 520);
+    later(() => entrance.classList.add("is-eye"), 880);
     later(() => {
       entrance.classList.add("is-open");
-      if (svg) drawStrokes(prepareStrokeDraw(svg), 1400);
-    }, 2000);
-    later(() => entrance.classList.add("is-lock"), 3400);
-    later(() => entrance.classList.add("is-whirl"), 6400);
-    later(finish, 8000);
+      if (svg) drawStrokes(prepareStrokeDraw(svg), 820);
+    }, 1100);
+    later(() => entrance.classList.add("is-lock"), 2050);
+    later(() => entrance.classList.add("is-whirl"), 2750);
+    later(finish, 2750 + WHIRL_MS);
   };
 
   if (document.readyState === "loading") {

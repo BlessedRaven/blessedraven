@@ -1,4 +1,4 @@
-/* BlessedRaven — giant animated crow landing (premium entrance) */
+/* BlessedRaven — crow → eye → kamui entrance (clean, transform-first) */
 
 :root {
   --raven-void: #07070a;
@@ -8,6 +8,8 @@
   --raven-red-hot: #ff3a3a;
   --raven-ink: #e8e4d8;
   --raven-rim: rgba(170, 172, 188, 0.55);
+  --raven-ease-commit: cubic-bezier(0.25, 0.08, 0.12, 1);
+  --raven-ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 html.raven-entrance-pending,
@@ -32,7 +34,7 @@ html.raven-entrance-done #raven-entrance {
   isolation: isolate;
   overflow: hidden;
   opacity: 1;
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.35s var(--raven-ease-commit);
 }
 
 .raven-entrance.is-exit { pointer-events: none; }
@@ -54,9 +56,9 @@ html.raven-entrance-done #raven-entrance {
   min-height: 44px;
   border-radius: 999px;
   cursor: pointer;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
 .raven-skip:hover,
@@ -84,14 +86,15 @@ html.raven-entrance-done #raven-entrance {
   transform: translate(-50%, -50%);
   z-index: 0;
   pointer-events: none;
-  background: radial-gradient(circle, rgba(224, 24, 24, 0.22) 0%, rgba(224, 24, 24, 0.06) 38%, transparent 68%);
+  background: radial-gradient(circle, rgba(224, 24, 24, 0.2) 0%, rgba(224, 24, 24, 0.05) 38%, transparent 68%);
   opacity: 0;
-  filter: blur(10px);
+  /* soft glow without huge live blur radius */
+  will-change: opacity, transform;
 }
 
 .raven-entrance.is-alive .raven-glow {
   opacity: 1;
-  animation: ravenAuraPulse 4.8s ease-in-out infinite;
+  animation: ravenAuraPulse 4.2s ease-in-out infinite;
 }
 
 .raven-stage {
@@ -102,8 +105,8 @@ html.raven-entrance-done #raven-entrance {
   max-height: 98dvh;
   display: grid;
   place-items: center;
-  transform-origin: 50% 40%;
-  will-change: transform, filter, opacity;
+  transform-origin: 50% 28%;
+  will-change: transform, opacity;
 }
 
 .raven-crow {
@@ -113,9 +116,9 @@ html.raven-entrance-done #raven-entrance {
   display: grid;
   place-items: center;
   opacity: 0;
-  transform: scale(1.05) translateY(10px);
-  filter: blur(5px);
+  transform: scale(1.04) translateY(8px);
   pointer-events: none;
+  will-change: transform, opacity;
 }
 
 .raven-crow-svg {
@@ -124,7 +127,7 @@ html.raven-entrance-done #raven-entrance {
   max-height: min(96vh, 1140px);
   overflow: visible;
   display: block;
-  filter: drop-shadow(0 0 28px rgba(0, 0, 0, 0.85));
+  filter: drop-shadow(0 0 22px rgba(0, 0, 0, 0.8));
 }
 
 /* —— Crow materials —— */
@@ -197,13 +200,16 @@ html.raven-entrance-done #raven-entrance {
   stroke-width: 1.2;
   opacity: 0;
   transform-origin: 0 0;
+  transform-box: fill-box;
+  will-change: transform, opacity;
 }
 
 .crow-third-geo {
   opacity: 0;
-  transform: scale(0.2);
+  transform: scale(0.96);
   transform-origin: 0 0;
   transform-box: fill-box;
+  will-change: transform, opacity;
 }
 
 .crow-third-geo .raven-eye-svg,
@@ -226,6 +232,23 @@ html.raven-entrance-done #raven-entrance {
   stroke: none !important;
 }
 
+/* Transform lids — eye open without clip-path morph */
+.crow-third-lid {
+  fill: #050000;
+  stroke: none;
+  pointer-events: none;
+  transform-box: fill-box;
+  will-change: transform;
+}
+
+.crow-third-lid-t {
+  transform-origin: 50% 100%;
+}
+
+.crow-third-lid-b {
+  transform-origin: 50% 0%;
+}
+
 .raven-mark {
   position: absolute;
   bottom: max(1.1rem, env(safe-area-inset-bottom));
@@ -241,34 +264,64 @@ html.raven-entrance-done #raven-entrance {
   white-space: nowrap;
 }
 
+/* Crisp kamui vortex — concentric stroke rings, not blur smear */
 .raven-whirl {
   position: absolute;
-  inset: -8%;
+  left: 50%;
+  top: 28%;
+  width: min(70vmin, 520px);
+  height: min(70vmin, 520px);
+  transform: translate(-50%, -50%);
   z-index: 2;
-  border-radius: 50%;
   opacity: 0;
   pointer-events: none;
-  background:
-    repeating-conic-gradient(
-      from 0deg,
-      rgba(224, 24, 24, 0) 0deg 10deg,
-      rgba(224, 24, 24, 0.09) 10deg 13deg,
-      rgba(212, 181, 106, 0.05) 13deg 16deg,
-      transparent 16deg 28deg
-    );
-  -webkit-mask-image: radial-gradient(circle, transparent 18%, #000 32%, #000 55%, transparent 72%);
-  mask-image: radial-gradient(circle, transparent 18%, #000 32%, #000 55%, transparent 72%);
-  mix-blend-mode: screen;
   will-change: transform, opacity;
+}
+
+.raven-whirl-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  display: block;
+}
+
+.raven-whirl-spin {
+  transform-origin: 50% 50%;
+  transform-box: fill-box;
+  will-change: transform, opacity;
+}
+
+.whirl-ring {
+  fill: none;
+  stroke: rgba(224, 24, 24, 0.72);
+  stroke-width: 1.15;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.whirl-ring.is-gold {
+  stroke: rgba(212, 181, 106, 0.55);
+  stroke-width: 0.9;
+}
+
+.whirl-ring.is-dash {
+  stroke-dasharray: 4 7;
+  stroke: rgba(255, 70, 70, 0.5);
+}
+
+.whirl-core {
+  fill: #000;
+  stroke: rgba(255, 60, 60, 0.85);
+  stroke-width: 1.4;
 }
 
 /* phases */
 .raven-entrance.is-crow .raven-crow {
-  animation: ravenCrowIn 1.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: ravenCrowIn 0.85s var(--raven-ease-commit) forwards;
 }
 
 .raven-entrance.is-crow .raven-mark {
-  animation: ravenMarkIn 1.2s ease 0.55s forwards;
+  animation: ravenMarkIn 0.7s ease 0.35s forwards;
 }
 
 .crow-root,
@@ -317,39 +370,54 @@ html.raven-entrance-done #raven-entrance {
   animation: ravenPrimaryShimmer 4.2s ease-in-out infinite;
 }
 
-/* third eye open */
+/* third eye: geo present, lids still shut until is-open */
 .raven-entrance.is-eye .crow-third-geo {
-  animation: ravenGeoIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: ravenGeoIn 0.45s var(--raven-ease-commit) forwards;
+}
+
+.raven-entrance.is-open .crow-third-lid-t {
+  animation: ravenLidOpenT 0.62s var(--raven-ease-commit) forwards;
+}
+
+.raven-entrance.is-open .crow-third-lid-b {
+  animation: ravenLidOpenB 0.62s var(--raven-ease-commit) forwards;
 }
 
 .raven-entrance.is-open .crow-third-ring {
-  animation: ravenRingPulse 2.4s ease-in-out infinite;
+  animation: ravenRingPulse 2.2s ease-in-out infinite;
 }
 
 .raven-entrance.is-lock .crow-third-pupil {
-  animation: ravenPupilIn 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: ravenPupilIn 0.55s var(--raven-ease-snap) forwards;
 }
 
 .raven-entrance.is-alive.is-open .crow-third-halo {
-  animation: ravenHaloPulse 3s ease-in-out infinite;
+  animation: ravenHaloPulse 2.6s ease-in-out infinite;
 }
 
 .raven-entrance.is-whirl .raven-whirl {
-  animation: ravenWhirlSpin 1.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: ravenWhirlReveal 0.92s var(--raven-ease-commit) forwards;
+}
+
+.raven-entrance.is-whirl .raven-whirl-spin {
+  animation: ravenWhirlSpin 0.92s var(--raven-ease-commit) forwards;
 }
 
 .raven-entrance.is-whirl .raven-stage {
-  animation: ravenWhirlStage 1.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: ravenWhirlStage 0.92s var(--raven-ease-commit) forwards;
+}
+
+.raven-entrance.is-whirl .raven-mark {
+  animation: ravenMarkOut 0.35s ease forwards;
 }
 
 .raven-entrance.is-whirl {
-  animation: ravenFadeOut 1.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: ravenFadeOut 0.92s var(--raven-ease-commit) forwards;
 }
 
 @keyframes ravenCrowIn {
-  0% { opacity: 0; transform: scale(1.08) translateY(16px); filter: blur(8px); }
-  55% { opacity: 1; transform: scale(1.01) translateY(0); filter: blur(0.4px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+  0% { opacity: 0; transform: scale(1.05) translateY(12px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 @keyframes ravenMarkIn {
@@ -357,30 +425,34 @@ html.raven-entrance-done #raven-entrance {
   to { opacity: 0.75; letter-spacing: 0.42em; }
 }
 
+@keyframes ravenMarkOut {
+  to { opacity: 0; }
+}
+
 @keyframes ravenBreathe {
   0%, 100% { transform: scale(1) translateY(0); }
-  50% { transform: scale(1.02) translateY(-7px); }
+  50% { transform: scale(1.015) translateY(-5px); }
 }
 
 @keyframes ravenHeadTilt {
   0%, 100% { transform: rotate(0deg); }
-  30% { transform: rotate(-1.5deg); }
-  70% { transform: rotate(1.3deg); }
+  30% { transform: rotate(-1.4deg); }
+  70% { transform: rotate(1.2deg); }
 }
 
 @keyframes ravenWingL {
   0%, 100% { transform: rotate(0deg) translate(0, 0); }
-  50% { transform: rotate(-2.4deg) translate(-4px, 3px); }
+  50% { transform: rotate(-2.2deg) translate(-3px, 2px); }
 }
 
 @keyframes ravenWingR {
   0%, 100% { transform: rotate(0deg) translate(0, 0); }
-  50% { transform: rotate(2.4deg) translate(4px, 3px); }
+  50% { transform: rotate(2.2deg) translate(3px, 2px); }
 }
 
 @keyframes ravenTailSway {
   0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(1.1deg); }
+  50% { transform: rotate(1deg); }
 }
 
 @keyframes ravenFeatherShimmer {
@@ -399,18 +471,28 @@ html.raven-entrance-done #raven-entrance {
 }
 
 @keyframes ravenAuraPulse {
-  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-  50% { opacity: 0.95; transform: translate(-50%, -50%) scale(1.1); }
+  0%, 100% { opacity: 0.45; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.85; transform: translate(-50%, -50%) scale(1.08); }
 }
 
 @keyframes ravenGeoIn {
-  from { opacity: 0; transform: scale(0.15); }
+  from { opacity: 0; transform: scale(0.94); }
   to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes ravenLidOpenT {
+  from { transform: scaleY(1); }
+  to { transform: scaleY(0.02); }
+}
+
+@keyframes ravenLidOpenB {
+  from { transform: scaleY(1); }
+  to { transform: scaleY(0.02); }
 }
 
 @keyframes ravenRingPulse {
   0%, 100% { stroke: rgba(255, 70, 70, 0.65); stroke-width: 2.5; }
-  50% { stroke: rgba(255, 100, 100, 0.95); stroke-width: 3.4; }
+  50% { stroke: rgba(255, 100, 100, 0.95); stroke-width: 3.2; }
 }
 
 @keyframes ravenHaloPulse {
@@ -419,26 +501,34 @@ html.raven-entrance-done #raven-entrance {
 }
 
 @keyframes ravenPupilIn {
-  from { opacity: 0; transform: scale(0.3); }
-  55% { opacity: 1; transform: scale(1.15); }
-  to { opacity: 1; transform: scale(1); }
+  0% { opacity: 0; transform: scale(0.35); }
+  55% { opacity: 1; transform: scale(1.12); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Rings appear, then spin + collapse into pupil (kamui) */
+@keyframes ravenWhirlReveal {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(1.15); }
+  12% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  72% { opacity: 1; transform: translate(-50%, -50%) scale(0.55); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.06); }
 }
 
 @keyframes ravenWhirlSpin {
-  0% { opacity: 0; transform: scale(0.7) rotate(0deg); }
-  22% { opacity: 0.5; transform: scale(1) rotate(70deg); }
-  100% { opacity: 0; transform: scale(2) rotate(400deg); }
+  0% { transform: rotate(0deg) scale(1); }
+  100% { transform: rotate(540deg) scale(0.08); }
 }
 
+/* Decisive pull into eye — transform/opacity only, no smear blur */
 @keyframes ravenWhirlStage {
-  0% { transform: scale(1) rotate(0deg); filter: blur(0); opacity: 1; }
-  55% { transform: scale(1.1) rotate(36deg); filter: blur(2px); opacity: 0.85; }
-  100% { transform: scale(1.5) rotate(110deg); filter: blur(12px); opacity: 0; }
+  0% { transform: scale(1) rotate(0deg); opacity: 1; }
+  28% { transform: scale(0.94) rotate(-12deg); opacity: 1; }
+  100% { transform: scale(0.06) rotate(200deg); opacity: 0; }
 }
 
 @keyframes ravenFadeOut {
   0% { opacity: 1; }
-  65% { opacity: 1; }
+  55% { opacity: 1; }
   100% { opacity: 0; }
 }
 
@@ -452,6 +542,11 @@ html.raven-entrance-done #raven-entrance {
     width: 124vw;
     max-width: none;
     max-height: min(90vh, 920px);
+  }
+
+  .raven-whirl {
+    width: min(78vmin, 420px);
+    height: min(78vmin, 420px);
   }
 
   .raven-mark {
@@ -477,6 +572,7 @@ html.raven-entrance-done #raven-entrance {
   .raven-entrance,
   .raven-crow,
   .raven-whirl,
+  .raven-whirl-spin,
   .raven-stage,
   .raven-glow,
   .raven-mark,
@@ -491,7 +587,8 @@ html.raven-entrance-done #raven-entrance {
   .crow-third-geo,
   .crow-third-ring,
   .crow-third-halo,
-  .crow-third-pupil {
+  .crow-third-pupil,
+  .crow-third-lid {
     animation: none !important;
     transition: none !important;
   }
