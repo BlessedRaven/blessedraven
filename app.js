@@ -1,11 +1,96 @@
 (() => {
   const CX = 447.56;
   const CY = 484.96;
+  const HOTSPOTS = [
+    { id: "n", x: 453.56, y: 145 },
+    { id: "nw", x: 148, y: 167 },
+    { id: "w", x: 91.8, y: 353 },
+    { id: "sw", x: 90, y: 555 },
+    { id: "s", x: 462, y: 820 },
+    { id: "se", x: 672.71, y: 750.29 },
+    { id: "e", x: 821.16, y: 582.19 },
+    { id: "ne", x: 820.1, y: 342.59 },
+  ];
+
   const host = document.querySelector("[data-mark-host]");
   const mark = document.querySelector("[data-mark]");
   if (!host || !mark) return;
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const nearestSym = (cx, cy) => {
+    let best = HOTSPOTS[0];
+    let bestD = Infinity;
+    for (const h of HOTSPOTS) {
+      const d = Math.hypot(cx - h.x, cy - h.y);
+      if (d < bestD) {
+        bestD = d;
+        best = h;
+      }
+    }
+    return best.id;
+  };
+
+  const wrapOrbitSyms = (svg, orbit, center) => {
+    center.setAttribute("data-sym", "center");
+
+    const kids = Array.from(orbit.children);
+    kids.forEach((el) => {
+      let bb;
+      try {
+        bb = el.getBBox();
+      } catch (err) {
+        return;
+      }
+      if (!bb.width && !bb.height) return;
+      const id = nearestSym(bb.x + bb.width / 2, bb.y + bb.height / 2);
+      const wrap = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      wrap.setAttribute("class", "sym");
+      wrap.setAttribute("data-sym", id);
+      orbit.insertBefore(wrap, el);
+      wrap.appendChild(el);
+    });
+  };
+
+  const wireHotspots = (svg) => {
+    const orbitSyms = () => svg.querySelectorAll(".orbit > .sym");
+    const centerSym = svg.querySelector('.center[data-sym="center"]');
+
+    const clear = () => {
+      mark.classList.remove("is-paused");
+      orbitSyms().forEach((s) => s.classList.remove("is-active", "is-dim"));
+      if (centerSym) centerSym.classList.remove("is-active", "is-dim");
+    };
+
+    const activate = (id) => {
+      mark.classList.add("is-paused");
+      if (id === "center") {
+        if (centerSym) {
+          centerSym.classList.add("is-active");
+          centerSym.classList.remove("is-dim");
+        }
+        orbitSyms().forEach((s) => {
+          s.classList.remove("is-active");
+          s.classList.add("is-dim");
+        });
+        return;
+      }
+      if (centerSym) centerSym.classList.remove("is-active", "is-dim");
+      orbitSyms().forEach((s) => {
+        const match = s.getAttribute("data-sym") === id;
+        s.classList.toggle("is-active", match);
+        s.classList.toggle("is-dim", !match);
+      });
+    };
+
+    document.querySelectorAll(".hits .hotspot[data-sym]").forEach((hot) => {
+      const id = hot.getAttribute("data-sym");
+      hot.addEventListener("pointerenter", () => activate(id));
+      hot.addEventListener("pointerleave", clear);
+      hot.addEventListener("focusin", () => activate(id));
+      hot.addEventListener("focusout", clear);
+    });
+  };
 
   const mount = async () => {
     let raw;
@@ -64,6 +149,10 @@
     host.innerHTML = "";
     host.appendChild(svg);
     mark.classList.add("is-ready");
+
+    // getBBox requires the SVG to be in the document
+    wrapOrbitSyms(svg, orbit, center);
+    wireHotspots(svg);
   };
 
   if (document.readyState === "loading") {
