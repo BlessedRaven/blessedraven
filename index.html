@@ -3,195 +3,70 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="BlessedRaven — inventions, ideas, and prototypes." />
+  <meta name="description" content="Blessed Raven — landing." />
   <meta name="theme-color" content="#ffffff" />
-  <title>BlessedRaven — Inventions & Ideas</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <title>Blessed Raven</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="paper-grid" aria-hidden="true"></div>
-  <canvas id="field" aria-hidden="true"></canvas>
-  <div class="grain" aria-hidden="true"></div>
+  <main class="landing" id="top" aria-label="Blessed Raven">
+    <div class="mark" data-mark>
+      <div class="mark-host" data-mark-host></div>
+      <svg class="hits" viewBox="0 0 923.86 886.31" role="group" aria-label="Sigil links">
+        <!-- Center stays still -->
+        <a class="hotspot hotspot-center" href="#" aria-label="Blessed Raven — home">
+          <circle class="hit" cx="447.56" cy="484.96" r="155" />
+          <text class="hit-label" x="447.56" y="484.96" text-anchor="middle" dy="0.35em">Home</text>
+        </a>
 
-  <header class="nav" id="site-nav">
-    <a class="logo" href="#top">BlessedRaven</a>
-    <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-panel" aria-label="Open menu">
-      <span class="nav-toggle-bars" aria-hidden="true"><span></span></span>
-    </button>
-    <div class="nav-right" id="nav-panel">
-      <nav class="nav-filters" aria-label="Filters">
-        <button type="button" class="nav-chip is-on" data-filter="all">All</button>
-        <button type="button" class="nav-chip" data-filter="invention">Invention</button>
-        <button type="button" class="nav-chip" data-filter="idea">Idea</button>
-        <button type="button" class="nav-chip" data-filter="prototype">Prototype</button>
-      </nav>
-      <a class="nav-fund" href="fund.html">Fund</a>
-    </div>
-  </header>
-
-  <main id="top">
-    <!-- Primary landing: full-viewport SVG sigil with symbol hotspots -->
-    <section class="sigil-landing" aria-label="BlessedRaven sigil">
-      <div class="sigil-stage">
-        <img
-          class="sigil-art"
-          src="assets/jakel3726.svg"
-          alt="BlessedRaven sigil — eight medallions around a central eye"
-          width="924"
-          height="886"
-          draggable="false"
-        />
-        <svg
-          class="sigil-hits"
-          viewBox="0 0 923.86 886.31"
-          role="group"
-          aria-label="Choose a symbol to open a page"
-        >
-          <!-- Center vortex / eye → Inventions hub -->
-          <a class="hotspot" href="#hub" aria-label="Inventions — open the hub">
-            <circle class="hit" cx="447.56" cy="484.96" r="155" />
-            <text class="hit-label" x="447.56" y="484.96" text-anchor="middle" dy="0.35em">Inventions</text>
-          </a>
-
-          <!-- N — crow crest → GitHub -->
-          <a class="hotspot" href="https://github.com/BlessedRaven/blessedraven" aria-label="GitHub — BlessedRaven repository" rel="noopener noreferrer" target="_blank">
+        <!-- Outer hotspots track the orbit -->
+        <g class="hits-orbit">
+          <!-- N — crow → GitHub -->
+          <a class="hotspot" href="https://github.com/BlessedRaven/blessedraven" aria-label="GitHub" rel="noopener noreferrer" target="_blank">
             <circle class="hit" cx="453.56" cy="145" r="100" />
             <text class="hit-label" x="453.56" y="145" text-anchor="middle" dy="0.35em">GitHub</text>
           </a>
-
-          <!-- NW — maze / labyrinth → placeholder -->
+          <!-- NW -->
           <a class="hotspot is-soon" href="#soon" aria-label="Archive — coming soon">
             <circle class="hit" cx="148" cy="167" r="90" />
             <text class="hit-label" x="148" y="167" text-anchor="middle" dy="0.35em">Archive</text>
           </a>
-
-          <!-- W — interlocking rings → placeholder -->
+          <!-- W -->
           <a class="hotspot is-soon" href="#soon" aria-label="Orbit — coming soon">
             <circle class="hit" cx="91.8" cy="353" r="85" />
             <text class="hit-label" x="91.8" y="353" text-anchor="middle" dy="0.35em">Orbit</text>
           </a>
-
-          <!-- SW — organic wing → placeholder -->
+          <!-- SW -->
           <a class="hotspot is-soon" href="#soon" aria-label="Wings — coming soon">
             <circle class="hit" cx="90" cy="555" r="90" />
             <text class="hit-label" x="90" y="555" text-anchor="middle" dy="0.35em">Wings</text>
           </a>
-
-          <!-- S — standing figure → Fund -->
-          <a class="hotspot" href="fund.html" aria-label="Fund — open the funds page">
+          <!-- S — Fund placeholder (wire later) -->
+          <a class="hotspot is-soon" href="#soon" aria-label="Fund — coming soon">
             <circle class="hit" cx="462" cy="820" r="90" />
             <text class="hit-label" x="462" y="820" text-anchor="middle" dy="0.35em">Fund</text>
           </a>
-
-          <!-- SE — circle cluster → placeholder -->
+          <!-- SE -->
           <a class="hotspot is-soon" href="#soon" aria-label="Nest — coming soon">
             <circle class="hit" cx="672.71" cy="750.29" r="105" />
             <text class="hit-label" x="672.71" y="750.29" text-anchor="middle" dy="0.35em">Nest</text>
           </a>
-
-          <!-- E — hex of circles → placeholder -->
+          <!-- E -->
           <a class="hotspot is-soon" href="#soon" aria-label="Lattice — coming soon">
             <circle class="hit" cx="821.16" cy="582.19" r="100" />
             <text class="hit-label" x="821.16" y="582.19" text-anchor="middle" dy="0.35em">Lattice</text>
           </a>
-
-          <!-- NE — petal / flower → placeholder -->
+          <!-- NE -->
           <a class="hotspot is-soon" href="#soon" aria-label="Bloom — coming soon">
             <circle class="hit" cx="820.1" cy="342.59" r="100" />
             <text class="hit-label" x="820.1" y="342.59" text-anchor="middle" dy="0.35em">Bloom</text>
           </a>
-        </svg>
-      </div>
-      <p class="sigil-hint">Hover or tap a symbol</p>
-    </section>
-
-    <section class="chapter hero-chapter" id="hub" data-chapter="hero">
-      <div class="chapter-pin">
-        <div class="hero-copy">
-          <p class="eyebrow reveal">Inventions &amp; Ideas</p>
-          <h1 class="headline reveal">
-            Thinking in<br /><span class="italic">line &amp; light</span>
-          </h1>
-          <p class="lede reveal">
-            A research sketchbook of concepts from Blessed Raven.
-            Scroll to morph the field — each chapter is a working thought, drawn in ink on white.
-          </p>
-          <p class="crow-line reveal">brother crow keeps the margins</p>
-        </div>
-        <div class="progress-rail" aria-hidden="true">
-          <div class="progress-fill" id="hero-progress"></div>
-        </div>
-      </div>
-    </section>
-
-    <div id="chapters" class="chapters" aria-live="polite"></div>
-
-    <section class="chapter fund-chapter" id="fund" data-chapter="fund">
-      <div class="chapter-pin fund-pin">
-        <div class="fund-teaser-layout" id="fund-root">
-          <p class="eyebrow reveal">Funding</p>
-          <h2 class="headline sm reveal" id="fund-headline">Seed the nest</h2>
-          <p class="lede reveal" id="fund-lede"></p>
-          <div class="fund-goal reveal" id="fund-goal" hidden>
-            <div class="fund-goal-meta">
-              <span id="fund-goal-label"></span>
-              <span id="fund-goal-nums"></span>
-            </div>
-            <div class="fund-rail" aria-hidden="true">
-              <div class="fund-rail-fill" id="fund-rail-fill"></div>
-            </div>
-            <p class="crow-line fund-note">Manually updated · full payment methods on the Funds page</p>
-          </div>
-          <a class="fund-teaser-cta reveal" href="fund.html">Open full Funds page</a>
-          <div id="fund-methods" hidden></div>
-          <div id="fund-projects" hidden></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="chapter close-chapter" data-chapter="close">
-      <div class="chapter-pin compact">
-        <p class="eyebrow reveal">Authoring</p>
-        <h2 class="headline sm reveal">Add a concept<br />in under a minute.</h2>
-        <p class="lede reveal">
-          Edit <code>inventions.json</code>, commit, push.
-          The gallery redraws. Details live in the README.
-        </p>
-        <p class="crow-line reveal">
-          <a href="https://github.com/BlessedRaven/blessedraven">GitHub</a>
-          · sketched with CROW
-        </p>
-      </div>
-    </section>
-
-    <p id="soon" class="soon-note" tabindex="-1">More pages coming soon — symbols marked Archive, Orbit, Wings, Nest, Lattice, and Bloom are placeholders.</p>
+        </g>
+      </svg>
+    </div>
+    <p class="hint">Hover or tap a symbol</p>
+    <p id="soon" class="soon" tabindex="-1">Coming soon.</p>
   </main>
-
-  <div id="detail" class="detail" hidden>
-    <div class="detail-shade" data-close></div>
-    <article class="detail-panel" role="dialog" aria-modal="true" aria-labelledby="d-title">
-      <button type="button" class="detail-x" data-close aria-label="Close">×</button>
-      <div class="detail-meta">
-        <span id="d-type" class="tag"></span>
-        <span id="d-status" class="tag soft"></span>
-        <span id="d-example" class="tag accent" hidden>example</span>
-      </div>
-      <h2 id="d-title"></h2>
-      <p id="d-summary" class="detail-summary"></p>
-      <div id="d-body" class="detail-body"></div>
-      <ul id="d-tags" class="tag-row"></ul>
-      <div id="d-links" class="link-row"></div>
-      <p id="d-dates" class="detail-dates"></p>
-    </article>
-  </div>
-
-  <noscript><p class="noscript">Enable JavaScript to load inventions.json.</p></noscript>
-
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script src="app.js" defer></script>
 </body>
 </html>
