@@ -145,7 +145,11 @@ body {
 }
 
 .mark-host svg.sigil .sym[data-sym="n"].is-active { animation: br-sym-cw 0.85s linear 1; }
-.mark-host svg.sigil .sym[data-sym="ne"].is-active { animation: br-sym-ccw 1.05s linear 1; }
+/* Quatrefoil (Bloom / ne): steady 360° spin, 5× slower than others, loops while hovered */
+.mark-host svg.sigil .sym[data-sym="ne"].is-active {
+  transition: opacity 180ms ease, filter 180ms ease;
+  animation: br-quatrefoil 5.25s linear infinite;
+}
 .mark-host svg.sigil .sym[data-sym="e"].is-active { animation: br-sym-cw 0.7s linear 1; }
 .mark-host svg.sigil .sym[data-sym="se"].is-active { animation: br-sym-ccw 1.2s linear 1; }
 .mark-host svg.sigil .sym[data-sym="s"].is-active { animation: br-sym-cw 0.95s linear 1; }
@@ -168,6 +172,11 @@ body {
 }
 
 @keyframes br-sym-ccw {
+  from { transform: rotate(0deg) scale(1.08); }
+  to { transform: rotate(-360deg) scale(1.08); }
+}
+
+@keyframes br-quatrefoil {
   from { transform: rotate(0deg) scale(1.08); }
   to { transform: rotate(-360deg) scale(1.08); }
 }
