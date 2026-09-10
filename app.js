@@ -36,6 +36,7 @@
     svg.setAttribute("role", "img");
     svg.setAttribute("aria-label", "Blessed Raven sigil");
     svg.setAttribute("focusable", "false");
+    svg.style.background = "#fff";
 
     const defs = src.querySelector("defs");
     if (defs) svg.appendChild(document.importNode(defs, true));
@@ -124,7 +125,7 @@
 
     const tick = () => {
       // fade trail on white — does not cover the sigil (sigil has white plate + higher z)
-      ctx.fillStyle = "rgba(255,255,255,0.18)";
+      ctx.fillStyle = "rgba(255,255,255,0.22)";
       ctx.fillRect(0, 0, w, h);
       ctx.font = `${font}px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`;
       ctx.textBaseline = "top";
@@ -134,7 +135,7 @@
         const ch = text[d.i % text.length];
         const x = col * colW;
         // darker matrix on white
-        ctx.fillStyle = col % 5 === 0 ? "rgba(0, 0, 0, 0.42)" : "rgba(0, 0, 0, 0.28)";
+        ctx.fillStyle = col % 5 === 0 ? "rgba(0, 0, 0, 0.35)" : "rgba(0, 0, 0, 0.2)";
         ctx.fillText(ch, x, d.y);
         d.i += 1;
         d.y += font * d.speed;
