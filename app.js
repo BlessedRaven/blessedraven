@@ -77,15 +77,31 @@
     mount();
   }
 
-  /* Matrix rain behind sigil (soft on white) */
+
+  /* Matrix rain — phrases, dark, strictly behind sigil */
   const canvas = document.querySelector("[data-matrix]");
   if (canvas && !reduced) {
     const ctx = canvas.getContext("2d");
-    const glyphs = "01アイウエオカキクケコﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶﾗｻﾝ01<>/$#{}[]";
-    let cols = [];
+    const phrases = [
+      "blackhole universe",
+      "consciousness carrier wave",
+      "quantum resonance",
+      "photon",
+      "phonon",
+      "past",
+      "future",
+      "co exist",
+      "consciousness bridge between universes",
+      "wave",
+      "quantum",
+      "light",
+      "lux",
+    ];
+    let drops = [];
     let w = 0;
     let h = 0;
-    let font = 14;
+    let font = 13;
+    let colW = 0;
     let raf = 0;
 
     const resize = () => {
@@ -95,23 +111,40 @@
       canvas.width = Math.floor(w * dpr);
       canvas.height = Math.floor(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      font = w < 640 ? 12 : 15;
-      const n = Math.ceil(w / font) + 1;
-      cols = Array.from({ length: n }, () => Math.random() * h);
+      font = w < 640 ? 11 : 13;
+      colW = font * 1.15;
+      const n = Math.max(8, Math.ceil(w / colW));
+      drops = Array.from({ length: n }, (_, i) => ({
+        y: Math.random() * h,
+        phrase: phrases[i % phrases.length],
+        i: 0,
+        speed: 0.55 + Math.random() * 0.75,
+      }));
     };
 
     const tick = () => {
-      ctx.fillStyle = "rgba(255,255,255,0.12)";
+      // fade trail on white — does not cover the sigil (sigil has white plate + higher z)
+      ctx.fillStyle = "rgba(255,255,255,0.18)";
       ctx.fillRect(0, 0, w, h);
       ctx.font = `${font}px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`;
-      for (let i = 0; i < cols.length; i++) {
-        const ch = glyphs[(Math.random() * glyphs.length) | 0];
-        const x = i * font;
-        const y = cols[i];
-        ctx.fillStyle = i % 7 === 0 ? "rgba(16, 120, 72, 0.55)" : "rgba(18, 18, 18, 0.22)";
-        ctx.fillText(ch, x, y);
-        cols[i] = y > h + Math.random() * 80 ? 0 : y + font * (0.85 + Math.random() * 0.6);
-      }
+      ctx.textBaseline = "top";
+
+      drops.forEach((d, col) => {
+        const text = d.phrase;
+        const ch = text[d.i % text.length];
+        const x = col * colW;
+        // darker matrix on white
+        ctx.fillStyle = col % 5 === 0 ? "rgba(0, 0, 0, 0.42)" : "rgba(0, 0, 0, 0.28)";
+        ctx.fillText(ch, x, d.y);
+        d.i += 1;
+        d.y += font * d.speed;
+        if (d.y > h + font * 2) {
+          d.y = -font * (1 + Math.random() * 8);
+          d.phrase = phrases[(Math.random() * phrases.length) | 0];
+          d.i = 0;
+          d.speed = 0.55 + Math.random() * 0.75;
+        }
+      });
       raf = requestAnimationFrame(tick);
     };
 
@@ -123,5 +156,6 @@
     });
     raf = requestAnimationFrame(tick);
   }
+
 
 })();
