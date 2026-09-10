@@ -12,6 +12,19 @@
     { id: "ne", x: 820.1, y: 342.59 },
   ];
 
+  // One spin controller — only ONE element animates at a time.
+  const SPIN = {
+    n: { ms: 4250, dir: 1 },
+    nw: { ms: 3750, dir: -1 },
+    w: { ms: 5500, dir: 1 },
+    sw: { ms: 4000, dir: -1 },
+    s: { ms: 4750, dir: 1 },
+    se: { ms: 6000, dir: -1 },
+    e: { ms: 3500, dir: 1 },
+    ne: { ms: 5250, dir: -1 }, // quatrefoil / Bloom ~5× slow
+    center: { ms: 5750, dir: 1 },
+  };
+
   const host = document.querySelector("[data-mark-host]");
   const mark = document.querySelector("[data-mark]");
   if (!host || !mark) return;
@@ -29,28 +42,77 @@
     }
   };
 
+  const centroidOf = (el) => {
+    try {
+      const bb = el.getBBox();
+      if (!bb.width && !bb.height) return null;
+      return { cx: bb.x + bb.width / 2, cy: bb.y + bb.height / 2, bb };
+    } catch (err) {
+      return null;
+    }
+  };
+
+  // If a group has far-apart children, split so they never spin as one blob.
+  const flattenOrbitLeaves = (orbit) => {
+    const leaves = [];
+    Array.from(orbit.children).forEach((el) => {
+      const tag = el.tagName.toLowerCase();
+      if (tag !== "g") {
+        leaves.push(el);
+        return;
+      }
+      const kids = Array.from(el.children);
+      if (kids.length <= 1) {
+        leaves.push(el);
+        return;
+      }
+      const centers = kids
+        .map((k) => {
+          const c = centroidOf(k);
+          return c ? { k, ...c } : null;
+        })
+        .filter(Boolean);
+      if (centers.length <= 1) {
+        leaves.push(el);
+        return;
+      }
+      let maxD = 0;
+      for (let i = 0; i < centers.length; i++) {
+        for (let j = i + 1; j < centers.length; j++) {
+          maxD = Math.max(
+            maxD,
+            Math.hypot(centers[i].cx - centers[j].cx, centers[i].cy - centers[j].cy)
+          );
+        }
+      }
+      if (maxD > 140) {
+        kids.forEach((k) => leaves.push(k));
+      } else {
+        leaves.push(el);
+      }
+    });
+    // Reparent leaves directly under orbit in order
+    leaves.forEach((el) => orbit.appendChild(el));
+    // Drop empty groups left behind
+    Array.from(orbit.querySelectorAll(":scope > g")).forEach((g) => {
+      if (!g.childNodes.length) g.remove();
+    });
+  };
+
   const wrapOrbitSyms = (svg, orbit, center) => {
     center.setAttribute("data-sym", "center");
     pinOrigin(center);
 
-    // Each top-level orbit child is its OWN .sym (no merging).
-    // Hotspot ids are assigned 1:1 to the nearest unused child so neighbors never spin together.
+    flattenOrbitLeaves(orbit);
+
     const items = [];
     Array.from(orbit.children).forEach((el) => {
-      let bb;
-      try {
-        bb = el.getBBox();
-      } catch (err) {
-        return;
-      }
-      if (!bb.width && !bb.height) return;
-      items.push({
-        el,
-        cx: bb.x + bb.width / 2,
-        cy: bb.y + bb.height / 2,
-      });
+      const c = centroidOf(el);
+      if (!c) return;
+      items.push({ el, cx: c.cx, cy: c.cy });
     });
 
+    // Strict 1:1 — each hotspot owns at most one leaf; no merging.
     const pairs = [];
     items.forEach((it, i) => {
       HOTSPOTS.forEach((h) => {
@@ -64,7 +126,7 @@
     const itemId = new Map();
     for (const p of pairs) {
       if (usedItems.has(p.i) || usedIds.has(p.id)) continue;
-      if (p.d > 220) continue; // too far = leave as decorative isolate
+      if (p.d > 200) continue;
       usedItems.add(p.i);
       usedIds.add(p.id);
       itemId.set(p.i, p.id);
@@ -73,7 +135,10 @@
     items.forEach((it, i) => {
       const wrap = document.createElementNS("http://www.w3.org/2000/svg", "g");
       wrap.setAttribute("class", "sym");
-      wrap.setAttribute("data-sym", itemId.get(i) || `_x${i}`);
+      const id = itemId.get(i) || `_x${i}`;
+      wrap.setAttribute("data-sym", id);
+      // Orphans never receive pointer spins
+      if (id.startsWith("_x")) wrap.setAttribute("data-deco", "1");
       orbit.insertBefore(wrap, it.el);
       wrap.appendChild(it.el);
       pinOrigin(wrap);
@@ -81,28 +146,52 @@
   };
 
   const wireHotspots = (svg) => {
-    const orbitSyms = () => svg.querySelectorAll(".orbit > .sym");
-    const centerSym = svg.querySelector('.center[data-sym="center"]');
+    const byId = (id) =>
+      id === "center"
+        ? svg.querySelector('.center[data-sym="center"]')
+        : svg.querySelector(`.orbit > .sym[data-sym="${id}"]`);
+
     let activeId = null;
     let pressed = false;
+    let spinAnim = null;
+    let spinEl = null;
 
-    // Freeze current angle, then ease back to 0 (no snap).
-    const releaseSpin = (el) => {
+    const hardStop = (el) => {
       if (!el) return;
-      if (!el.classList.contains("is-active")) {
-        el.classList.remove("is-dim");
+      el.getAnimations().forEach((a) => a.cancel());
+      el.style.transition = "";
+      el.style.transform = "";
+      el.classList.remove("is-active");
+    };
+
+    const stopSpin = ({ ease } = { ease: false }) => {
+      const el = spinEl;
+      const anim = spinAnim;
+      spinAnim = null;
+      spinEl = null;
+      if (!el) return;
+
+      if (!ease || reduced) {
+        hardStop(el);
         return;
       }
-      const matrix = getComputedStyle(el).transform;
+
+      let matrix = "none";
+      try {
+        matrix = getComputedStyle(el).transform;
+      } catch (err) {
+        /* ignore */
+      }
+      if (anim) anim.cancel();
       el.classList.remove("is-active");
-      el.getAnimations().forEach((a) => a.cancel());
       el.style.transition = "none";
       el.style.transform = matrix === "none" ? "rotate(0deg)" : matrix;
       void el.getBoundingClientRect();
-      el.style.transition = "transform 0.7s ease-out";
+      el.style.transition = "transform 0.55s ease-out";
       el.style.transform = "rotate(0deg)";
       const finish = (e) => {
         if (e && e.propertyName && e.propertyName !== "transform") return;
+        if (spinEl === el) return; // restarted
         el.style.transition = "";
         el.style.transform = "";
         el.removeEventListener("transitionend", finish);
@@ -110,85 +199,84 @@
       el.addEventListener("transitionend", finish);
     };
 
-    const clearDims = () => {
-      orbitSyms().forEach((s) => s.classList.remove("is-dim"));
-      if (centerSym) centerSym.classList.remove("is-dim");
+    const startSpin = (id) => {
+      const el = byId(id);
+      if (!el || el.getAttribute("data-deco") === "1") return;
+      hardStop(el);
+      el.classList.add("is-active");
+      spinEl = el;
+      if (reduced) return;
+      const cfg = SPIN[id] || { ms: 4500, dir: 1 };
+      const deg = 360 * cfg.dir;
+      spinAnim = el.animate(
+        [{ transform: "rotate(0deg)" }, { transform: `rotate(${deg}deg)` }],
+        { duration: cfg.ms, iterations: Infinity, easing: "linear" }
+      );
     };
 
-    const clear = () => {
+    const clear = ({ ease } = { ease: true }) => {
       activeId = null;
       pressed = false;
       mark.classList.remove("is-hovering");
-      orbitSyms().forEach((s) => {
-        if (s.classList.contains("is-active")) releaseSpin(s);
-        else s.classList.remove("is-dim");
-      });
-      if (centerSym) {
-        if (centerSym.classList.contains("is-active")) releaseSpin(centerSym);
-        else centerSym.classList.remove("is-dim");
-      }
+      stopSpin({ ease });
     };
 
-    // Isolation: animate ONLY the single matched .sym for as long as hover/press lasts.
     const activate = (id) => {
+      if (!id) return;
       if (activeId === id) {
         mark.classList.add("is-hovering");
-        return; // keep spinning — do not restart
-      }
-      // Ease out whoever was spinning, then start the new one.
-      orbitSyms().forEach((s) => {
-        if (s.classList.contains("is-active")) releaseSpin(s);
-      });
-      if (centerSym && centerSym.classList.contains("is-active")) releaseSpin(centerSym);
-      clearDims();
-
-      activeId = id;
-      mark.classList.add("is-hovering");
-
-      const arm = (el) => {
-        if (!el) return;
-        el.style.transition = "";
-        el.style.transform = "";
-        el.classList.add("is-active");
-      };
-
-      if (id === "center") {
-        arm(centerSym);
-        orbitSyms().forEach((s) => s.classList.add("is-dim"));
         return;
       }
-      const match = svg.querySelector(`.orbit > .sym[data-sym="${id}"]`);
-      arm(match);
-      orbitSyms().forEach((s) => {
-        if (s !== match) s.classList.add("is-dim");
-      });
+      // Switching targets: hard-stop previous so two never animate together.
+      stopSpin({ ease: false });
+      activeId = id;
+      mark.classList.add("is-hovering");
+      startSpin(id);
     };
 
-    document.querySelectorAll(".hits .hotspot[data-sym]").forEach((hot) => {
-      const id = hot.getAttribute("data-sym");
-      hot.addEventListener("pointerenter", () => activate(id));
-      hot.addEventListener("pointerleave", () => {
-        if (!pressed) clear();
-      });
-      hot.addEventListener("pointerdown", (e) => {
-        if (e.button != null && e.button !== 0) return;
-        pressed = true;
-        try {
-          hot.setPointerCapture(e.pointerId);
-        } catch (err) {
-          /* ignore */
-        }
-        activate(id);
-      });
-      hot.addEventListener("pointerup", () => {
-        pressed = false;
-        // keep spin if pointer still over hotspot
-        if (!hot.matches(":hover")) clear();
-      });
-      hot.addEventListener("pointercancel", clear);
-      hot.addEventListener("focusin", () => activate(id));
+    // Single hit-test path: whichever hotspot is under the pointer wins (only one).
+    const hits = document.querySelector(".hits");
+    if (!hits) return;
+
+    const idFromEvent = (e) => {
+      const t = e.target && e.target.closest ? e.target.closest(".hotspot[data-sym]") : null;
+      return t ? t.getAttribute("data-sym") : null;
+    };
+
+    hits.addEventListener("pointerover", (e) => {
+      const id = idFromEvent(e);
+      if (id) activate(id);
+    });
+    hits.addEventListener("pointerout", (e) => {
+      const to = e.relatedTarget && e.relatedTarget.closest
+        ? e.relatedTarget.closest(".hotspot[data-sym]")
+        : null;
+      if (to) {
+        // Moving to another hotspot — activate that one (pointerover will also fire).
+        return;
+      }
+      const from = idFromEvent(e);
+      if (!from) return;
+      if (!pressed) clear({ ease: true });
+    });
+    hits.addEventListener("pointerdown", (e) => {
+      if (e.button != null && e.button !== 0) return;
+      const id = idFromEvent(e);
+      if (!id) return;
+      pressed = true;
+      activate(id);
+    });
+    hits.addEventListener("pointerup", (e) => {
+      pressed = false;
+      const id = idFromEvent(e);
+      if (!id) clear({ ease: true });
+    });
+    hits.addEventListener("pointercancel", () => clear({ ease: false }));
+
+    hits.querySelectorAll(".hotspot[data-sym]").forEach((hot) => {
+      hot.addEventListener("focusin", () => activate(hot.getAttribute("data-sym")));
       hot.addEventListener("focusout", () => {
-        if (!pressed) clear();
+        if (!pressed) clear({ ease: true });
       });
     });
   };
@@ -196,7 +284,7 @@
   const mount = async () => {
     let raw;
     try {
-      const res = await fetch("assets/jakel3726.svg", { cache: "force-cache" });
+      const res = await fetch("assets/jakel3726.svg", { cache: "no-cache" });
       if (!res.ok) throw new Error("svg missing");
       raw = await res.text();
     } catch (err) {
@@ -251,7 +339,6 @@
     host.appendChild(svg);
     mark.classList.add("is-ready");
 
-    // getBBox requires the SVG to be in the document
     wrapOrbitSyms(svg, orbit, center);
     wireHotspots(svg);
   };

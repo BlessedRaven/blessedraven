@@ -130,54 +130,24 @@ body {
   }
 }
 
-/* Isolation: ONLY the matched .sym spins. Never transform .sigil / whole .orbit on hover. */
+/* Hover spin is WAAPI in app.js — only ONE .sym at a time. */
 .mark-host svg.sigil .sym,
 .mark-host svg.sigil .center {
   transform-box: fill-box;
   transform-origin: center;
-  transition: opacity 180ms ease, filter 180ms ease;
-  will-change: transform;
 }
 
 .mark-host svg.sigil .sym.is-active,
 .mark-host svg.sigil .center.is-active {
   filter: drop-shadow(0 0 12px rgba(18, 18, 18, 0.35));
-  /* duration ignored for infinite — speed set per-symbol below */
-  animation: br-sym-cw 4.5s linear infinite;
 }
 
-/* Per-symbol speeds (all loop while hovered/pressed). Quatrefoil/Bloom = 5× slow. */
-.mark-host svg.sigil .sym[data-sym="n"].is-active { animation: br-sym-cw 4.25s linear infinite; }
-.mark-host svg.sigil .sym[data-sym="ne"].is-active { animation: br-quatrefoil 5.25s linear infinite; }
-.mark-host svg.sigil .sym[data-sym="e"].is-active { animation: br-sym-cw 3.5s linear infinite; }
-.mark-host svg.sigil .sym[data-sym="se"].is-active { animation: br-sym-ccw 6s linear infinite; }
-.mark-host svg.sigil .sym[data-sym="s"].is-active { animation: br-sym-cw 4.75s linear infinite; }
-.mark-host svg.sigil .sym[data-sym="sw"].is-active { animation: br-sym-ccw 4s linear infinite; }
-.mark-host svg.sigil .sym[data-sym="w"].is-active { animation: br-sym-cw 5.5s linear infinite; }
-.mark-host svg.sigil .sym[data-sym="nw"].is-active { animation: br-sym-ccw 3.75s linear infinite; }
-
-.mark-host svg.sigil .sym.is-dim {
-  opacity: 0.28;
+/* While hovering a symbol: freeze orbit + page breath so ONLY that symbol moves */
+.mark.is-hovering {
+  animation-play-state: paused;
 }
-
-.mark-host svg.sigil .center.is-active {
-  animation: br-sym-cw 5.75s linear infinite;
-  filter: drop-shadow(0 0 16px rgba(18, 18, 18, 0.4));
-}
-
-@keyframes br-sym-cw {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes br-sym-ccw {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-360deg); }
-}
-
-@keyframes br-quatrefoil {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-360deg); }
+.mark.is-hovering .center {
+  animation-play-state: paused;
 }
 
 .hits {
