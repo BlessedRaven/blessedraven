@@ -130,55 +130,54 @@ body {
   }
 }
 
-/* Isolation rule: hover scale/glow ONLY on the matched .sym / .center.is-active.
-   Never transform .sigil or .orbit as a whole for hover. Dim siblings OK. */
-.mark-host svg.sigil .sym {
+/* Isolation: ONLY the matched .sym spins. Never transform .sigil / whole .orbit on hover. */
+.mark-host svg.sigil .sym,
+.mark-host svg.sigil .center {
   transform-box: fill-box;
   transform-origin: center;
-  transition: transform 180ms ease, opacity 180ms ease, filter 180ms ease;
-}
-
-/* Each symbol: own 360° spin on hover (direction/speed differ) */
-.mark-host svg.sigil .sym.is-active {
-  filter: drop-shadow(0 0 12px rgba(18, 18, 18, 0.35));
-  animation: br-sym-cw 0.9s linear 1;
-}
-
-.mark-host svg.sigil .sym[data-sym="n"].is-active { animation: br-sym-cw 0.85s linear 1; }
-/* Quatrefoil (Bloom / ne): steady 360° spin, 5× slower than others, loops while hovered */
-.mark-host svg.sigil .sym[data-sym="ne"].is-active {
   transition: opacity 180ms ease, filter 180ms ease;
-  animation: br-quatrefoil 5.25s linear infinite;
+  will-change: transform;
 }
-.mark-host svg.sigil .sym[data-sym="e"].is-active { animation: br-sym-cw 0.7s linear 1; }
-.mark-host svg.sigil .sym[data-sym="se"].is-active { animation: br-sym-ccw 1.2s linear 1; }
-.mark-host svg.sigil .sym[data-sym="s"].is-active { animation: br-sym-cw 0.95s linear 1; }
-.mark-host svg.sigil .sym[data-sym="sw"].is-active { animation: br-sym-ccw 0.8s linear 1; }
-.mark-host svg.sigil .sym[data-sym="w"].is-active { animation: br-sym-cw 1.1s linear 1; }
-.mark-host svg.sigil .sym[data-sym="nw"].is-active { animation: br-sym-ccw 0.75s linear 1; }
+
+.mark-host svg.sigil .sym.is-active,
+.mark-host svg.sigil .center.is-active {
+  filter: drop-shadow(0 0 12px rgba(18, 18, 18, 0.35));
+  /* duration ignored for infinite — speed set per-symbol below */
+  animation: br-sym-cw 4.5s linear infinite;
+}
+
+/* Per-symbol speeds (all loop while hovered/pressed). Quatrefoil/Bloom = 5× slow. */
+.mark-host svg.sigil .sym[data-sym="n"].is-active { animation: br-sym-cw 4.25s linear infinite; }
+.mark-host svg.sigil .sym[data-sym="ne"].is-active { animation: br-quatrefoil 5.25s linear infinite; }
+.mark-host svg.sigil .sym[data-sym="e"].is-active { animation: br-sym-cw 3.5s linear infinite; }
+.mark-host svg.sigil .sym[data-sym="se"].is-active { animation: br-sym-ccw 6s linear infinite; }
+.mark-host svg.sigil .sym[data-sym="s"].is-active { animation: br-sym-cw 4.75s linear infinite; }
+.mark-host svg.sigil .sym[data-sym="sw"].is-active { animation: br-sym-ccw 4s linear infinite; }
+.mark-host svg.sigil .sym[data-sym="w"].is-active { animation: br-sym-cw 5.5s linear infinite; }
+.mark-host svg.sigil .sym[data-sym="nw"].is-active { animation: br-sym-ccw 3.75s linear infinite; }
 
 .mark-host svg.sigil .sym.is-dim {
   opacity: 0.28;
 }
 
 .mark-host svg.sigil .center.is-active {
-  animation: br-sym-cw 1.15s linear 1;
+  animation: br-sym-cw 5.75s linear infinite;
   filter: drop-shadow(0 0 16px rgba(18, 18, 18, 0.4));
 }
 
 @keyframes br-sym-cw {
-  from { transform: rotate(0deg) scale(1.08); }
-  to { transform: rotate(360deg) scale(1.08); }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes br-sym-ccw {
-  from { transform: rotate(0deg) scale(1.08); }
-  to { transform: rotate(-360deg) scale(1.08); }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
 }
 
 @keyframes br-quatrefoil {
-  from { transform: rotate(0deg) scale(1.08); }
-  to { transform: rotate(-360deg) scale(1.08); }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
 }
 
 .hits {
@@ -304,6 +303,7 @@ body {
 
   .mark-host svg.sigil .sym.is-active,
   .mark-host svg.sigil .center.is-active {
+    animation: none !important;
     transform: none;
     filter: none;
   }

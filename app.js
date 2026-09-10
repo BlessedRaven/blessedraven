@@ -18,24 +18,24 @@
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const nearestSym = (cx, cy) => {
-    let best = HOTSPOTS[0];
-    let bestD = Infinity;
-    for (const h of HOTSPOTS) {
-      const d = Math.hypot(cx - h.x, cy - h.y);
-      if (d < bestD) {
-        bestD = d;
-        best = h;
-      }
+  const pinOrigin = (el) => {
+    try {
+      const bb = el.getBBox();
+      if (!bb.width && !bb.height) return;
+      el.style.transformBox = "view-box";
+      el.style.transformOrigin = `${bb.x + bb.width / 2}px ${bb.y + bb.height / 2}px`;
+    } catch (err) {
+      /* ignore */
     }
-    return best.id;
   };
 
   const wrapOrbitSyms = (svg, orbit, center) => {
     center.setAttribute("data-sym", "center");
+    pinOrigin(center);
 
-    // One .sym group per hotspot id (merge near-duplicates). Hover scales only that group.
-    const wraps = new Map();
+    // Each top-level orbit child is its OWN .sym (no merging).
+    // Hotspot ids are assigned 1:1 to the nearest unused child so neighbors never spin together.
+    const items = [];
     Array.from(orbit.children).forEach((el) => {
       let bb;
       try {
@@ -44,48 +44,75 @@
         return;
       }
       if (!bb.width && !bb.height) return;
-      const id = nearestSym(bb.x + bb.width / 2, bb.y + bb.height / 2);
-      let wrap = wraps.get(id);
-      if (!wrap) {
-        wrap = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        wrap.setAttribute("class", "sym");
-        wrap.setAttribute("data-sym", id);
-        orbit.insertBefore(wrap, el);
-        wraps.set(id, wrap);
-      }
-      wrap.appendChild(el);
+      items.push({
+        el,
+        cx: bb.x + bb.width / 2,
+        cy: bb.y + bb.height / 2,
+      });
+    });
+
+    const pairs = [];
+    items.forEach((it, i) => {
+      HOTSPOTS.forEach((h) => {
+        pairs.push({ i, id: h.id, d: Math.hypot(it.cx - h.x, it.cy - h.y) });
+      });
+    });
+    pairs.sort((a, b) => a.d - b.d);
+
+    const usedItems = new Set();
+    const usedIds = new Set();
+    const itemId = new Map();
+    for (const p of pairs) {
+      if (usedItems.has(p.i) || usedIds.has(p.id)) continue;
+      if (p.d > 220) continue; // too far = leave as decorative isolate
+      usedItems.add(p.i);
+      usedIds.add(p.id);
+      itemId.set(p.i, p.id);
+    }
+
+    items.forEach((it, i) => {
+      const wrap = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      wrap.setAttribute("class", "sym");
+      wrap.setAttribute("data-sym", itemId.get(i) || `_x${i}`);
+      orbit.insertBefore(wrap, it.el);
+      wrap.appendChild(it.el);
+      pinOrigin(wrap);
     });
   };
 
   const wireHotspots = (svg) => {
     const orbitSyms = () => svg.querySelectorAll(".orbit > .sym");
     const centerSym = svg.querySelector('.center[data-sym="center"]');
+    let activeId = null;
+    let pressed = false;
 
     const clear = () => {
+      activeId = null;
+      pressed = false;
       mark.classList.remove("is-hovering");
       orbitSyms().forEach((s) => s.classList.remove("is-active", "is-dim"));
       if (centerSym) centerSym.classList.remove("is-active", "is-dim");
     };
 
-    // Isolation: animate ONLY the single matched .sym (never .sigil / whole .orbit).
-    const retrigger = (el) => {
-      if (!el) return;
-      el.classList.remove("is-active");
-      void el.getBoundingClientRect();
-      el.classList.add("is-active");
-    };
-
+    // Isolation: animate ONLY the single matched .sym for as long as hover/press lasts.
     const activate = (id) => {
-      clear();
+      if (activeId === id) {
+        mark.classList.add("is-hovering");
+        return; // keep spinning — do not restart
+      }
+      activeId = id;
       mark.classList.add("is-hovering");
+      orbitSyms().forEach((s) => s.classList.remove("is-active", "is-dim"));
+      if (centerSym) centerSym.classList.remove("is-active", "is-dim");
+
       if (id === "center") {
-        retrigger(centerSym);
+        if (centerSym) centerSym.classList.add("is-active");
         orbitSyms().forEach((s) => s.classList.add("is-dim"));
         return;
       }
       const match = svg.querySelector(`.orbit > .sym[data-sym="${id}"]`);
       orbitSyms().forEach((s) => {
-        if (s === match) retrigger(s);
+        if (s === match) s.classList.add("is-active");
         else s.classList.add("is-dim");
       });
     };
@@ -93,9 +120,29 @@
     document.querySelectorAll(".hits .hotspot[data-sym]").forEach((hot) => {
       const id = hot.getAttribute("data-sym");
       hot.addEventListener("pointerenter", () => activate(id));
-      hot.addEventListener("pointerleave", clear);
+      hot.addEventListener("pointerleave", () => {
+        if (!pressed) clear();
+      });
+      hot.addEventListener("pointerdown", (e) => {
+        if (e.button != null && e.button !== 0) return;
+        pressed = true;
+        try {
+          hot.setPointerCapture(e.pointerId);
+        } catch (err) {
+          /* ignore */
+        }
+        activate(id);
+      });
+      hot.addEventListener("pointerup", () => {
+        pressed = false;
+        // keep spin if pointer still over hotspot
+        if (!hot.matches(":hover")) clear();
+      });
+      hot.addEventListener("pointercancel", clear);
       hot.addEventListener("focusin", () => activate(id));
-      hot.addEventListener("focusout", clear);
+      hot.addEventListener("focusout", () => {
+        if (!pressed) clear();
+      });
     });
   };
 
