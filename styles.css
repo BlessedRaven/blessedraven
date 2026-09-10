@@ -1386,3 +1386,139 @@ a.fund-project-link {
     transform: none;
   }
 }
+
+/* ---------- SVG sigil landing (primary drop) ---------- */
+.sigil-landing {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: calc(var(--nav) + 0.75rem) 1rem 1.5rem;
+  background: var(--paper);
+}
+
+.sigil-stage {
+  position: relative;
+  width: min(92vw, calc(86vh * 923.86 / 886.31), 880px);
+  max-width: 100%;
+  aspect-ratio: 923.86 / 886.31;
+}
+
+.sigil-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.sigil-hits {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.sigil-hits .hotspot {
+  cursor: pointer;
+  outline: none;
+}
+
+.sigil-hits .hit {
+  fill: rgba(184, 146, 63, 0);
+  stroke: rgba(184, 146, 63, 0);
+  stroke-width: 2.5;
+  transition:
+    fill 160ms var(--ease-out),
+    stroke 160ms var(--ease-out);
+}
+
+.sigil-hits .hit-label {
+  fill: var(--ink);
+  font-family: var(--sans);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  pointer-events: none;
+  paint-order: stroke fill;
+  stroke: rgba(255, 255, 255, 0.92);
+  stroke-width: 6px;
+  stroke-linejoin: round;
+  transition: opacity 160ms var(--ease-out);
+}
+
+.sigil-hits .hotspot:hover .hit,
+.sigil-hits .hotspot:focus-visible .hit {
+  fill: rgba(184, 146, 63, 0.14);
+  stroke: rgba(184, 146, 63, 0.65);
+}
+
+.sigil-hits .hotspot:hover .hit-label,
+.sigil-hits .hotspot:focus-visible .hit-label {
+  opacity: 1;
+}
+
+.sigil-hits .hotspot.is-soon:hover .hit,
+.sigil-hits .hotspot.is-soon:focus-visible .hit {
+  fill: rgba(18, 18, 18, 0.05);
+  stroke: rgba(18, 18, 18, 0.28);
+}
+
+.sigil-hint {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mute-2);
+}
+
+.soon-note {
+  max-width: 40rem;
+  margin: 0 auto 4rem;
+  padding: 0 1.25rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--mute);
+  text-align: center;
+}
+
+.soon-note:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
+@media (max-width: 640px) {
+  .sigil-landing {
+    padding-inline: 0.5rem;
+    gap: 0.65rem;
+  }
+
+  .sigil-stage {
+    width: min(96vw, calc(78vh * 923.86 / 886.31));
+  }
+
+  .sigil-hits .hit-label {
+    font-size: 32px;
+  }
+
+  .sigil-hint {
+    font-size: 0.72rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sigil-hits .hit,
+  .sigil-hits .hit-label {
+    transition: none;
+  }
+}

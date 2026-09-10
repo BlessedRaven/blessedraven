@@ -4,7 +4,7 @@
 
 - Static site on GitHub Pages (repo root, custom domain via `CNAME`).
 - `inventions.json` is the single source of truth for chapters.
-- `index.html` + `styles.css` + `app.js` render a cinematic sticky-scroll gallery with a canvas particle field scrubbed by scroll progress (GSAP ScrollTrigger via CDN).
+- `index.html` opens on a clean full-viewport SVG sigil (`assets/jakel3726.svg`) with hotspot links; below, `styles.css` + `app.js` render a sticky-scroll inventions gallery with a canvas particle field (GSAP ScrollTrigger via CDN).
 - Detail panel/modal for full descriptions.
 - No backend, no auth, no build tooling.
 

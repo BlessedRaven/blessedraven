@@ -6,7 +6,7 @@ Live at [www.blessedraven.com](https://www.blessedraven.com).
 Vanilla HTML / CSS / JS (GSAP + ScrollTrigger via CDN). No build step.
 GitHub Pages serves from the repo root on `main`.
 
-The experience is a cinematic sticky-scroll gallery: a particle field morphs as you scroll, and each invention is a full-viewport chapter. Click **Open details** for the full write-up.
+Primary landing is the full-viewport sigil (`assets/jakel3726.svg`): tap a symbol to open Inventions (`#hub`), Fund, GitHub, or a placeholder. Below that, a sticky-scroll gallery morphs a particle field as you scroll — each invention is a chapter. Click **Open details** for the full write-up.
 
 ## Add an invention in under a minute
 
