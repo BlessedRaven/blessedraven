@@ -19,6 +19,7 @@ body {
 body {
   min-height: 100vh;
   min-height: 100dvh;
+  overflow-x: hidden;
 }
 
 .landing {
@@ -40,9 +41,9 @@ body {
 
 .mark {
   position: relative;
-  /* +66% vs prior 820/92vw/88vh cap */
-  width: min(99vw, calc(146vh * 923.86 / 886.31), 1361px);
-  max-width: 100%;
+  /* Near full-viewport / ~2x prior presence */
+  width: min(100vw, calc(100dvh * 923.86 / 886.31), 2000px);
+  max-width: none;
   aspect-ratio: 923.86 / 886.31;
   transform-origin: 50% 55%;
   will-change: transform, opacity;
@@ -283,7 +284,7 @@ body {
 
 @media (max-width: 640px) {
   .mark {
-    width: min(99vw, calc(136vh * 923.86 / 886.31), 1361px);
+    width: min(100vw, calc(100dvh * 923.86 / 886.31), 2000px);
   }
 
   .hits .hit-label {
