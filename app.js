@@ -76,4 +76,52 @@
   } else {
     mount();
   }
+
+  /* Matrix rain behind sigil (soft on white) */
+  const canvas = document.querySelector("[data-matrix]");
+  if (canvas && !reduced) {
+    const ctx = canvas.getContext("2d");
+    const glyphs = "01アイウエオカキクケコﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶﾗｻﾝ01<>/$#{}[]";
+    let cols = [];
+    let w = 0;
+    let h = 0;
+    let font = 14;
+    let raf = 0;
+
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = canvas.clientWidth;
+      h = canvas.clientHeight;
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      font = w < 640 ? 12 : 15;
+      const n = Math.ceil(w / font) + 1;
+      cols = Array.from({ length: n }, () => Math.random() * h);
+    };
+
+    const tick = () => {
+      ctx.fillStyle = "rgba(255,255,255,0.12)";
+      ctx.fillRect(0, 0, w, h);
+      ctx.font = `${font}px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`;
+      for (let i = 0; i < cols.length; i++) {
+        const ch = glyphs[(Math.random() * glyphs.length) | 0];
+        const x = i * font;
+        const y = cols[i];
+        ctx.fillStyle = i % 7 === 0 ? "rgba(16, 120, 72, 0.55)" : "rgba(18, 18, 18, 0.22)";
+        ctx.fillText(ch, x, y);
+        cols[i] = y > h + Math.random() * 80 ? 0 : y + font * (0.85 + Math.random() * 0.6);
+      }
+      raf = requestAnimationFrame(tick);
+    };
+
+    resize();
+    window.addEventListener("resize", resize, { passive: true });
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) cancelAnimationFrame(raf);
+      else raf = requestAnimationFrame(tick);
+    });
+    raf = requestAnimationFrame(tick);
+  }
+
 })();
