@@ -25,7 +25,7 @@
       } catch (e) {}
     })();
   </script>
-  <link rel="stylesheet" href="styles.css?v=1" />
+  <link rel="stylesheet" href="styles.css?v=2" />
 </head>
 <body>
   <header class="top">
@@ -45,18 +45,18 @@
         </span>
         <button type="button" data-panel-open="symbol" aria-pressed="false" aria-expanded="false" aria-controls="motion-panel" title="Symbol options">Symbol</button>
         <span class="motion-wrap" data-motion-wrap>
-          <button type="button" data-motion-toggle aria-pressed="false" aria-expanded="false" aria-haspopup="true" title="Slow whole-sigil orbit">Motion</button>
+          <button type="button" data-motion-toggle aria-pressed="false" aria-expanded="false" aria-haspopup="true" title="Whole-sigil orbit">Motion</button>
           <span class="motion-menu pin-menu" data-motion-menu hidden>
             <button type="button" data-motion-spin="cw" aria-pressed="false">Clockwise</button>
             <button type="button" data-motion-spin="ccw" aria-pressed="false">Anticlockwise</button>
           </span>
         </span>
         <span class="pin-wrap" data-pin-wrap>
-          <button type="button" data-motion-pin aria-pressed="false" aria-expanded="false" aria-haspopup="true" title="Sandbox: drag, fling, orbit — double-click a shape to orbit it">Sandbox</button>
+          <button type="button" data-motion-pin aria-pressed="false" aria-expanded="false" aria-haspopup="true" title="Sandbox: drag, fling, orbit — double-click a shape to make hub">Sandbox</button>
           <span class="pin-menu" data-pin-menu hidden>
-            <button type="button" data-pin-cloud-orbit aria-pressed="false" title="Arm orbit — double-click a shape or Random">Orbit</button>
+            <button type="button" data-pin-cloud-orbit aria-pressed="false" title="Snap into orbit ring">Orbit</button>
             <button type="button" data-pin-orbit-random title="Random hub + orbit ring">Random</button>
-            <button type="button" data-pin-layout-reset>Reset</button>
+            <button type="button" data-pin-layout-reset>Reset layout</button>
           </span>
         </span>
         <button type="button" data-pin-repel aria-pressed="false" title="Hard separation while dragging">Repel</button>
@@ -75,7 +75,7 @@
           <button type="button" class="motion-opt" data-sym-select-none>Clear</button>
         </div>
         <div class="motion-list" data-motion-symbols role="listbox" aria-label="Symbol" aria-multiselectable="true"></div>
-        <p class="motion-label" style="margin-top:0.65rem">Animation</p>
+        <p class="motion-label" style="margin-top:0.65rem">Power</p>
         <div class="motion-list" data-motion-anims role="listbox" aria-label="Animation"></div>
         <p class="motion-label" style="margin-top:0.65rem">Colour</p>
         <div class="motion-list motion-colour-modes" data-motion-colours role="listbox" aria-label="Colour mode">
@@ -84,10 +84,9 @@
           <button type="button" role="option" class="motion-opt" data-colour-pick="bar" aria-selected="false">Spectrum</button>
         </div>
         <div class="colour-bar-wrap" data-colour-bar-wrap hidden>
-          <input class="colour-bar" data-colour-bar type="range" min="0" max="3600" value="250" step="1" aria-label="Colour spectrum" />
+          <input class="colour-bar" data-colour-bar type="range" min="0" max="3600" value="2100" step="1" aria-label="Colour spectrum" />
           <span class="colour-bar-swatch" data-colour-swatch title="Current colour"></span>
         </div>
-        <p class="motion-hint" data-colour-bar-hint hidden style="margin-top:0.3rem">Spectrum paints SVG stroke colour.</p>
         <div class="motion-speed-row" style="margin-top:0.65rem">
           <p class="motion-label">Size</p>
           <span class="motion-speed-val" data-motion-size-val>100%</span>
@@ -95,14 +94,14 @@
         <input class="motion-speed" data-motion-size type="range" min="25" max="320" value="100" step="1" aria-label="Symbol size" />
         <div class="motion-speed-row" style="margin-top:0.65rem">
           <p class="motion-label">Spin speed</p>
-          <span class="motion-speed-val" data-motion-speed-val>1%</span>
+          <span class="motion-speed-val" data-motion-speed-val>35%</span>
         </div>
-        <input class="motion-speed" data-motion-speed type="range" min="1" max="100" value="1" step="1" aria-label="Spin speed" />
+        <input class="motion-speed" data-motion-speed type="range" min="1" max="100" value="35" step="1" aria-label="Spin speed" />
         <div class="motion-speed-row" style="margin-top:0.65rem">
           <p class="motion-label">Colour speed</p>
-          <span class="motion-speed-val" data-motion-colour-speed-val>100%</span>
+          <span class="motion-speed-val" data-motion-colour-speed-val>60%</span>
         </div>
-        <input class="motion-speed" data-motion-colour-speed type="range" min="1" max="100" value="100" step="1" aria-label="Colour speed" />
+        <input class="motion-speed" data-motion-colour-speed type="range" min="1" max="100" value="60" step="1" aria-label="Colour speed" />
 
         <p class="motion-label" style="margin-top:0.85rem">Custom saves</p>
         <div class="motion-list" data-custom-slots role="listbox" aria-label="Custom slots">
@@ -115,27 +114,11 @@
           <button type="button" class="motion-opt" data-custom-load>Load Custom</button>
           <button type="button" class="motion-opt" data-custom-clear>Clear slot</button>
         </div>
-        <p class="motion-hint" style="margin-top:0.25rem">Reset won’t wipe saves. Clear slot empties A/B/C.</p>
-        <p class="motion-label" style="margin-top:0.85rem">Projects</p>
-        <div class="motion-list" data-project-list role="listbox" aria-label="Projects">
-          <button type="button" role="option" class="motion-opt" data-project-pick="orb" aria-selected="false">Orb</button>
-        </div>
-        <div class="motion-project-detail" data-project-detail="orb" hidden>
-          <p class="motion-label" style="margin-top:0.45rem">Orb function</p>
-          <div class="motion-list" data-orb-fn-list role="listbox" aria-label="Orb function">
-            <button type="button" role="option" class="motion-opt" data-orb-fn="shield" aria-selected="true">Shield</button>
-            <button type="button" role="option" class="motion-opt" data-orb-fn="orbit" aria-selected="false">Orbit</button>
-            <button type="button" role="option" class="motion-opt" data-orb-fn="cloud" aria-selected="false">Cloud</button>
-          </div>
-          <div class="motion-list" style="margin-top:0.4rem" data-orb-opts>
-            <button type="button" class="motion-opt" data-orb-field aria-pressed="false">Glow field</button>
-          </div>
-          <p class="motion-hint" style="margin-top:0.35rem">Circle rim by default. Glow field = translucent aura.</p>
-        </div>
+        <p class="motion-hint" style="margin-top:0.25rem">Reset won’t wipe Custom saves.</p>
       </div>
       <button type="button" class="motion-reset motion-reset-danger" data-motion-reset>Reset</button>
       <button type="button" class="motion-sandbox" data-sandbox-toggle aria-pressed="false" title="Play framing label">Play frame</button>
-      <p class="motion-hint">Select symbols, then edit. Sandbox → Orbit (double-click hub or Random). Repel is separate. Import AI symbols via <a href="import.html">Import</a>.</p>
+      <p class="motion-hint">Click a symbol to select · Sandbox → drag/fling · Orbit ring · Import AI symbols via <a href="import.html">Import</a>.</p>
     </div>
   </aside>
 
@@ -184,15 +167,15 @@
         <g class="hits-free"></g>
       </svg>
     </div>
-    <p class="hint">Sandbox → Orbit · fling · Repel · Symbol lab for spin &amp; colour</p>
+    <p class="hint">Sandbox → Orbit · fling · Symbol lab for spin &amp; colour</p>
     <p id="soon" class="soon" tabindex="-1">Coming soon.</p>
   </main>
 
   <div class="site-bar" data-site-bar role="toolbar" aria-label="Site">
     <button type="button" data-link-toggle aria-pressed="true" title="Tap a shape to follow its link">Link</button>
-    <button type="button" data-drag-toggle aria-pressed="false" title="Shapes always drag in sandbox">Drag</button>
+    <button type="button" data-drag-toggle aria-pressed="false" title="Prefer drag feel">Drag</button>
     <span class="zoom-wrap" data-zoom-wrap>
-      <button type="button" data-zoom-toggle aria-pressed="false" aria-expanded="false" aria-haspopup="true" title="Zoom mode: click-drag on empty space">Zoom</button>
+      <button type="button" data-zoom-toggle aria-pressed="false" aria-expanded="false" aria-haspopup="true" title="Zoom mode: drag on empty space">Zoom</button>
       <span class="zoom-menu" data-zoom-menu hidden>
         <button type="button" data-zoom-invert aria-pressed="false">Invert drag</button>
         <button type="button" data-zoom-reset>Reset 100%</button>
@@ -209,15 +192,8 @@
     <span class="muted">Fund &amp; inventions — hooks TBD</span>
   </footer>
 
-  <script src="theme.js?v=1" defer></script>
-  <script src="motion.js?v=1" defer></script>
-  <script src="app.js?v=1" defer></script>
-
-  <div class="cloud-shape-menu" data-cloud-shape-menu hidden role="menu" aria-label="Shape actions">
-    <button type="button" role="menuitem" data-cloud-act="hub">Make hub</button>
-    <button type="button" role="menuitem" data-cloud-act="all-shapes">All shapes</button>
-    <button type="button" role="menuitem" data-cloud-act="reset-shape">Reset shape</button>
-    <button type="button" role="menuitem" data-cloud-act="reset-all">Reset</button>
-  </div>
+  <script src="theme.js?v=2" defer></script>
+  <script src="app.js?v=2" defer></script>
+  <script src="game.js?v=2" defer></script>
 </body>
 </html>

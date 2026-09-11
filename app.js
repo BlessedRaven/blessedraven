@@ -1,4 +1,6 @@
 (() => {
+  "use strict";
+
   const CX = 447.56;
   const CY = 484.96;
   const HOTSPOTS = [
@@ -24,9 +26,7 @@
       if (!bb.width && !bb.height) return;
       el.style.transformBox = "fill-box";
       el.style.transformOrigin = "center";
-    } catch (err) {
-      /* ignore */
-    }
+    } catch {}
   };
 
   const makeSlot = (id) => {
@@ -41,7 +41,7 @@
       const bb = el.getBBox();
       if (!bb.width && !bb.height) return null;
       return { cx: bb.x + bb.width / 2, cy: bb.y + bb.height / 2, bb };
-    } catch (err) {
+    } catch {
       return null;
     }
   };
@@ -87,19 +87,7 @@
     });
   };
 
-  const wrapOne = (parent, el, id) => {
-    const slot = makeSlot(id);
-    const wrap = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    wrap.setAttribute("class", id === "center" ? "center" : "sym");
-    wrap.setAttribute("data-sym", id);
-    parent.insertBefore(slot, el);
-    slot.appendChild(wrap);
-    wrap.appendChild(el);
-    pinOrigin(wrap);
-    return wrap;
-  };
-
-  const wrapOrbitSyms = (svg, orbit, centerWrap) => {
+  const wrapOrbitSyms = (orbit, centerWrap) => {
     centerWrap.setAttribute("data-sym", "center");
     pinOrigin(centerWrap);
     flattenOrbitLeaves(orbit);
@@ -148,7 +136,7 @@
     if (!wrap || wrap.querySelector(".sym-shape-hit")) return;
     const nodes = wrap.querySelectorAll("path, circle, ellipse, line, polyline, polygon, rect");
     nodes.forEach((node) => {
-      if (node.classList.contains("sym-shape-hit") || node.classList.contains("sym-hitpad")) return;
+      if (node.classList.contains("sym-shape-hit") || node.classList.contains("sym-aura")) return;
       try {
         const clone = node.cloneNode(true);
         clone.setAttribute("class", "sym-shape-hit");
@@ -159,11 +147,11 @@
           try {
             const cs = window.getComputedStyle(node);
             hasFill = cs.fill && cs.fill !== "none" && cs.fill !== "rgba(0, 0, 0, 0)";
-          } catch (err) {}
+          } catch {}
         }
         if (hasFill) clone.setAttribute("data-hit-fill", "1");
         wrap.appendChild(clone);
-      } catch (err) {}
+      } catch {}
     });
   };
 
@@ -231,7 +219,7 @@
     host.innerHTML = "";
     host.appendChild(svg);
 
-    wrapOrbitSyms(svg, orbit, center);
+    wrapOrbitSyms(orbit, center);
     document.querySelectorAll(".sym, .center").forEach(installShapeHits);
     mark.classList.add("is-ready");
     if (reduced) mark.classList.add("reduced");
@@ -269,7 +257,6 @@
     try {
       localStorage.setItem(ZOOM_KEY, String(markZoom));
     } catch {}
-    document.dispatchEvent(new CustomEvent("br:zoom", { detail: { zoom: markZoom } }));
   };
 
   const setZoomMode = (on) => {
@@ -287,13 +274,9 @@
     zoomBtn.setAttribute("aria-expanded", open ? "true" : "false");
   };
 
-  const syncZoomInvertUi = () => {
-    if (zoomInvertBtn) zoomInvertBtn.setAttribute("aria-pressed", zoomInvert ? "true" : "false");
-  };
-
   applyZoom();
   setZoomMode(false);
-  syncZoomInvertUi();
+  if (zoomInvertBtn) zoomInvertBtn.setAttribute("aria-pressed", zoomInvert ? "true" : "false");
 
   if (zoomBtn) {
     zoomBtn.addEventListener("click", (e) => {
@@ -310,7 +293,7 @@
       try {
         localStorage.setItem(ZOOM_INV_KEY, zoomInvert ? "1" : "0");
       } catch {}
-      syncZoomInvertUi();
+      zoomInvertBtn.setAttribute("aria-pressed", zoomInvert ? "true" : "false");
     });
   }
   if (zoomResetBtn) {
@@ -333,7 +316,7 @@
     zoomDrag = { y0: e.clientY, z0: markZoom, pid: e.pointerId };
     try {
       mark.setPointerCapture(e.pointerId);
-    } catch (err) {}
+    } catch {}
   });
   mark.addEventListener("pointermove", (e) => {
     if (!zoomDrag) return;
@@ -348,21 +331,20 @@
   mark.addEventListener("pointerup", endZoomDrag);
   mark.addEventListener("pointercancel", endZoomDrag);
 
-  let sandboxOn = false;
-  const setSandbox = (on) => {
-    sandboxOn = !!on;
-    document.documentElement.setAttribute("data-sandbox-frame", sandboxOn ? "on" : "off");
-    if (sandboxBtn) sandboxBtn.setAttribute("aria-pressed", sandboxOn ? "true" : "false");
+  let sandboxFrame = false;
+  const setSandboxFrame = (on) => {
+    sandboxFrame = !!on;
+    document.documentElement.setAttribute("data-sandbox-frame", sandboxFrame ? "on" : "off");
+    if (sandboxBtn) sandboxBtn.setAttribute("aria-pressed", sandboxFrame ? "true" : "false");
   };
   if (sandboxBtn) {
     sandboxBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      setSandbox(!sandboxOn);
+      setSandboxFrame(!sandboxFrame);
     });
   }
-  setSandbox(false);
+  setSandboxFrame(false);
 
-  // Link vs drag chrome (optional)
   const linkBtn = document.querySelector("[data-link-toggle]");
   const dragBtn = document.querySelector("[data-drag-toggle]");
   let clickMode = "link";
@@ -371,45 +353,20 @@
     if (dragBtn) dragBtn.setAttribute("aria-pressed", clickMode === "drag" ? "true" : "false");
     document.documentElement.setAttribute("data-click-mode", clickMode);
   };
-  const setClickMode = (mode) => {
-    clickMode = mode === "drag" ? "drag" : "link";
+  if (linkBtn) linkBtn.addEventListener("click", () => {
+    clickMode = "link";
     syncClickModeUi();
-  };
-  if (linkBtn) linkBtn.addEventListener("click", () => setClickMode("link"));
-  if (dragBtn) dragBtn.addEventListener("click", () => setClickMode("drag"));
+  });
+  if (dragBtn) dragBtn.addEventListener("click", () => {
+    clickMode = "drag";
+    syncClickModeUi();
+  });
   syncClickModeUi();
 
-  // Soft tap-to-link when Link mode (skip if drag moved)
-  let tap = null;
-  document.addEventListener(
-    "pointerdown",
-    (e) => {
-      const hot = e.target.closest("a.hotspot[href]");
-      if (!hot || clickMode !== "link") return;
-      tap = { hot, x: e.clientX, y: e.clientY };
-    },
-    true
-  );
-  document.addEventListener(
-    "pointerup",
-    (e) => {
-      if (!tap) return;
-      const { hot, x, y } = tap;
-      tap = null;
-      if (Math.hypot(e.clientX - x, e.clientY - y) > 8) return;
-      if (document.documentElement.getAttribute("data-pin") === "on") return;
-      // allow navigation
-    },
-    true
-  );
-
-  // Load optional symbols registry (non-blocking)
-  fetch("symbols.json?v=1")
+  fetch("symbols.json?v=2")
     .then((r) => (r.ok ? r.json() : null))
     .then((reg) => {
-      if (reg && Array.isArray(reg.symbols)) {
-        window.__BR_SYMBOLS__ = reg;
-      }
+      if (reg && Array.isArray(reg.symbols)) window.__BR_SYMBOLS__ = reg;
     })
     .catch(() => {});
 
