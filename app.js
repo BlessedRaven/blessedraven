@@ -12,19 +12,6 @@
     { id: "ne", x: 820.1, y: 342.59 },
   ];
 
-  // One spin controller — only ONE element animates at a time.
-  const SPIN = {
-    n: { ms: 4250, dir: 1 },
-    nw: { ms: 3750, dir: -1 },
-    w: { ms: 5500, dir: 1 },
-    sw: { ms: 4000, dir: -1 },
-    s: { ms: 4750, dir: 1 },
-    se: { ms: 6000, dir: -1 },
-    e: { ms: 3500, dir: 1 },
-    ne: { ms: 5250, dir: -1 }, // quatrefoil / Bloom ~5× slow
-    center: { ms: 5750, dir: 1 },
-  };
-
   const host = document.querySelector("[data-mark-host]");
   const mark = document.querySelector("[data-mark]");
   if (!host || !mark) return;
@@ -35,11 +22,18 @@
     try {
       const bb = el.getBBox();
       if (!bb.width && !bb.height) return;
-      el.style.transformBox = "view-box";
-      el.style.transformOrigin = `${bb.x + bb.width / 2}px ${bb.y + bb.height / 2}px`;
+      el.style.transformBox = "fill-box";
+      el.style.transformOrigin = "center";
     } catch (err) {
       /* ignore */
     }
+  };
+
+  const makeSlot = (id) => {
+    const slot = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    slot.setAttribute("class", "sym-slot");
+    slot.setAttribute("data-sym-slot", id);
+    return slot;
   };
 
   const centroidOf = (el) => {
@@ -52,7 +46,6 @@
     }
   };
 
-  // If a group has far-apart children, split so they never spin as one blob.
   const flattenOrbitLeaves = (orbit) => {
     const leaves = [];
     Array.from(orbit.children).forEach((el) => {
@@ -85,24 +78,30 @@
           );
         }
       }
-      if (maxD > 140) {
-        kids.forEach((k) => leaves.push(k));
-      } else {
-        leaves.push(el);
-      }
+      if (maxD > 140) kids.forEach((k) => leaves.push(k));
+      else leaves.push(el);
     });
-    // Reparent leaves directly under orbit in order
     leaves.forEach((el) => orbit.appendChild(el));
-    // Drop empty groups left behind
     Array.from(orbit.querySelectorAll(":scope > g")).forEach((g) => {
       if (!g.childNodes.length) g.remove();
     });
   };
 
-  const wrapOrbitSyms = (svg, orbit, center) => {
-    center.setAttribute("data-sym", "center");
-    pinOrigin(center);
+  const wrapOne = (parent, el, id) => {
+    const slot = makeSlot(id);
+    const wrap = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    wrap.setAttribute("class", id === "center" ? "center" : "sym");
+    wrap.setAttribute("data-sym", id);
+    parent.insertBefore(slot, el);
+    slot.appendChild(wrap);
+    wrap.appendChild(el);
+    pinOrigin(wrap);
+    return wrap;
+  };
 
+  const wrapOrbitSyms = (svg, orbit, centerWrap) => {
+    centerWrap.setAttribute("data-sym", "center");
+    pinOrigin(centerWrap);
     flattenOrbitLeaves(orbit);
 
     const items = [];
@@ -112,7 +111,6 @@
       items.push({ el, cx: c.cx, cy: c.cy });
     });
 
-    // Strict 1:1 — each hotspot owns at most one leaf; no merging.
     const pairs = [];
     items.forEach((it, i) => {
       HOTSPOTS.forEach((h) => {
@@ -133,151 +131,39 @@
     }
 
     items.forEach((it, i) => {
+      const id = itemId.get(i) || `_x${i}`;
+      const slot = makeSlot(id);
       const wrap = document.createElementNS("http://www.w3.org/2000/svg", "g");
       wrap.setAttribute("class", "sym");
-      const id = itemId.get(i) || `_x${i}`;
       wrap.setAttribute("data-sym", id);
-      // Orphans never receive pointer spins
       if (id.startsWith("_x")) wrap.setAttribute("data-deco", "1");
-      orbit.insertBefore(wrap, it.el);
+      orbit.insertBefore(slot, it.el);
+      slot.appendChild(wrap);
       wrap.appendChild(it.el);
       pinOrigin(wrap);
     });
   };
 
-  const wireHotspots = (svg) => {
-    const byId = (id) =>
-      id === "center"
-        ? svg.querySelector('.center[data-sym="center"]')
-        : svg.querySelector(`.orbit > .sym[data-sym="${id}"]`);
-
-    let activeId = null;
-    let pressed = false;
-    let spinAnim = null;
-    let spinEl = null;
-
-    const hardStop = (el) => {
-      if (!el) return;
-      el.getAnimations().forEach((a) => a.cancel());
-      el.style.transition = "";
-      el.style.transform = "";
-      el.classList.remove("is-active");
-    };
-
-    const stopSpin = ({ ease } = { ease: false }) => {
-      const el = spinEl;
-      const anim = spinAnim;
-      spinAnim = null;
-      spinEl = null;
-      if (!el) return;
-
-      if (!ease || reduced) {
-        hardStop(el);
-        return;
-      }
-
-      let matrix = "none";
+  const installShapeHits = (wrap) => {
+    if (!wrap || wrap.querySelector(".sym-shape-hit")) return;
+    const nodes = wrap.querySelectorAll("path, circle, ellipse, line, polyline, polygon, rect");
+    nodes.forEach((node) => {
+      if (node.classList.contains("sym-shape-hit") || node.classList.contains("sym-hitpad")) return;
       try {
-        matrix = getComputedStyle(el).transform;
-      } catch (err) {
-        /* ignore */
-      }
-      if (anim) anim.cancel();
-      el.classList.remove("is-active");
-      el.style.transition = "none";
-      el.style.transform = matrix === "none" ? "rotate(0deg)" : matrix;
-      void el.getBoundingClientRect();
-      el.style.transition = "transform 0.55s ease-out";
-      el.style.transform = "rotate(0deg)";
-      const finish = (e) => {
-        if (e && e.propertyName && e.propertyName !== "transform") return;
-        if (spinEl === el) return; // restarted
-        el.style.transition = "";
-        el.style.transform = "";
-        el.removeEventListener("transitionend", finish);
-      };
-      el.addEventListener("transitionend", finish);
-    };
-
-    const startSpin = (id) => {
-      const el = byId(id);
-      if (!el || el.getAttribute("data-deco") === "1") return;
-      hardStop(el);
-      el.classList.add("is-active");
-      spinEl = el;
-      if (reduced) return;
-      const cfg = SPIN[id] || { ms: 4500, dir: 1 };
-      const deg = 360 * cfg.dir;
-      spinAnim = el.animate(
-        [{ transform: "rotate(0deg)" }, { transform: `rotate(${deg}deg)` }],
-        { duration: cfg.ms, iterations: Infinity, easing: "linear" }
-      );
-    };
-
-    const clear = ({ ease } = { ease: true }) => {
-      activeId = null;
-      pressed = false;
-      mark.classList.remove("is-hovering");
-      stopSpin({ ease });
-    };
-
-    const activate = (id) => {
-      if (!id) return;
-      if (activeId === id) {
-        mark.classList.add("is-hovering");
-        return;
-      }
-      // Switching targets: hard-stop previous so two never animate together.
-      stopSpin({ ease: false });
-      activeId = id;
-      mark.classList.add("is-hovering");
-      startSpin(id);
-    };
-
-    // Single hit-test path: whichever hotspot is under the pointer wins (only one).
-    const hits = document.querySelector(".hits");
-    if (!hits) return;
-
-    const idFromEvent = (e) => {
-      const t = e.target && e.target.closest ? e.target.closest(".hotspot[data-sym]") : null;
-      return t ? t.getAttribute("data-sym") : null;
-    };
-
-    hits.addEventListener("pointerover", (e) => {
-      const id = idFromEvent(e);
-      if (id) activate(id);
-    });
-    hits.addEventListener("pointerout", (e) => {
-      const to = e.relatedTarget && e.relatedTarget.closest
-        ? e.relatedTarget.closest(".hotspot[data-sym]")
-        : null;
-      if (to) {
-        // Moving to another hotspot — activate that one (pointerover will also fire).
-        return;
-      }
-      const from = idFromEvent(e);
-      if (!from) return;
-      if (!pressed) clear({ ease: true });
-    });
-    hits.addEventListener("pointerdown", (e) => {
-      if (e.button != null && e.button !== 0) return;
-      const id = idFromEvent(e);
-      if (!id) return;
-      pressed = true;
-      activate(id);
-    });
-    hits.addEventListener("pointerup", (e) => {
-      pressed = false;
-      const id = idFromEvent(e);
-      if (!id) clear({ ease: true });
-    });
-    hits.addEventListener("pointercancel", () => clear({ ease: false }));
-
-    hits.querySelectorAll(".hotspot[data-sym]").forEach((hot) => {
-      hot.addEventListener("focusin", () => activate(hot.getAttribute("data-sym")));
-      hot.addEventListener("focusout", () => {
-        if (!pressed) clear({ ease: true });
-      });
+        const clone = node.cloneNode(true);
+        clone.setAttribute("class", "sym-shape-hit");
+        clone.removeAttribute("style");
+        const f = (node.getAttribute("fill") || "").trim().toLowerCase();
+        let hasFill = f && f !== "none" && f !== "transparent";
+        if (!hasFill) {
+          try {
+            const cs = window.getComputedStyle(node);
+            hasFill = cs.fill && cs.fill !== "none" && cs.fill !== "rgba(0, 0, 0, 0)";
+          } catch (err) {}
+        }
+        if (hasFill) clone.setAttribute("data-hit-fill", "1");
+        wrap.appendChild(clone);
+      } catch (err) {}
     });
   };
 
@@ -314,8 +200,11 @@
     const defs = src.querySelector("defs");
     if (defs) svg.appendChild(document.importNode(defs, true));
 
+    const centerSlot = makeSlot("center");
     const center = document.createElementNS("http://www.w3.org/2000/svg", "g");
     center.setAttribute("class", "center");
+    center.setAttribute("data-sym", "center");
+    centerSlot.appendChild(center);
 
     const orbit = document.createElementNS("http://www.w3.org/2000/svg", "g");
     orbit.setAttribute("class", "orbit");
@@ -333,15 +222,196 @@
       }
     });
 
+    const free = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    free.setAttribute("class", "free-layer");
+
     svg.appendChild(orbit);
-    svg.appendChild(center);
+    svg.appendChild(free);
+    svg.appendChild(centerSlot);
     host.innerHTML = "";
     host.appendChild(svg);
-    mark.classList.add("is-ready");
 
     wrapOrbitSyms(svg, orbit, center);
-    wireHotspots(svg);
+    document.querySelectorAll(".sym, .center").forEach(installShapeHits);
+    mark.classList.add("is-ready");
+    if (reduced) mark.classList.add("reduced");
+    document.dispatchEvent(new CustomEvent("br:syms-ready"));
   };
+
+  // Zoom (empty-space drag when Zoom mode on)
+  const ZOOM_KEY = "br-mark-zoom-v1";
+  const ZOOM_INV_KEY = "br-mark-zoom-invert-v1";
+  const ZOOM_MIN = 0.28;
+  const ZOOM_MAX = 2.4;
+  const readZoom = () => {
+    try {
+      const n = Number(localStorage.getItem(ZOOM_KEY));
+      if (Number.isFinite(n) && n >= ZOOM_MIN && n <= ZOOM_MAX) return n;
+    } catch {}
+    return 1;
+  };
+  let markZoom = readZoom();
+  let zoomMode = false;
+  let zoomInvert = false;
+  try {
+    zoomInvert = localStorage.getItem(ZOOM_INV_KEY) === "1";
+  } catch {}
+  let zoomDrag = null;
+
+  const zoomBtn = document.querySelector("[data-zoom-toggle]");
+  const zoomMenu = document.querySelector("[data-zoom-menu]");
+  const zoomInvertBtn = document.querySelector("[data-zoom-invert]");
+  const zoomResetBtn = document.querySelector("[data-zoom-reset]");
+  const sandboxBtn = document.querySelector("[data-sandbox-toggle]");
+
+  const applyZoom = () => {
+    mark.style.setProperty("--mark-zoom", String(markZoom));
+    try {
+      localStorage.setItem(ZOOM_KEY, String(markZoom));
+    } catch {}
+    document.dispatchEvent(new CustomEvent("br:zoom", { detail: { zoom: markZoom } }));
+  };
+
+  const setZoomMode = (on) => {
+    zoomMode = !!on;
+    document.documentElement.setAttribute("data-zoom-mode", zoomMode ? "on" : "off");
+    if (zoomBtn) {
+      zoomBtn.setAttribute("aria-pressed", zoomMode ? "true" : "false");
+      zoomBtn.setAttribute("aria-expanded", zoomMode && zoomMenu && !zoomMenu.hidden ? "true" : "false");
+    }
+  };
+
+  const zoomMenuOpen = (open) => {
+    if (!zoomMenu || !zoomBtn) return;
+    zoomMenu.hidden = !open;
+    zoomBtn.setAttribute("aria-expanded", open ? "true" : "false");
+  };
+
+  const syncZoomInvertUi = () => {
+    if (zoomInvertBtn) zoomInvertBtn.setAttribute("aria-pressed", zoomInvert ? "true" : "false");
+  };
+
+  applyZoom();
+  setZoomMode(false);
+  syncZoomInvertUi();
+
+  if (zoomBtn) {
+    zoomBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const next = !zoomMode;
+      setZoomMode(next);
+      zoomMenuOpen(next);
+    });
+  }
+  if (zoomInvertBtn) {
+    zoomInvertBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      zoomInvert = !zoomInvert;
+      try {
+        localStorage.setItem(ZOOM_INV_KEY, zoomInvert ? "1" : "0");
+      } catch {}
+      syncZoomInvertUi();
+    });
+  }
+  if (zoomResetBtn) {
+    zoomResetBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      markZoom = 1;
+      applyZoom();
+    });
+  }
+  document.addEventListener("click", (e) => {
+    if (!zoomMenu || zoomMenu.hidden) return;
+    if (e.target.closest("[data-zoom-wrap]")) return;
+    zoomMenuOpen(false);
+  });
+
+  mark.addEventListener("pointerdown", (e) => {
+    if (!zoomMode) return;
+    if (e.target.closest("a.hotspot, .sym, .center, [data-motion-panel], header")) return;
+    e.preventDefault();
+    zoomDrag = { y0: e.clientY, z0: markZoom, pid: e.pointerId };
+    try {
+      mark.setPointerCapture(e.pointerId);
+    } catch (err) {}
+  });
+  mark.addEventListener("pointermove", (e) => {
+    if (!zoomDrag) return;
+    const dy = e.clientY - zoomDrag.y0;
+    const sens = zoomInvert ? 0.0045 : -0.0045;
+    markZoom = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, zoomDrag.z0 * Math.exp(dy * sens)));
+    applyZoom();
+  });
+  const endZoomDrag = () => {
+    zoomDrag = null;
+  };
+  mark.addEventListener("pointerup", endZoomDrag);
+  mark.addEventListener("pointercancel", endZoomDrag);
+
+  let sandboxOn = false;
+  const setSandbox = (on) => {
+    sandboxOn = !!on;
+    document.documentElement.setAttribute("data-sandbox-frame", sandboxOn ? "on" : "off");
+    if (sandboxBtn) sandboxBtn.setAttribute("aria-pressed", sandboxOn ? "true" : "false");
+  };
+  if (sandboxBtn) {
+    sandboxBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      setSandbox(!sandboxOn);
+    });
+  }
+  setSandbox(false);
+
+  // Link vs drag chrome (optional)
+  const linkBtn = document.querySelector("[data-link-toggle]");
+  const dragBtn = document.querySelector("[data-drag-toggle]");
+  let clickMode = "link";
+  const syncClickModeUi = () => {
+    if (linkBtn) linkBtn.setAttribute("aria-pressed", clickMode === "link" ? "true" : "false");
+    if (dragBtn) dragBtn.setAttribute("aria-pressed", clickMode === "drag" ? "true" : "false");
+    document.documentElement.setAttribute("data-click-mode", clickMode);
+  };
+  const setClickMode = (mode) => {
+    clickMode = mode === "drag" ? "drag" : "link";
+    syncClickModeUi();
+  };
+  if (linkBtn) linkBtn.addEventListener("click", () => setClickMode("link"));
+  if (dragBtn) dragBtn.addEventListener("click", () => setClickMode("drag"));
+  syncClickModeUi();
+
+  // Soft tap-to-link when Link mode (skip if drag moved)
+  let tap = null;
+  document.addEventListener(
+    "pointerdown",
+    (e) => {
+      const hot = e.target.closest("a.hotspot[href]");
+      if (!hot || clickMode !== "link") return;
+      tap = { hot, x: e.clientX, y: e.clientY };
+    },
+    true
+  );
+  document.addEventListener(
+    "pointerup",
+    (e) => {
+      if (!tap) return;
+      const { hot, x, y } = tap;
+      tap = null;
+      if (Math.hypot(e.clientX - x, e.clientY - y) > 8) return;
+      if (document.documentElement.getAttribute("data-pin") === "on") return;
+      // allow navigation
+    },
+    true
+  );
+
+  // Load optional symbols registry (non-blocking)
+  fetch("symbols.json?v=1")
+    .then((r) => (r.ok ? r.json() : null))
+    .then((reg) => {
+      if (reg && Array.isArray(reg.symbols)) {
+        window.__BR_SYMBOLS__ = reg;
+      }
+    })
+    .catch(() => {});
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", mount, { once: true });

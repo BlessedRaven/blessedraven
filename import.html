@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <title>Import SVG — Blessed Raven</title>
+  <link rel="stylesheet" href="styles.css?v=1" />
+  <style>
+    .import-page {
+      max-width: 52rem;
+      margin: 0 auto;
+      padding: 1.25rem 1rem 3rem;
+      min-height: 100dvh;
+      overflow: auto;
+    }
+    .import-page h1 {
+      font-size: 1.15rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin: 0 0 0.35rem;
+    }
+    .import-page .lead {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin: 0 0 1.25rem;
+      line-height: 1.45;
+    }
+    .import-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 820px) {
+      .import-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .import-card {
+      border: 1px solid color-mix(in srgb, var(--fg) 16%, transparent);
+      border-radius: 1rem;
+      padding: 0.9rem 1rem;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(10px);
+    }
+    .import-card h2 {
+      margin: 0 0 0.55rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    textarea.svg-in {
+      width: 100%;
+      min-height: 11rem;
+      font: 0.75rem/1.35 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      border-radius: 0.65rem;
+      border: 1px solid color-mix(in srgb, var(--fg) 18%, transparent);
+      background: color-mix(in srgb, var(--bg) 70%, #000 8%);
+      color: var(--fg);
+      padding: 0.65rem;
+      resize: vertical;
+    }
+    .import-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.65rem;
+    }
+    .import-actions button,
+    .import-actions label.file-btn {
+      appearance: none;
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.65rem;
+      font-weight: 650;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.45rem 0.7rem;
+      border-radius: 999px;
+      color: var(--bg);
+      background: var(--fg);
+    }
+    .import-actions button.ghost {
+      color: var(--fg);
+      background: transparent;
+      border: 1px solid color-mix(in srgb, var(--fg) 22%, transparent);
+    }
+    .import-actions input[type="file"] { display: none; }
+    .qc-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+    .qc-list li {
+      padding: 0.35rem 0;
+      border-bottom: 1px solid color-mix(in srgb, var(--fg) 10%, transparent);
+    }
+    .qc-ok { color: #2ecc71; }
+    .qc-warn { color: #f0a020; }
+    .qc-bad { color: #ff5c6c; }
+    .preview-box {
+      min-height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.75rem;
+      background:
+        radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 55%),
+        color-mix(in srgb, var(--fg) 4%, transparent);
+      overflow: hidden;
+    }
+    .preview-box svg {
+      max-width: 92%;
+      max-height: 280px;
+      display: block;
+      filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent) 35%, transparent));
+    }
+    .ai-block {
+      margin-top: 1rem;
+      font-size: 0.78rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: color-mix(in srgb, var(--fg) 5%, transparent);
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      border: 1px dashed color-mix(in srgb, var(--fg) 18%, transparent);
+    }
+    .back {
+      display: inline-block;
+      margin-bottom: 0.85rem;
+      color: var(--fg);
+      text-decoration: none;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.75;
+    }
+    .back:hover { opacity: 1; }
+  </style>
+</head>
+<body>
+  <div class="import-page">
+    <a class="back" href="/">← Blessed Raven</a>
+    <h1>Import / QC</h1>
+    <p class="lead">Paste or upload an SVG. We sanitize scripts, check viewBox, warn on complexity, estimate a rotation center, and print AI instructions to wire it into <code>assets/</code> + <code>symbols.json</code>.</p>
+
+    <div class="import-grid">
+      <section class="import-card">
+        <h2>Source</h2>
+        <textarea class="svg-in" id="svgIn" placeholder="<svg viewBox=&quot;0 0 …&quot;>…</svg>" spellcheck="false"></textarea>
+        <div class="import-actions">
+          <label class="file-btn">Upload<svg style="display:none"></svg>
+            <input type="file" id="fileIn" accept="image/svg+xml,.svg,text/plain" />
+          </label>
+          <button type="button" id="runQc">Sanitize &amp; QC</button>
+          <button type="button" class="ghost" id="clearIn">Clear</button>
+        </div>
+      </section>
+      <section class="import-card">
+        <h2>Preview</h2>
+        <div class="preview-box" id="preview" aria-live="polite"></div>
+      </section>
+    </div>
+
+    <section class="import-card" style="margin-top:1rem">
+      <h2>QC report</h2>
+      <ul class="qc-list" id="qcList"></ul>
+      <div class="ai-block" id="aiHelp">Run QC to generate AI add-symbol instructions.</div>
+    </section>
+  </div>
+
+  <script>
+  (() => {
+    const svgIn = document.getElementById("svgIn");
+    const fileIn = document.getElementById("fileIn");
+    const preview = document.getElementById("preview");
+    const qcList = document.getElementById("qcList");
+    const aiHelp = document.getElementById("aiHelp");
+
+    const sanitize = (raw) => {
+      const doc = new DOMParser().parseFromString(raw, "image/svg+xml");
+      const err = doc.querySelector("parsererror");
+      if (err) return { ok: false, error: "Parse error — not valid SVG XML." };
+      const svg = doc.querySelector("svg");
+      if (!svg) return { ok: false, error: "No <svg> root found." };
+      const banned = ["script", "foreignObject", "iframe", "object", "embed", "link", "meta"];
+      let stripped = 0;
+      banned.forEach((tag) => {
+        doc.querySelectorAll(tag).forEach((n) => { n.remove(); stripped++; });
+      });
+      doc.querySelectorAll("*").forEach((el) => {
+        [...el.attributes].forEach((a) => {
+          const n = a.name.toLowerCase();
+          const v = (a.value || "").toLowerCase();
+          if (n.startsWith("on") || v.includes("javascript:")) {
+            el.removeAttribute(a.name);
+            stripped++;
+          }
+        });
+      });
+      return { ok: true, doc, svg, stripped, xml: new XMLSerializer().serializeToString(svg) };
+    };
+
+    const countNodes = (svg) => svg.querySelectorAll("*").length;
+    const pathLenEstimate = (svg) => {
+      let n = 0;
+      svg.querySelectorAll("path").forEach((p) => {
+        n += (p.getAttribute("d") || "").length;
+      });
+      return n;
+    };
+
+    const estimateCenter = (svg) => {
+      // Prefer explicit viewBox mid; refine with geometry bbox when possible
+      const vb = (svg.getAttribute("viewBox") || "").trim().split(/[\s,]+/).map(Number);
+      let cx = null, cy = null, method = "none";
+      if (vb.length === 4 && vb.every(Number.isFinite)) {
+        cx = vb[0] + vb[2] / 2;
+        cy = vb[1] + vb[3] / 2;
+        method = "viewBox";
+      }
+      // Temporary mount for getBBox
+      const host = document.createElement("div");
+      host.style.cssText = "position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden";
+      const clone = svg.cloneNode(true);
+      host.appendChild(clone);
+      document.body.appendChild(host);
+      try {
+        const bb = clone.getBBox();
+        if (bb && (bb.width || bb.height)) {
+          cx = bb.x + bb.width / 2;
+          cy = bb.y + bb.height / 2;
+          method = "bbox";
+        }
+      } catch (e) {}
+      host.remove();
+      return { cx, cy, method };
+    };
+
+    const slugify = (s) =>
+      (s || "symbol")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "")
+        .slice(0, 32) || "symbol";
+
+    const run = () => {
+      qcList.innerHTML = "";
+      preview.innerHTML = "";
+      const raw = svgIn.value.trim();
+      if (!raw) {
+        qcList.innerHTML = '<li class="qc-bad">Paste or upload an SVG first.</li>';
+        return;
+      }
+      const res = sanitize(raw);
+      const add = (cls, msg) => {
+        const li = document.createElement("li");
+        li.className = cls;
+        li.textContent = msg;
+        qcList.appendChild(li);
+      };
+      if (!res.ok) {
+        add("qc-bad", res.error);
+        return;
+      }
+      const { svg, stripped, xml } = res;
+      svgIn.value = xml;
+      preview.innerHTML = xml;
+
+      const vb = svg.getAttribute("viewBox");
+      if (vb) add("qc-ok", "viewBox present: " + vb);
+      else add("qc-warn", "Missing viewBox — add one so framing & physics scale correctly.");
+
+      if (stripped) add("qc-warn", "Stripped " + stripped + " unsafe node(s)/attribute(s) (scripts, handlers, javascript:).");
+      else add("qc-ok", "No script handlers or foreign embeds found.");
+
+      const nodes = countNodes(svg);
+      const pathChars = pathLenEstimate(svg);
+      if (nodes > 400 || pathChars > 80000) {
+        add("qc-warn", "High complexity (" + nodes + " nodes, ~" + pathChars + " path chars). Prefer simplified art for 60fps glow + spin.");
+      } else {
+        add("qc-ok", "Complexity OK (" + nodes + " nodes, ~" + pathChars + " path chars).");
+      }
+
+      const center = estimateCenter(svg);
+      if (center.cx != null) {
+        add("qc-ok", "Auto center (" + center.method + "): " + center.cx.toFixed(2) + ", " + center.cy.toFixed(2));
+      } else {
+        add("qc-warn", "Could not estimate center — set transform-origin manually after wrap.");
+      }
+
+      const w = svg.getAttribute("width");
+      const h = svg.getAttribute("height");
+      if (w || h) add("qc-warn", "width/height attributes present — prefer viewBox-only for responsive framing.");
+
+      const idGuess = slugify(svg.getAttribute("id") || "new-symbol");
+      const slotHint = "n|nw|w|sw|s|se|e|ne|center";
+      aiHelp.textContent =
+`AI add-symbol checklist (Blessed Raven)
+1. Save sanitized SVG to assets/${idGuess}.svg (or merge into jakel3726.svg group).
+2. Register in symbols.json:
+   { "id": "${idGuess}", "label": "${idGuess}", "hotspot": "<one of ${slotHint}>",
+     "defaults": { "anim": "off", "speed": 30, "colour": "off", "size": 100 },
+     "href": "#soon", "blurb": "…" }
+3. Hotspot: ensure index.html has <a class="hotspot" data-sym="${idGuess}"> with circle at artist seat.
+4. Wrap: app.js maps leaves → data-sym via hotspot centroids. After wrap, pinOrigin uses fill-box center.
+   Detected center: ${center.cx != null ? center.cx.toFixed(2) + ", " + center.cy.toFixed(2) + " (" + center.method + ")" : "unknown"}.
+5. Gamify: Symbol lab → pick symbol → CW/CCW/pulse/breathe/shimmer/shield + Multicolour/Spectrum + size/speed.
+6. Physics: Sandbox drag/fling; Orbit hub (default Home/center); Repel optional. Motion CSS ring mutually exclusive with Pin.
+7. Bump ?v= on JS/CSS/assets after deploy. Prefer <400 DOM nodes per symbol for neon perf.`;
+    };
+
+    document.getElementById("runQc").addEventListener("click", run);
+    document.getElementById("clearIn").addEventListener("click", () => {
+      svgIn.value = "";
+      preview.innerHTML = "";
+      qcList.innerHTML = "";
+      aiHelp.textContent = "Run QC to generate AI add-symbol instructions.";
+    });
+    fileIn.addEventListener("change", async () => {
+      const f = fileIn.files && fileIn.files[0];
+      if (!f) return;
+      svgIn.value = await f.text();
+      run();
+    });
+  })();
+  </script>
+</body>
+</html>

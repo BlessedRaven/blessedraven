@@ -1,72 +1,223 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Blessed Raven — landing." />
-  <meta name="theme-color" content="#ffffff" />
+  <meta name="description" content="Blessed Raven — symbol sandbox & inventions hub." />
+  <meta name="theme-color" content="#f7f5f0" />
   <title>Blessed Raven</title>
-  <link rel="stylesheet" href="styles.css" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("br-theme");
+        if (t === "vibe") t = "vibe-dark";
+        if (t === "custom") {
+          document.documentElement.setAttribute("data-theme", "light");
+          document.documentElement.setAttribute("data-br-mode", "custom");
+        } else if (t === "light" || t === "dark" || t === "vibe-dark" || t === "vibe-light") {
+          document.documentElement.setAttribute("data-theme", t);
+          document.documentElement.setAttribute("data-br-mode", t);
+        } else {
+          document.documentElement.setAttribute("data-theme", "light");
+          document.documentElement.setAttribute("data-br-mode", "light");
+        }
+        document.documentElement.setAttribute("data-colour", "off");
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css?v=1" />
 </head>
 <body>
+  <header class="top">
+    <a class="brand" href="/">BLESSED RAVEN</a>
+    <div class="top-right">
+      <p class="tag" id="tagline">Symbol sandbox — play &amp; invent</p>
+      <div class="themes dash" role="group" aria-label="Controls">
+        <button type="button" data-theme-set="custom" aria-pressed="false" title="Your saved Custom setup">Custom</button>
+        <button type="button" data-theme-set="dark" aria-pressed="false">Dark</button>
+        <button type="button" data-theme-set="light" aria-pressed="true">Light</button>
+        <span class="vibe-wrap" data-vibe-wrap>
+          <button type="button" data-vibe-toggle aria-pressed="false" aria-expanded="false" aria-haspopup="true">Vibe</button>
+          <span class="vibe-menu" data-vibe-menu hidden>
+            <button type="button" data-theme-set="vibe-dark">Vibe Dark</button>
+            <button type="button" data-theme-set="vibe-light">Vibe Light</button>
+          </span>
+        </span>
+        <button type="button" data-panel-open="symbol" aria-pressed="false" aria-expanded="false" aria-controls="motion-panel" title="Symbol options">Symbol</button>
+        <span class="motion-wrap" data-motion-wrap>
+          <button type="button" data-motion-toggle aria-pressed="false" aria-expanded="false" aria-haspopup="true" title="Slow whole-sigil orbit">Motion</button>
+          <span class="motion-menu pin-menu" data-motion-menu hidden>
+            <button type="button" data-motion-spin="cw" aria-pressed="false">Clockwise</button>
+            <button type="button" data-motion-spin="ccw" aria-pressed="false">Anticlockwise</button>
+          </span>
+        </span>
+        <span class="pin-wrap" data-pin-wrap>
+          <button type="button" data-motion-pin aria-pressed="false" aria-expanded="false" aria-haspopup="true" title="Sandbox: drag, fling, orbit — double-click a shape to orbit it">Sandbox</button>
+          <span class="pin-menu" data-pin-menu hidden>
+            <button type="button" data-pin-cloud-orbit aria-pressed="false" title="Arm orbit — double-click a shape or Random">Orbit</button>
+            <button type="button" data-pin-orbit-random title="Random hub + orbit ring">Random</button>
+            <button type="button" data-pin-layout-reset>Reset</button>
+          </span>
+        </span>
+        <button type="button" data-pin-repel aria-pressed="false" title="Hard separation while dragging">Repel</button>
+        <button type="button" class="top-reset" data-motion-reset title="Reset all symbol play">Reset</button>
+      </div>
+    </div>
+  </header>
+
+  <aside id="motion-panel" class="motion-panel dash-panel" hidden data-motion-panel>
+    <div class="motion-panel-inner">
+      <p class="motion-kicker">Symbol lab</p>
+      <div class="motion-block" data-panel-section="symbol">
+        <p class="motion-label">Symbol</p>
+        <div class="motion-list motion-list-actions" data-sym-actions>
+          <button type="button" class="motion-opt" data-sym-select-all>Select all</button>
+          <button type="button" class="motion-opt" data-sym-select-none>Clear</button>
+        </div>
+        <div class="motion-list" data-motion-symbols role="listbox" aria-label="Symbol" aria-multiselectable="true"></div>
+        <p class="motion-label" style="margin-top:0.65rem">Animation</p>
+        <div class="motion-list" data-motion-anims role="listbox" aria-label="Animation"></div>
+        <p class="motion-label" style="margin-top:0.65rem">Colour</p>
+        <div class="motion-list motion-colour-modes" data-motion-colours role="listbox" aria-label="Colour mode">
+          <button type="button" role="option" class="motion-opt" data-colour-pick="off" aria-selected="true">None</button>
+          <button type="button" role="option" class="motion-opt" data-colour-pick="vibe" aria-selected="false">Multicolour</button>
+          <button type="button" role="option" class="motion-opt" data-colour-pick="bar" aria-selected="false">Spectrum</button>
+        </div>
+        <div class="colour-bar-wrap" data-colour-bar-wrap hidden>
+          <input class="colour-bar" data-colour-bar type="range" min="0" max="3600" value="250" step="1" aria-label="Colour spectrum" />
+          <span class="colour-bar-swatch" data-colour-swatch title="Current colour"></span>
+        </div>
+        <p class="motion-hint" data-colour-bar-hint hidden style="margin-top:0.3rem">Spectrum paints SVG stroke colour.</p>
+        <div class="motion-speed-row" style="margin-top:0.65rem">
+          <p class="motion-label">Size</p>
+          <span class="motion-speed-val" data-motion-size-val>100%</span>
+        </div>
+        <input class="motion-speed" data-motion-size type="range" min="25" max="320" value="100" step="1" aria-label="Symbol size" />
+        <div class="motion-speed-row" style="margin-top:0.65rem">
+          <p class="motion-label">Spin speed</p>
+          <span class="motion-speed-val" data-motion-speed-val>1%</span>
+        </div>
+        <input class="motion-speed" data-motion-speed type="range" min="1" max="100" value="1" step="1" aria-label="Spin speed" />
+        <div class="motion-speed-row" style="margin-top:0.65rem">
+          <p class="motion-label">Colour speed</p>
+          <span class="motion-speed-val" data-motion-colour-speed-val>100%</span>
+        </div>
+        <input class="motion-speed" data-motion-colour-speed type="range" min="1" max="100" value="100" step="1" aria-label="Colour speed" />
+
+        <p class="motion-label" style="margin-top:0.85rem">Custom saves</p>
+        <div class="motion-list" data-custom-slots role="listbox" aria-label="Custom slots">
+          <button type="button" role="option" class="motion-opt" data-custom-slot="A" aria-selected="true">A</button>
+          <button type="button" role="option" class="motion-opt" data-custom-slot="B" aria-selected="false">B</button>
+          <button type="button" role="option" class="motion-opt" data-custom-slot="C" aria-selected="false">C</button>
+        </div>
+        <div class="motion-list" style="margin-top:0.4rem">
+          <button type="button" class="motion-opt" data-custom-save>Save to Custom</button>
+          <button type="button" class="motion-opt" data-custom-load>Load Custom</button>
+          <button type="button" class="motion-opt" data-custom-clear>Clear slot</button>
+        </div>
+        <p class="motion-hint" style="margin-top:0.25rem">Reset won’t wipe saves. Clear slot empties A/B/C.</p>
+        <p class="motion-label" style="margin-top:0.85rem">Projects</p>
+        <div class="motion-list" data-project-list role="listbox" aria-label="Projects">
+          <button type="button" role="option" class="motion-opt" data-project-pick="orb" aria-selected="false">Orb</button>
+        </div>
+        <div class="motion-project-detail" data-project-detail="orb" hidden>
+          <p class="motion-label" style="margin-top:0.45rem">Orb function</p>
+          <div class="motion-list" data-orb-fn-list role="listbox" aria-label="Orb function">
+            <button type="button" role="option" class="motion-opt" data-orb-fn="shield" aria-selected="true">Shield</button>
+            <button type="button" role="option" class="motion-opt" data-orb-fn="orbit" aria-selected="false">Orbit</button>
+            <button type="button" role="option" class="motion-opt" data-orb-fn="cloud" aria-selected="false">Cloud</button>
+          </div>
+          <div class="motion-list" style="margin-top:0.4rem" data-orb-opts>
+            <button type="button" class="motion-opt" data-orb-field aria-pressed="false">Glow field</button>
+          </div>
+          <p class="motion-hint" style="margin-top:0.35rem">Circle rim by default. Glow field = translucent aura.</p>
+        </div>
+      </div>
+      <button type="button" class="motion-reset motion-reset-danger" data-motion-reset>Reset</button>
+      <button type="button" class="motion-sandbox" data-sandbox-toggle aria-pressed="false" title="Play framing label">Play frame</button>
+      <p class="motion-hint">Select symbols, then edit. Sandbox → Orbit (double-click hub or Random). Repel is separate. Import AI symbols via <a href="import.html">Import</a>.</p>
+    </div>
+  </aside>
+
   <main class="landing" id="top" aria-label="Blessed Raven">
     <div class="mark" data-mark>
       <div class="mark-host" data-mark-host></div>
       <svg class="hits" viewBox="0 0 923.86 886.31" role="group" aria-label="Sigil links">
-        <!-- Center stays still -->
         <a class="hotspot hotspot-center" data-sym="center" href="#" aria-label="Blessed Raven — home">
           <circle class="hit" cx="447.56" cy="484.96" r="120" />
           <text class="hit-label" x="447.56" y="484.96" text-anchor="middle" dy="0.35em">Home</text>
         </a>
-
-        <!-- Outer hotspots track the orbit -->
         <g class="hits-orbit">
-          <!-- N — crow → GitHub -->
-          <a class="hotspot" href="https://github.com/BlessedRaven/blessedraven" data-sym="n" aria-label="GitHub" rel="noopener noreferrer" target="_blank">
+          <a class="hotspot" href="https://github.com/BlessedRaven/blessedraven" data-sym="n" aria-label="Crow — GitHub" rel="noopener noreferrer" target="_blank">
             <circle class="hit" cx="453.56" cy="145" r="72" />
-            <text class="hit-label" x="453.56" y="145" text-anchor="middle" dy="0.35em">GitHub</text>
+            <text class="hit-label" x="453.56" y="145" text-anchor="middle" dy="0.35em">Crow</text>
           </a>
-          <!-- NW -->
           <a class="hotspot is-soon" href="#soon" data-sym="nw" aria-label="Archive — coming soon">
             <circle class="hit" cx="148" cy="167" r="64" />
             <text class="hit-label" x="148" y="167" text-anchor="middle" dy="0.35em">Archive</text>
           </a>
-          <!-- W -->
           <a class="hotspot is-soon" href="#soon" data-sym="w" aria-label="Orbit — coming soon">
             <circle class="hit" cx="91.8" cy="353" r="60" />
             <text class="hit-label" x="91.8" y="353" text-anchor="middle" dy="0.35em">Orbit</text>
           </a>
-          <!-- SW -->
           <a class="hotspot is-soon" href="#soon" data-sym="sw" aria-label="Wings — coming soon">
             <circle class="hit" cx="90" cy="555" r="64" />
             <text class="hit-label" x="90" y="555" text-anchor="middle" dy="0.35em">Wings</text>
           </a>
-          <!-- S — Fund placeholder (wire later) -->
           <a class="hotspot is-soon" href="#soon" data-sym="s" aria-label="Fund — coming soon">
             <circle class="hit" cx="462" cy="820" r="64" />
             <text class="hit-label" x="462" y="820" text-anchor="middle" dy="0.35em">Fund</text>
           </a>
-          <!-- SE -->
           <a class="hotspot is-soon" href="#soon" data-sym="se" aria-label="Nest — coming soon">
             <circle class="hit" cx="672.71" cy="750.29" r="72" />
             <text class="hit-label" x="672.71" y="750.29" text-anchor="middle" dy="0.35em">Nest</text>
           </a>
-          <!-- E -->
           <a class="hotspot is-soon" href="#soon" data-sym="e" aria-label="Lattice — coming soon">
             <circle class="hit" cx="821.16" cy="582.19" r="70" />
             <text class="hit-label" x="821.16" y="582.19" text-anchor="middle" dy="0.35em">Lattice</text>
           </a>
-          <!-- NE -->
           <a class="hotspot is-soon" href="#soon" data-sym="ne" aria-label="Bloom — coming soon">
             <circle class="hit" cx="820.1" cy="342.59" r="70" />
             <text class="hit-label" x="820.1" y="342.59" text-anchor="middle" dy="0.35em">Bloom</text>
           </a>
         </g>
+        <g class="hits-free"></g>
       </svg>
     </div>
-    <p class="hint">Hover or tap a symbol</p>
+    <p class="hint">Sandbox → Orbit · fling · Repel · Symbol lab for spin &amp; colour</p>
     <p id="soon" class="soon" tabindex="-1">Coming soon.</p>
   </main>
-  <script src="app.js" defer></script>
+
+  <div class="site-bar" data-site-bar role="toolbar" aria-label="Site">
+    <button type="button" data-link-toggle aria-pressed="true" title="Tap a shape to follow its link">Link</button>
+    <button type="button" data-drag-toggle aria-pressed="false" title="Shapes always drag in sandbox">Drag</button>
+    <span class="zoom-wrap" data-zoom-wrap>
+      <button type="button" data-zoom-toggle aria-pressed="false" aria-expanded="false" aria-haspopup="true" title="Zoom mode: click-drag on empty space">Zoom</button>
+      <span class="zoom-menu" data-zoom-menu hidden>
+        <button type="button" data-zoom-invert aria-pressed="false">Invert drag</button>
+        <button type="button" data-zoom-reset>Reset 100%</button>
+      </span>
+    </span>
+    <a class="site-bar-link" href="import.html">Import</a>
+  </div>
+
+  <footer class="foot">
+    <a href="https://github.com/BlessedRaven/blessedraven" rel="noopener noreferrer" target="_blank">GitHub</a>
+    <span aria-hidden="true">·</span>
+    <a href="import.html">Import SVG</a>
+    <span aria-hidden="true">·</span>
+    <span class="muted">Fund &amp; inventions — hooks TBD</span>
+  </footer>
+
+  <script src="theme.js?v=1" defer></script>
+  <script src="motion.js?v=1" defer></script>
+  <script src="app.js?v=1" defer></script>
+
+  <div class="cloud-shape-menu" data-cloud-shape-menu hidden role="menu" aria-label="Shape actions">
+    <button type="button" role="menuitem" data-cloud-act="hub">Make hub</button>
+    <button type="button" role="menuitem" data-cloud-act="all-shapes">All shapes</button>
+    <button type="button" role="menuitem" data-cloud-act="reset-shape">Reset shape</button>
+    <button type="button" role="menuitem" data-cloud-act="reset-all">Reset</button>
+  </div>
 </body>
 </html>

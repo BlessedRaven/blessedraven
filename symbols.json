@@ -1,0 +1,83 @@
+{
+  "site": {
+    "title": "Blessed Raven",
+    "tagline": "Symbol sandbox — play & invent",
+    "home": "/"
+  },
+  "hub": "center",
+  "slots": ["n", "nw", "w", "sw", "s", "se", "e", "ne", "center"],
+  "symbols": [
+    {
+      "id": "n",
+      "label": "Crow",
+      "hotspot": "n",
+      "defaults": { "anim": "off", "speed": 35, "colour": "off", "size": 100 },
+      "href": "https://github.com/BlessedRaven/blessedraven",
+      "blurb": "Brand crow — GitHub / megaphone."
+    },
+    {
+      "id": "nw",
+      "label": "Archive",
+      "hotspot": "nw",
+      "defaults": { "anim": "off", "speed": 28, "colour": "off", "size": 100 },
+      "href": "#soon",
+      "blurb": "Memory & docs lane."
+    },
+    {
+      "id": "w",
+      "label": "Orbit",
+      "hotspot": "w",
+      "defaults": { "anim": "off", "speed": 22, "colour": "off", "size": 100 },
+      "href": "#soon",
+      "blurb": "Horizon / merger experiments."
+    },
+    {
+      "id": "sw",
+      "label": "Wings",
+      "hotspot": "sw",
+      "defaults": { "anim": "off", "speed": 40, "colour": "off", "size": 100 },
+      "href": "#soon",
+      "blurb": "Open invention slot."
+    },
+    {
+      "id": "s",
+      "label": "Fund",
+      "hotspot": "s",
+      "defaults": { "anim": "off", "speed": 45, "colour": "off", "size": 100 },
+      "href": "#soon",
+      "blurb": "Serious funding path — keep hooks simple."
+    },
+    {
+      "id": "se",
+      "label": "Nest",
+      "hotspot": "se",
+      "defaults": { "anim": "off", "speed": 30, "colour": "off", "size": 100 },
+      "href": "#soon",
+      "blurb": "Land & base lane."
+    },
+    {
+      "id": "e",
+      "label": "Lattice",
+      "hotspot": "e",
+      "defaults": { "anim": "off", "speed": 50, "colour": "off", "size": 100 },
+      "href": "#soon",
+      "blurb": "Structure / systems slot."
+    },
+    {
+      "id": "ne",
+      "label": "Bloom",
+      "hotspot": "ne",
+      "defaults": { "anim": "off", "speed": 25, "colour": "off", "size": 100 },
+      "href": "#soon",
+      "blurb": "Growth / flower lane."
+    },
+    {
+      "id": "center",
+      "label": "Home",
+      "hotspot": "center",
+      "defaults": { "anim": "off", "speed": 20, "colour": "off", "size": 100 },
+      "href": "#",
+      "blurb": "Hub — default Sandbox orbit center."
+    }
+  ]
+}
